@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="shortcut icon" href="{{asset('frontOffice/images/logo-no-background.png')}}">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <title>{% block title %}Dashboard{% endblock %}</title>
+    <!-- ======= Styles ====== -->
+    {% block CSS %}
+      <link rel="stylesheet" href="{{asset('backOffice/css/style.css')}}">
+    {% endblock %}
+    
+</head>
+
+<body>
+            
+    <!-- =============== Navigation ================ -->
+    <div class="container">
+        <div class="navigation">
+            <ul>
+                <li>
+                    <a href="#">
+                        <span class="icon">
+                            <i class="fa-regular fa-handshake fa-2x"></i>
+                        </span>
+                        <span class="title">SwapNShare</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{path('app_admin_home')}}">
+                        <span class="icon">
+                            <ion-icon name="home-outline"></ion-icon>
+                        </span>
+                        <span class="title">Dashboard</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{path('app_admin_utilisateurs')}}">
+                        <span class="icon">
+                            <ion-icon name="people-outline"></ion-icon>
+                        </span>
+                        <span class="title">Utilisateurs</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{path('app_admin_produits')}}">
+                        <span class="icon">
+                            <ion-icon name="cube-outline"></ion-icon>
+                        </span>
+                        <span class="title">Produits</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{path('app_admin_services')}}">
+                        <span class="icon">
+                            <ion-icon name="hammer-outline"></ion-icon>
+                        </span>
+                        <span class="title">Services</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{path('app_admin_categories')}}">
+                        <span class="icon">
+                            <ion-icon name="layers-outline"></ion-icon>
+                        </span>
+                        <span class="title">Catégories</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{path('app_admin_commandes')}}">
+                        <span class="icon">
+                            <ion-icon name="cart-outline"></ion-icon>
+                        </span>
+                        <span class="title">Commandes</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{path('app_admin_reclamations')}}">
+                        <span class="icon">
+                            <ion-icon name="receipt-outline"></ion-icon>
+                        </span>
+                        <span class="title">Réclamations</span>
+                    </a>
+                </li>
+
+
+
+                <li>
+                    <a href="{{path('app_admin_messages')}}">
+                        <span class="icon">
+                            <ion-icon name="chatbubble-outline"></ion-icon>
+                        </span>
+                        <span class="title">Messages</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <span class="icon">
+                            <ion-icon name="help-outline"></ion-icon>
+                        </span>
+                        <span class="title">Help</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <span class="icon">
+                            <ion-icon name="settings-outline"></ion-icon>
+                        </span>
+                        <span class="title">Settings</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <span class="icon">
+                            <ion-icon name="log-out-outline"></ion-icon>
+                        </span>
+                        <span class="title">Sign Out</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- ========================= Main ==================== -->
+
+        <div class="main">
+            <div class="topbar">
+                <div class="toggle">
+                    <ion-icon name="menu-outline"></ion-icon>
+                </div>
+
+                <div class="search">
+                    <label>
+                        <input type="text" placeholder="Search here">
+                        <ion-icon name="search-outline"></ion-icon>
+                    </label>
+                </div>
+
+                <div class="user">
+                    <img src="{{asset('backOffice/imgs/customer01.jpg')}}" alt="">
+                </div>
+            </div>
+           
+            <!-- ======================= Cards ================== -->
+            {% block body %}
+
+            {% endblock %}
+        </div>
+    </div>
+
+    <!-- =========== Scripts =========  -->
+    {% block JS %}
+    <script src="{{asset('backOffice/js/main.js')}}"></script>
+    {% endblock %}
+
+    <!-- ====== ionicons ======= -->
+
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    
+</body>
+
+</html>
