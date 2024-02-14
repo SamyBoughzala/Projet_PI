@@ -6,6 +6,7 @@ use App\Repository\CategorieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CategorieRepository::class)]
 class Categorie
@@ -16,7 +17,13 @@ class Categorie
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:"Field must not be empty.")]
+    #[Assert\Regex(
+        pattern: "/^\D{0,20}$/",
+        message: "Field must not contain numbers and must be at most 20 characters long."
+    )]
     private ?string $nomCategorie = null;
+    
 
     #[ORM\OneToMany(mappedBy: 'categorie', targetEntity: Service::class, orphanRemoval: true)]
     private Collection $services;

@@ -1,0 +1,18 @@
+{% extends 'baseBackOffice.html.twig' %}
+{% block title %}New Categorie{% endblock %}
+
+{% block body %}
+    <br><br><br><br><br>
+    {{form_start(form,{'attr':{'novalidate':'novalidate'}})}}
+    <h1>Create new Categorie</h1>
+    <table>
+    <tr>
+    <td> {{ form_label(form.nomCategorie,"Category Name") }} </td>
+    <td> {{form_widget(form.nomCategorie)}} </td>
+    <td> {{form_errors(form.nomCategorie)}} </td>
+    </tr>
+    <table>
+    <td> {{form_widget(form.save)}} </td>
+    {{form_end(form)}}
+    <a href="{{ path('app_categorie_index') }}">back to list</a>
+{% endblock %}
