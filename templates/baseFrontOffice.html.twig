@@ -40,20 +40,86 @@
 						<li><a class="nav-link" href="{{path('services')}}">Services</a></li>
 						<li><a class="nav-link" href="{{path('contact')}}">Contact</a></li>
 					</ul>
-
+					<!-- category mega menu-->
 					<ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
-						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownCategories" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+						<li class="nav-item dropdown" id="mega-cat-menu-dropdown">
+							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownCategories" role="button" aria-expanded="false">
 								Categories
 							</a>
-							<ul class="dropdown-menu" aria-labelledby="navbarDropdownCategories">
-								<li><a class="dropdown-item" href="#">Category 1</a></li>
-								<li><a class="dropdown-item" href="#">Category 2</a></li>
-								<li><a class="dropdown-item" href="#">Category 3</a></li>
-								<!-- Add more categories as needed -->
-							</ul>
+							<div class=" mega-menu" id="dropdown-cat-menu"aria-labelledby="navbarDropdownCategories">
+								<div class="container">
+									<div class="row">
+										<h1>Products </h1>
+										<div class="col-md-3">
+											<h5>Category 1</h5>
+											<ul class="list-unstyled">
+												<li><a class="dropdown-item subcategory-link" href="#">Subcategory 1</a></li>
+												<li><a class="dropdown-item subcategory-link" href="#">Subcategory 2</a></li>
+												<li><a class="dropdown-item subcategory-link" href="#">Subcategory 3</a></li>
+												<!-- Add more subcategories as needed -->
+											</ul>
+										</div>										
+										<div class="col-md-3">
+											<h5>Category 2</h5>
+											<ul class="list-unstyled">
+												<li><a class="dropdown-item subcategory-link " href="#">Subcategory 1</a></li>
+												<li><a class="dropdown-item subcategory-link"  href="#">Subcategory 2</a></li>
+												<li><a class="dropdown-item subcategory-link" href="#">Subcategory 3</a></li>
+												<!-- Add more subcategories as needed -->
+											</ul>
+										</div>
+										<div class="col-md-3">
+											<h5>Category 3</h5>
+											<ul class="list-unstyled">
+												<li><a class="dropdown-item subcategory-link" href="#">Subcategory 1</a></li>
+												<li><a class="dropdown-item subcategory-link" href="#">Subcategory 2</a></li>
+												<li><a class="dropdown-item subcategory-link" href="#">Subcategory 3</a></li>
+												<!-- Add more subcategories as needed -->
+											</ul>
+										</div>
+										<div class="col-md-3">
+											<h5>Category 4</h5>
+											<ul class="list-unstyled">
+												<li><a class="dropdown-item subcategory-link" href="#">Subcategory 1</a></li>
+												<li><a class="dropdown-item subcategory-link" href="#">Subcategory 2</a></li>
+												<li><a class="dropdown-item subcategory-link" href="#">Subcategory 3</a></li>
+												<!-- Add more subcategories as needed -->
+											</ul>
+										</div>
+									</div>
+									<h1>Service </h1>
+									<div class="row">
+										<div class="col-md-3">
+											<h5>Category 1</h5>
+											<ul class="list-unstyled">
+												<li><a class="dropdown-item subcategory-link" href="#">Subcategory 1</a></li>
+												<li><a class="dropdown-item subcategory-link" href="#">Subcategory 2</a></li>
+												<li><a class="dropdown-item subcategory-link" href="#">Subcategory 3</a></li>
+												<!-- Add more subcategories as needed -->
+											</ul>
+										</div>										
+										<div class="col-md-3">
+											<h5>Category 2</h5>
+											<ul class="list-unstyled">
+												<li><a class="dropdown-item subcategory-link " href="#">Subcategory 1</a></li>
+												<li><a class="dropdown-item subcategory-link"  href="#">Subcategory 2</a></li>
+												<li><a class="dropdown-item subcategory-link" href="#">Subcategory 3</a></li>
+												<!-- Add more subcategories as needed -->
+											</ul>
+										</div>
+									</div>
+								</div>
+							</div>
 						</li>
 					</ul>
+					<script>
+						// Activate dropdown on hover
+						$('#mega-cat-menu-dropdown').hover(function() {
+							$(this).find('#dropdown-cat-menu').stop(true, true).delay(200).fadeIn(500);
+						}, function() {
+							$(this).find('#dropdown-cat-menu').stop(true, true).delay(200).fadeOut(500);
+						});
+					</script>
 					<!-- search bar -->
 					<form class="d-flex">
 						<input class="form-control me-2" type="search" placeholder="Search..." aria-label="Search">
@@ -111,16 +177,13 @@
 				<script>
 					let profile = document.querySelector("#profile")
 					document.querySelector("#user-btn").onclick = () =>{
-					profile.classList.toggle('active');
-					search.classList.remove('active');
-}
-				</script>
-
-				
+						profile.classList.toggle('active');
+						search.classList.remove('active');
+					}	
+				</script>			
 			</div>
-
 		</nav>
-
+		
 		<!-- End Header/Navigation -->
 
 		<!-- Start Hero Section -->

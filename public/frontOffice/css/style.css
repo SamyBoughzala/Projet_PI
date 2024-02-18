@@ -711,6 +711,7 @@ textarea {
     border-radius: 50%;
     background: rgba(59, 93, 80, 0.2); }
 
+/* profile custom css */
 #profile {
   position: absolute;
   top: 120%;
@@ -778,4 +779,60 @@ textarea {
 #profile .cardBox .card:hover .numbers,
 #profile .cardBox .card:hover .iconBx {
   color: #fff;
+}
+
+/* mega menu drop down for categories  */
+
+#mega-cat-menu-dropdown:hover #dropdown-cat-menu {
+  display: block;
+}
+
+#dropdown-cat-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  background-color: #fff;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  width: 500%;
+}
+
+#dropdown-cat-menu .container {
+  max-width: 100%;
+}
+
+#dropdown-cat-menu .row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#dropdown-cat-menu .col-md-3 {
+  flex: 0 0 50%;
+  max-width: 50%;
+}
+
+#dropdown-cat-menu h5 {
+  color: #3b5d50;;
+}
+
+#dropdown-cat-menu ul {
+  list-style: none;
+  padding: 0;
+}
+
+#dropdown-cat-menu ul li {
+  margin-bottom: 10px;
+}
+
+#dropdown-cat-menu .subcategory-link {
+  color: #2f2f2f !important;
+  display: block; 
+}
+
+#dropdown-cat-menu ul li .subcategory-link:hover {
+  color: #fff !important;
+  text-decoration: none;
+  background: #3b5d50;
 }
