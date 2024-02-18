@@ -272,21 +272,64 @@ body {
 .details .recentOrders {
   position: relative;
   display: grid;
-  min-height: 500px;
+  min-height: 250px;
   background: var(--white);
   padding: 20px;
   box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
   border-radius: 20px;
+
 }
+
+/* Styles for the edit form */
+.details .recentOrders .form-control {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.details .recentOrders .form-control:focus {
+  outline: none;
+  border-color: #3b5d50; /* Change border color on focus */
+}
+
+.details .recentOrders .form-label {
+  font-weight: bold;
+  color: #3b5d50;
+}
+
+.details .recentOrders .form-error {
+  color: red;
+  font-size: 14px;
+}
+
+.details .recentOrders .btn-submit {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #fff;
+  color: #3b5d50;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s; /* Smooth transition for hover effect */
+}
+
+.details .recentOrders .btn-submit:hover {
+  background-color: #3b5d50; /* Change background color on hover */
+  color: #fff; /* Change text color on hover */
+}
+
 
 .details .cardHeader {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items :flex-start; 
 }
 .cardHeader h2 {
   font-weight: 600;
   color: var(--green);
+  margin: 0;
 }
 .cardHeader .btn {
   position: relative;
@@ -295,12 +338,14 @@ body {
   text-decoration: none;
   color: var(--white);
   border-radius: 6px;
+  margin: 0;
 }
 
 .details table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 10px;
+  margin-top: 10 !important;
+  
 }
 .details table thead td {
   font-weight: 600;
