@@ -1,0 +1,45 @@
+{% extends "baseFrontOffice.html.twig" %}
+
+{% block title %} Product Exchange List Index {% endblock %}
+
+
+{% block body %}
+    <h1>EchangeProduit index</h1>
+    <div >
+    <table class="table table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Date of Exchange</th>
+                <th>Valid</th>
+                <th>Actions</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for echange_produit in echange_produits %}
+                <tr>
+                    <td>{{ echange_produit.id }}</td>
+                    <td>{{ echange_produit.dateEchange ? echange_produit.dateEchange|date('Y-m-d H:i:s') : '' }}</td>
+                    <td>{{ echange_produit.valide ? 'Yes' : 'No' }}</td>
+                    <td>
+                        <a href="{{ path('app_echange_produit_edit', {'id': echange_produit.id}) }}" class="btn btn-primary btn-sm">Edit</a>
+                    </td>
+                    <td>   
+                        <form method="post" action="{{ path('app_echange_produit_delete', {'id': echange_produit.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ echange_produit.id) }}">
+                            <button class="btn btn-danger">Delete</button>
+                        </form>  
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">No records found</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_echange_produit_new') }}" class="btn btn-success">Create New</a>
+
+{% endblock %}

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+
+<title>EchangeService index</title>
+
+{% block body %}
+    <h1>EchangeService index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Date_echange</th>
+                <th>Valide</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for echange_service in echange_services %}
+            <tr>
+                <td>{{ echange_service.id }}</td>
+                <td>{{ echange_service.dateEchange ? echange_service.dateEchange|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ echange_service.valide ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('app_echange_service_show', {'id': echange_service.id}) }}">show</a>
+                    <a href="{{ path('app_echange_service_edit', {'id': echange_service.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_echange_service_new') }}">Create new</a>
+{% endblock %}

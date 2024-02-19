@@ -110,7 +110,6 @@ class Categorie
                 $produit->setCategorie(null);
             }
         }
-
         return $this;
     }
 }
