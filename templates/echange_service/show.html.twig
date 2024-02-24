@@ -1,6 +1,7 @@
-<!DOCTYPE html>
+{% extends "baseFrontOffice.html.twig" %}
 
-<title>EchangeService</title>
+{% block title %} Show Exchanged Service {% endblock %}
+
 
 {% block body %}
     <h1>EchangeService</h1>
@@ -26,5 +27,4 @@
 
     <a href="{{ path('app_echange_service_edit', {'id': echange_service.id}) }}">edit</a>
 
-    {{ include('echange_service/_delete_form.html.twig') }}
 {% endblock %}

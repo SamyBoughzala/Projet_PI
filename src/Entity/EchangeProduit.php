@@ -5,8 +5,11 @@ namespace App\Entity;
 use App\Repository\EchangeProduitRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: EchangeProduitRepository::class)]
+#[UniqueEntity(fields: ['produitIn', 'produitOut'], message: 'This exchange already exists')]
 class EchangeProduit
 {
     #[ORM\Id]
@@ -14,18 +17,25 @@ class EchangeProduit
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity: Produit::class)]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotBlank(message: 'Please select a product')]
     private ?Produit $produitIn = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity: Produit::class)]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotBlank(message: 'Please select a product')]
     private ?Produit $produitOut = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Assert\GreaterThan(
+        value: "today",
+        message: "Please select a date in the future"
+    )]
     private ?\DateTimeInterface $date_echange = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\IsTrue(message: 'Valid Box must be Checked.')]
     private ?bool $valide = null;
 
     public function getId(): ?int
@@ -77,7 +87,6 @@ class EchangeProduit
     public function setValide(?bool $valide): static
     {
         $this->valide = $valide;
-
         return $this;
     }
 }

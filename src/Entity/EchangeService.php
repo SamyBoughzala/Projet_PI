@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\EchangeServiceRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: EchangeServiceRepository::class)]
 class EchangeService
@@ -14,18 +15,25 @@ class EchangeService
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity: Service::class)]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotBlank(message: 'Please select a service')]
     private ?Service $serviceIn = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity: Service::class)]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotBlank(message: 'Please select a service')]
     private ?Service $serviceOut = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Assert\GreaterThan(
+        value: "today",
+        message: "Please select a date in the future"
+    )]
     private ?\DateTimeInterface $date_echange = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\IsTrue(message: 'Valid Box must be Checked.')]
     private ?bool $valide = null;
 
     public function getId(): ?int

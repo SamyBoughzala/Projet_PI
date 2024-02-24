@@ -1,11 +1,12 @@
-<!DOCTYPE html>
+{% extends "baseFrontOffice.html.twig" %}
 
-<title>New EchangeService</title>
+{% block title %} New Service Exchange {% endblock %}
+
 
 {% block body %}
-    <h1>Create new EchangeService</h1>
+    <h1>Create New Service Exhange</h1>
 
     {{ include('echange_service/_form.html.twig') }}
 
-    <a href="{{ path('app_echange_service_index') }}">back to list</a>
+    
 {% endblock %}

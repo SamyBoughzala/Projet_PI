@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/echange/produit')]
+#[Route('echange/produit')]
 class EchangeProduitController extends AbstractController
 {
     #[Route('/', name: 'app_echange_produit_index', methods: ['GET'])]
@@ -68,7 +68,7 @@ class EchangeProduitController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_echange_produit_delete', methods: ['POST'])]
+    #[Route('/{id}/delete', name: 'app_echange_produit_delete', methods: ['POST'])]
     public function delete(Request $request, EchangeProduit $echangeProduit, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$echangeProduit->getId(), $request->request->get('_token'))) {
