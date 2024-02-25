@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\ServiceRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,9 +16,12 @@ class AdminContollerController extends AbstractController
     }
 
     #[Route('/admin/services', name: 'app_admin_services')]
-    public function services(): Response
+    public function services(ServiceRepository $serviceRepository): Response
     {
-        return $this->render('admin/services.html.twig');
+        $services= $serviceRepository->findAll();
+        return $this->render('admin/services.html.twig',[
+            'services'=>$services
+        ]);
     }
 
     #[Route('/admin/categories', name: 'app_admin_categories')]

@@ -6,7 +6,7 @@ use App\Repository\ServiceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: ServiceRepository::class)]
 class Service
 {
@@ -16,15 +16,19 @@ class Service
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:"The Title is mandatory")]
     private ?string $titreService = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:"The description is mandatory")]
     private ?string $descriptionService = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:"please add an address")]
     private ?string $ville = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 255, nullable: true)]   
+    #[Assert\NotBlank(message:"please add an image")]
     private ?string $photo = null;
 
     #[ORM\Column]
@@ -32,10 +36,16 @@ class Service
 
     #[ORM\ManyToOne(inversedBy: 'services')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotBlank(message:"The Category is mandatory")]
     private ?Categorie $categorie = null;
 
     #[ORM\OneToMany(mappedBy: 'service', targetEntity: Commentaire::class, orphanRemoval: true)]
     private Collection $commentaires;
+
+    #[ORM\ManyToOne(inversedBy: 'services')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotBlank(message:"The user is mandatory")]
+    private ?Utilisateur $utilisateur = null;
 
     public function __construct()
     {
@@ -145,6 +155,18 @@ class Service
                 $commentaire->setService(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUtilisateur(): ?Utilisateur
+    {
+        return $this->utilisateur;
+    }
+
+    public function setUtilisateur(?Utilisateur $utilisateur): static
+    {
+        $this->utilisateur = $utilisateur;
 
         return $this;
     }

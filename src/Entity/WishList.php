@@ -19,16 +19,13 @@ class WishList
     #[ORM\JoinColumn(nullable: false)]
     private ?Utilisateur $utilisateur = null;
 
-    #[ORM\ManyToOne(inversedBy: 'wishLists')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Produit $produit = null;
 
-    #[ORM\OneToMany(mappedBy: 'wishList', targetEntity: Produit::class)]
-    private Collection $Produit;
+    #[ORM\OneToMany(mappedBy: 'wishList', targetEntity: ProduitFavoris::class, orphanRemoval: true)]
+    private Collection $produitFavoris;
 
     public function __construct()
     {
-        $this->Produit = new ArrayCollection();
+        $this->produitFavoris = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -48,34 +45,34 @@ class WishList
         return $this;
     }
 
-    public function getProduit(): ?Produit
+
+
+
+
+    /**
+     * @return Collection<int, ProduitFavoris>
+     */
+    public function getProduitFavoris(): Collection
     {
-        return $this->produit;
+        return $this->produitFavoris;
     }
 
-    public function setProduit(?Produit $produit): static
+    public function addProduitFavori(ProduitFavoris $produitFavori): static
     {
-        $this->produit = $produit;
-
-        return $this;
-    }
-
-    public function addProduit(Produit $produit): static
-    {
-        if (!$this->Produit->contains($produit)) {
-            $this->Produit->add($produit);
-            $produit->setWishList($this);
+        if (!$this->produitFavoris->contains($produitFavori)) {
+            $this->produitFavoris->add($produitFavori);
+            $produitFavori->setWishList($this);
         }
 
         return $this;
     }
 
-    public function removeProduit(Produit $produit): static
+    public function removeProduitFavori(ProduitFavoris $produitFavori): static
     {
-        if ($this->Produit->removeElement($produit)) {
+        if ($this->produitFavoris->removeElement($produitFavori)) {
             // set the owning side to null (unless already changed)
-            if ($produit->getWishList() === $this) {
-                $produit->setWishList(null);
+            if ($produitFavori->getWishList() === $this) {
+                $produitFavori->setWishList(null);
             }
         }
 

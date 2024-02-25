@@ -2,4 +2,48 @@
 {% block title %}Services{% endblock %}
 {% block body %}
 <h1>Services</h1>
+
+            <div class="details" style="align: center;">
+                <div class="recentOrders">
+                    <div class="cardHeader">
+                        <h2>Service List</h2>
+                    </div>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <td>Image</td>
+                                <td>Title</td>
+                                <td>Category</td>
+                                <td>Barter</td>
+                                <td>Actions</td>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                        {% for service in services %}
+                            <tr>
+                                
+                                 	<div class="d-flex">
+                                    <td>
+											<img src="{{ asset('uploads/services/' ~ service.photo) }}" alt="" class="rounded-image" >
+                                    </td>
+									</div> 
+                                
+                                <td>{{ service.titreService }}</td>
+                                <td>{{ service.categorie.nomCategorie }}</td>
+                                <td>{{ service.utilisateur.nom ~ ' ' ~ service.utilisateur.prenom }}</td>
+                                <td>
+                                    <a href="#"><i class="fa-regular fa-eye" ></i></a>
+                                    <a href="{{ path('suppression_service', { id: service.id }) }}"><i class="fa-regular fa-circle-xmark" style="color: red;"></i></a>
+                                </td>
+                                
+                            </tr>
+                        {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
 {% endblock %}
