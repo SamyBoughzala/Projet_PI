@@ -73,7 +73,7 @@ class ServiceController extends AbstractController
             if($image){
                 $imageName =  bin2hex(random_bytes(10)) .'.'. $image->guessExtension();
                 $image->move(
-                    'F:\ESPRIT\SwapNShare2\Projet_PI'. '/public/uploads/services',
+                    'C:\Users\Amine\Documents\PIDEV\Projet_PI'. '/public/uploads/services',
                     $imageName
                 );
             }
