@@ -15,7 +15,53 @@ body {
   line-height: 28px;
   color: #6a6a6a;
   font-size: 14px;
-  background-color: #faebef; }
+  background-color: #FAEBEF; }
+
+  .service-category {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  .add-button {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-bottom: 30px;
+    margin-right: 50px;
+  }
+
+  .icon-service {
+    margin-right: 10px; /* Adjust the margin as needed */
+  }
+  .service-text{
+    margin: 0;
+  }
+
+  .custom-file-input input[type="file"] {
+    display: none;
+}
+
+.custom-file-label {
+    background-color: #007bff;
+    color: #fff;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.custom-file-input:hover .custom-file-label {
+    background-color: #0056b3;
+}
+  .green-button {
+    background-color: #3b5d50 ;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    text-decoration: none;
+  }
 
 a {
   text-decoration: none;

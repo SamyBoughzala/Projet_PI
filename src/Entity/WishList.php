@@ -19,6 +19,18 @@ class WishList
     #[ORM\JoinColumn(nullable: false)]
     private ?Utilisateur $utilisateur = null;
 
+    #[ORM\ManyToOne(inversedBy: 'wishLists')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Produit $produit = null;
+
+    #[ORM\OneToMany(mappedBy: 'wishList', targetEntity: Produit::class)]
+    private Collection $Produit;
+
+    public function __construct()
+    {
+        $this->Produit = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -36,9 +48,37 @@ class WishList
         return $this;
     }
 
+    public function getProduit(): ?Produit
+    {
+        return $this->produit;
+    }
 
+    public function setProduit(?Produit $produit): static
+    {
+        $this->produit = $produit;
 
-   
+        return $this;
+    }
 
- 
+    public function addProduit(Produit $produit): static
+    {
+        if (!$this->Produit->contains($produit)) {
+            $this->Produit->add($produit);
+            $produit->setWishList($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProduit(Produit $produit): static
+    {
+        if ($this->Produit->removeElement($produit)) {
+            // set the owning side to null (unless already changed)
+            if ($produit->getWishList() === $this) {
+                $produit->setWishList(null);
+            }
+        }
+
+        return $this;
+    }
 }

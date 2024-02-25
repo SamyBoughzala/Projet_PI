@@ -57,11 +57,15 @@ class Utilisateur
     #[ORM\OneToOne(mappedBy: 'utilisateur', cascade: ['persist', 'remove'])]
     private ?Panier $panier = null;
 
+    #[ORM\OneToMany(mappedBy: 'utilisateur', targetEntity: Service::class, orphanRemoval: true)]
+    private Collection $services;
+
     public function __construct()
     {
         $this->commentaires = new ArrayCollection();
         $this->produits = new ArrayCollection();
         $this->reclamations = new ArrayCollection();
+        $this->services = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -297,6 +301,36 @@ class Utilisateur
         }
 
         $this->panier = $panier;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Service>
+     */
+    public function getServices(): Collection
+    {
+        return $this->services;
+    }
+
+    public function addService(Service $service): static
+    {
+        if (!$this->services->contains($service)) {
+            $this->services->add($service);
+            $service->setUtilisateur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeService(Service $service): static
+    {
+        if ($this->services->removeElement($service)) {
+            // set the owning side to null (unless already changed)
+            if ($service->getUtilisateur() === $this) {
+                $service->setUtilisateur(null);
+            }
+        }
 
         return $this;
     }
