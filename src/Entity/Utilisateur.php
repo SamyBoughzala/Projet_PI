@@ -5,42 +5,50 @@ namespace App\Entity;
 use App\Repository\UtilisateurRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\JsonType;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\Json;
 
 #[ORM\Entity(repositoryClass: UtilisateurRepository::class)]
-class Utilisateur
+class Utilisateur implements PasswordAuthenticatedUserInterface ,UserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+
     #[ORM\Column(length: 255)]
     private ?string $nom = null;
 
+
+    
     #[ORM\Column(length: 255)]
     private ?string $prenom = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $photo = null;
 
     #[ORM\Column(length: 255)]
     private ?string $adresse = null;
 
     #[ORM\Column(length: 255)]
     private ?string $telephone = null;
-
+    
+   
     #[ORM\Column(length: 255)]
     private ?string $email = null;
+
 
     #[ORM\Column(length: 255)]
     private ?string $mot_de_passe = null;
 
+
     #[ORM\Column(nullable: true)]
     private ?float $score = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $role = null;
+    #[ORM\Column(type:"json")]
+    private  array $roles= [];
 
     #[ORM\OneToMany(mappedBy: 'utilisateur', targetEntity: Commentaire::class, orphanRemoval: true)]
     private Collection $commentaires;
@@ -93,17 +101,7 @@ class Utilisateur
         return $this;
     }
 
-    public function getPhoto(): ?string
-    {
-        return $this->photo;
-    }
 
-    public function setPhoto(string $photo): static
-    {
-        $this->photo = $photo;
-
-        return $this;
-    }
 
     public function getAdresse(): ?string
     {
@@ -165,18 +163,7 @@ class Utilisateur
         return $this;
     }
 
-    public function getRole(): ?string
-    {
-        return $this->role;
-    }
-
-    public function setRole(string $role): static
-    {
-        $this->role = $role;
-
-        return $this;
-    }
-
+   
     /**
      * @return Collection<int, Commentaire>
      */
@@ -299,5 +286,53 @@ class Utilisateur
         $this->panier = $panier;
 
         return $this;
+    }
+
+
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    public function getSalt()
+    {
+        // not needed when using the "bcrypt" algorithm in security.yaml
+        return null;
+    }
+
+    public function getUsername()
+    {
+        return $this->email;
+    }
+
+    public function eraseCredentials()
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
+
+    public function getUserIdentifier()
+    {
+        // Return the unique identifier for the user
+        return $this->email; // Assuming email is the unique identifier
+    }
+
+    public function getPassword():?string
+    {
+        // Return the hashed password for the user
+        return $this->mot_de_passe;
+       
     }
 }
