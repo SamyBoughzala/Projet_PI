@@ -1,0 +1,35 @@
+{% extends "baseFrontOffice.html.twig" %}
+{% block title %}Transactions{% endblock %}
+{% block subheader %}
+    <div class="hero">
+        <div class="container">
+            <div class="row justify-content-between">
+                <div class="col-lg-5">
+                    <div class="intro-excerpt">
+                        <h1>Transactions</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block body %}
+    <h1>Transaction table</h1>
+    <div>
+        <table class="table table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Exchanges</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for transaction in transactions %}
+                    <tr>
+                        <td>{{ transaction }}</td>
+                        <td><button  class="btn btn-primary">Validate The Exchange</button></td>
+                    </tr>
+            </tbody>       
+        </table>
+    </div>
+    <a href="{{ path('index') }}" class="btn btn-success">Back Home</a>
+{% endblock %}

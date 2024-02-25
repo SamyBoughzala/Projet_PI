@@ -18,17 +18,19 @@ class EchangeProduitType extends AbstractType
             ->add('valide')
             ->add('produitIn', EntityType::class, [
                 'class' => 'App\Entity\Produit',  
-                'choice_label' => 'titreProduit', 
+                'choice_label' => function ($produit) {
+                    return $produit->getTitreProduit() . ' - ' . $produit->getDescriptionProduit() . ' - ' . $produit->getPrix() . ' \n Seller Info : ' . $produit->getUtilisateur()->getNom() . 'Email'. $produit->getUtilisateur()->getEmail() . 'Phone Number' .$produit->getUtilisateur()->getTelephone();
+                },
                 'placeholder' => 'Select your product Product', 
                 'required' => true, 
-    
+                'disabled' => true, // Set the produitIn field as read-only
             ])
             ->add('produitOut', EntityType::class, [
-                'class' => 'App\Entity\Produit', 
+                'class' => Produit::class,
+                'choices' => $options['userProducts'],
                 'choice_label' => 'titreProduit', 
                 'placeholder' => 'Select the exchanged Product',
                 'required' => true, 
-    
             ])
         ;
     }

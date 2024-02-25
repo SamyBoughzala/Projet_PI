@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\EchangeProduit;
+use App\Entity\Produit;
 use App\Form\EchangeProduitType;
 use App\Repository\EchangeProduitRepository;
+use App\Repository\ProduitRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,10 +24,16 @@ class EchangeProduitController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_echange_produit_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/new/{productId}', name: 'app_echange_produit_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager,int $productId,ProduitRepository $produitRepository): Response
     {
+        $user = $this->getUser();
+        $userProducts = $produitRepository->findBy(['utilisateur' => $user]);
+
+        $selectedProduct = $produitRepository->find($productId);
         $echangeProduit = new EchangeProduit();
+        $echangeProduit->setProduitIn($selectedProduct);
+
         $form = $this->createForm(EchangeProduitType::class, $echangeProduit);
         $form->handleRequest($request);
 
@@ -38,7 +46,9 @@ class EchangeProduitController extends AbstractController
 
         return $this->renderForm('echange_produit/new.html.twig', [
             'echange_produit' => $echangeProduit,
+            'userProducts' => $userProducts,
             'form' => $form,
+            //'form' => $form->createView(),
         ]);
     }
 
@@ -77,5 +87,23 @@ class EchangeProduitController extends AbstractController
         }
 
         return $this->redirectToRoute('app_echange_produit_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/transactions', name: 'app_echange_produit_transactions')]
+    public function transactions(EchangeProduitRepository $echangeProduitRepository, ProduitRepository $produitRepository): Response
+    {
+        // Get the current user
+        $user = $this->getUser();
+        // Fetch user's products
+        $userProducts = $produitRepository->findBy(['utilisateur' => $user]);
+        $transactions = [];
+        foreach ($userProducts as $product) {
+            $productTransactions = $echangeProduitRepository->findByProduitIn($product);
+            $transactions = array_merge($transactions, $productTransactions);
+        }
+        // Render the template with the user's transacions
+        return $this->render('echange_produit/transactions.html.twig', [
+            'transactions' => $transactions,
+        ]);
     }
 }
