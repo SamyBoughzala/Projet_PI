@@ -26,16 +26,11 @@ class FrontOfficePagesController extends AbstractController
         return $this->render('front_office_pages/services.html.twig');
     }
 
-    #[Route('/contact', name: 'contact')]
-    public function contact(): Response
-    {
-        return $this->render('front_office_pages/contactUs.html.twig');
-    }
+
 
     #[Route('/panier', name: 'panier')]
     public function panier(): Response
     {
         return $this->render('front_office_pages/panier.html.twig');
     }
-
 }

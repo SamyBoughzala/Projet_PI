@@ -69,33 +69,27 @@
                 </div>
               </div>
 
-              <form>
+
                 <div class="row">
-                  <div class="col-6">
-                    <div class="form-group">
-                      <label class="text-black" for="fname">First name</label>
-                      <input type="text" class="form-control" id="fname">
-                    </div>
-                  </div>
-                  <div class="col-6">
-                    <div class="form-group">
-                      <label class="text-black" for="lname">Last name</label>
-                      <input type="text" class="form-control" id="lname">
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="text-black" for="email">Email address</label>
-                  <input type="email" class="form-control" id="email">
-                </div>
+                  
+                
+                      <div align="center" style="max-width: 50%; margin: 0 auto;">
+                        <h2> Complaint Form</h2>
+                        <h4> Please fill out the following form with your complaint. We will review your request and follow up with you as soon as possible.</h4>
+                        {{form_start(form3A60, {'attr': {'novalidate': 'novalidate'}})}}
+                        <div style="display: none;">
+                          {{ form_row(form3A60.date) }}
+                        </div>
+                        {{ form_row(form3A60.titreR) }}
+                        {{ form_row(form3A60.descriptionR) }}
+                        
+                        {{form_errors(form3A60)}}
 
-                <div class="form-group mb-5">
-                  <label class="text-black" for="message">Message</label>
-                  <textarea name="" class="form-control" id="message" cols="30" rows="5"></textarea>
-                </div>
+                        {{ form_end(form3A60) }}
 
-                <button type="submit" class="btn btn-primary-hover-outline">Send Message</button>
-              </form>
+                      </div>
+                      
+
 
             </div>
 
