@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Repository\ProduitRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -27,10 +29,13 @@ class AdminContollerController extends AbstractController
     }
 
     #[Route('/admin/produits', name: 'app_admin_produits')]
-    public function produits(): Response
+    public function produits(ProduitRepository $ProduitRepository): Response
     {
-        return $this->render('admin/produits.html.twig');
+        return $this->render('admin/produits.html.twig', ['product'=>$ProduitRepository->findAll()
+        ]);
     }
+
+
 
     #[Route('/admin/reclamations', name: 'app_admin_reclamations')]
     public function reclamations(): Response

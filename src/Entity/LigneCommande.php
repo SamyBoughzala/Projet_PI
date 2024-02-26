@@ -17,7 +17,7 @@ class LigneCommande
     #[ORM\JoinColumn(nullable: false)]
     private ?Panier $panier = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?Produit $produit = null;
 
