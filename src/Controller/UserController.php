@@ -14,6 +14,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+
 
 
 
@@ -36,7 +38,7 @@ class UserController extends AbstractController
 
 
 
-    #[Route('/inscription', name: 'app_user')]
+    #[Route('/users', name: 'app_user')]
     public function register(Request $request, ManagerRegistry $manager, UserPasswordHasherInterface $passwordHasher): Response
 {
 
@@ -55,7 +57,7 @@ class UserController extends AbstractController
 
       
 
-        $user->setRoles(['ROLE_USER']); 
+        
          
         $em= $manager->getManager();
         
@@ -77,7 +79,7 @@ class UserController extends AbstractController
 
 
 
-#[Route('/authentification/{id}', name: 'app_authentification')]
+/* #[Route('/authentification/{id}', name: 'app_authentification')]
 public function connexion(Request $request, $id, UtilisateurRepository $utili): Response
 {
     $form = $this->createForm( AuthentificationType::class);
@@ -115,7 +117,7 @@ public function connexion(Request $request, $id, UtilisateurRepository $utili): 
     return $this->render('user/authen.html.twig', [
         'form' => $form->createView(),
     ]);
-}
+}*/
 
 
    
@@ -137,6 +139,8 @@ public function deleteau($id, ManagerRegistry $manager, UtilisateurRepository $r
 #[Route('/e/{id}', name: 'app_edit')]
 public function editau(ManagerRegistry $manager,UtilisateurRepository  $utilisateurrep,$id,  Request $req): Response
 {
+
+
         $em= $manager->getManager();
         $utili= $utilisateurrep->find($id); 
         
@@ -162,7 +166,49 @@ public function editau(ManagerRegistry $manager,UtilisateurRepository  $utilisat
 }
 
 
+  
+  
 
+#[Route(path: '/loggin', name: 'app_login')]
+public function login(AuthenticationUtils $authenticationUtils): Response
+{
+    // if ($this->getUser()) {
+    //     return $this->redirectToRoute('target_path');
+    // }
+
+    // get the login error if there is one
+    $error = $authenticationUtils->getLastAuthenticationError();
+    // last username entered by the user
+    $lastUsername = $authenticationUtils->getLastUsername();
+
+    return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+}
+
+#[Route(path: '/logout', name: 'app_logout')]
+
+
+public function logout(SessionInterface $session): void
+{   
+    if ($session->has('user_id') ) {
+        $session->remove('user_id');
+        $session->remove('user_role');
+        $session->remove('user_email');
+        $session->remove('user_address');
+        $session->remove('user_phonenumber');
+        $session->remove('user_score');
+        $session->remove('user_name');
+    }
+
+    throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+}
+
+
+
+#[Route('/profile', name: 'app_profil')]
+public function Profil(): Response
+{
+    return $this->render('user/profile.html.twig');
+}
 
 
 

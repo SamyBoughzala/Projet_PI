@@ -43,9 +43,9 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
         if (!$user) {
             throw new CustomUserMessageAuthenticationException("This e-mail doesn't exist.");
         }
-        if ($user && $user->getStatus() !== 'Vérifié') {
-            throw new CustomUserMessageAuthenticationException('Your account is not verified, please verify your email');
-        }
+        //if ($user && $user->getStatus() !== 'Vérifié') {
+            //throw new CustomUserMessageAuthenticationException('Your account is not verified, please verify your email');
+        //}
                 return new Passport(
                     new UserBadge($email),
                     new PasswordCredentials ($request->request->get('password', '')),
@@ -58,15 +58,19 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): Response
     {
-        $path = $this->getLoginUrl($request);
+        
         $user = $token->getUser();
-        if ($user instanceof Utilisateur) {
+          if ($user instanceof Utilisateur) {
         $request->getSession()->set('user_id', $user->getId());
         $request->getSession()->set('user_name', $user->getPrenom() . ' ' . $user->getNom());
+        $request->getSession()->set('user_phonenumber', $user->getTelephone());
+        $request->getSession()->set('user_email', $user->getEmail());
+        $request->getSession()->set('user_address', $user->getAdresse());
+        $request->getSession()->set('user_score', $user->getScore());
         $request->getSession()->set('user_role', $user->getRoles());
       
         }
-            return new RedirectResponse($this->urlGenerator->generate('app_user'));
+            return new RedirectResponse($this->urlGenerator->generate('app_profil')); //page d'accueil
     }
 
     protected function getLoginUrl(Request $request): string
