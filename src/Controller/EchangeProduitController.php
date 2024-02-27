@@ -2,11 +2,12 @@
 
 namespace App\Controller;
 
-use App\Entity\EchangeProduit;
 use App\Entity\Produit;
+use App\Entity\EchangeProduit;
 use App\Form\EchangeProduitType;
 use App\Repository\EchangeProduitRepository;
 use App\Repository\ProduitRepository;
+use App\Repository\UtilisateurRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,9 +26,10 @@ class EchangeProduitController extends AbstractController
     }
 
     #[Route('/new/{productId}', name: 'app_echange_produit_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager,int $productId,ProduitRepository $produitRepository): Response
+    public function new(Request $request, EntityManagerInterface $entityManager,int $productId,ProduitRepository $produitRepository,UtilisateurRepository $utilisateurRepository): Response
     {
         $user = $this->getUser();
+        //$user = $utilisateurRepository->find(1);
         $userProducts = $produitRepository->findBy(['utilisateur' => $user]);
 
         $selectedProduct = $produitRepository->find($productId);
