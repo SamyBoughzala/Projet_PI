@@ -2,3 +2,6 @@
 #    path: /
 #    controller: App\Controller\DefaultController::index
 
+loggin:
+    path: /loggin
+    controller: App\Controller\SecurityController::login

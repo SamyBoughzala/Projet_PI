@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\UtilisateurRepository;
 use App\Repository\ServiceRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -54,9 +55,15 @@ class AdminContollerController extends AbstractController
         return $this->render('admin/commandes.html.twig');
     }
 
+    
+
     #[Route('/admin/utilisateurs', name: 'app_admin_utilisateurs')]
-    public function utilisateurs(): Response
+    public function utilisateurs(UtilisateurRepository $utilisateurs ): Response
     {
-        return $this->render('admin/utilisateurs.html.twig');
+
+        return $this->render('admin/utilisateurs.html.twig', [
+            'rep'=> $utilisateurs->findAll(),
+        ]);
+        
     }
 }

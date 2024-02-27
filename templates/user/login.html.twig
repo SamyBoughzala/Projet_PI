@@ -1,0 +1,24 @@
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Connexion</title>
+</head>
+<body>
+    <h1>Connexion</h1>
+    
+    {# Votre formulaire de connexion avec les champs email et password #}
+    <form method="post">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br><br>
+        
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br><br>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+        
+        <button type="submit">Connexion</button>
+    </form>
+</body>
+</html>
