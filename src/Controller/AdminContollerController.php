@@ -6,6 +6,7 @@ use App\Repository\ProduitRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Repository\UtilisateurRepository;
 use App\Repository\ServiceRepository;
+use App\Repository\ReclamationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -43,9 +44,12 @@ class AdminContollerController extends AbstractController
 
 
     #[Route('/admin/reclamations', name: 'app_admin_reclamations')]
-    public function reclamations(): Response
+    public function reclamations(ReclamationRepository $reclamationRepository): Response
     {
-        return $this->render('admin/reclamations.html.twig');
+        $reclamations = $reclamationRepository->findAll();
+        return $this->render('admin/reclamations.html.twig', [
+            'reclamations' => $reclamations
+        ]);
     }
 
     #[Route('/admin/messages', name: 'app_admin_messages')]

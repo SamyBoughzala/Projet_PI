@@ -1,0 +1,30 @@
+
+{% extends 'baseFrontOffice.html.twig'%}
+{% block body %}
+
+{% if reponse is not null %}
+<table >
+    <thead>
+        <tr>
+            <td>Reason of Complaint</td>
+            <td>Description</td>
+        </tr>
+    </thead>
+
+    <tbody>
+    
+        <tr>
+            <td>{{ reponse.titreR }}</td>
+            <td>{{ reponse.descriptionR }}</td>
+        </tr>
+    </tbody>
+</table>
+
+{% else %}
+
+<h2>No reponse for this complaint</h2>
+
+{% endif %}
+
+{% endblock %}
+ 

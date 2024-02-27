@@ -2,54 +2,33 @@
 
 namespace App\Entity;
 
-use App\Repository\ReclamationRepository;
-use Doctrine\DBAL\Types\Types;
+use App\Repository\ReponseRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ORM\Entity(repositoryClass: ReclamationRepository::class)]
-class Reclamation
+#[ORM\Entity(repositoryClass: ReponseRepository::class)]
+class Reponse
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'reclamations')]
-    #[ORM\JoinColumn(nullable: false)]
-    #[Assert\NotBlank(message: "Please select a user")]
-    private ?Utilisateur $utilisateur = null;
-
-
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message: "Please select a reason")]
+    #[Assert\NotBlank(message: "Please select the designed reason")]
     private ?string $titreR = null;
 
-
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "Please provide further details")]
     private ?string $descriptionR = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $date = null;
-
-
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?reclamation $reponse = null;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getUtilisateur(): ?Utilisateur
-    {
-        return $this->utilisateur;
-    }
-
-    public function setUtilisateur(?Utilisateur $utilisateur): static
-    {
-        $this->utilisateur = $utilisateur;
-
-        return $this;
     }
 
     public function getTitreR(): ?string
@@ -76,14 +55,14 @@ class Reclamation
         return $this;
     }
 
-    public function getDate(): ?\DateTimeInterface
+    public function getReponse(): ?reclamation
     {
-        return $this->date;
+        return $this->reponse;
     }
 
-    public function setDate(\DateTimeInterface $date): static
+    public function setReponse(reclamation $reponse): static
     {
-        $this->date = $date;
+        $this->reponse = $reponse;
 
         return $this;
     }
