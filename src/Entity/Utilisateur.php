@@ -68,12 +68,16 @@ class Utilisateur implements PasswordAuthenticatedUserInterface ,UserInterface
     #[ORM\OneToMany(mappedBy: 'utilisateur', targetEntity: Service::class, orphanRemoval: true)]
     private Collection $services;
 
+    #[ORM\OneToMany(mappedBy: 'reviewer', targetEntity: Review::class, orphanRemoval: true)]
+    private Collection $reviews;
+
     public function __construct()
     {
         $this->commentaires = new ArrayCollection();
         $this->produits = new ArrayCollection();
         $this->reclamations = new ArrayCollection();
         $this->services = new ArrayCollection();
+        $this->reviews = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -364,6 +368,36 @@ class Utilisateur implements PasswordAuthenticatedUserInterface ,UserInterface
             // set the owning side to null (unless already changed)
             if ($service->getUtilisateur() === $this) {
                 $service->setUtilisateur(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Review>
+     */
+    public function getReviews(): Collection
+    {
+        return $this->reviews;
+    }
+
+    public function addReview(Review $review): static
+    {
+        if (!$this->reviews->contains($review)) {
+            $this->reviews->add($review);
+            $review->setReviewer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReview(Review $review): static
+    {
+        if ($this->reviews->removeElement($review)) {
+            // set the owning side to null (unless already changed)
+            if ($review->getReviewer() === $this) {
+                $review->setReviewer(null);
             }
         }
 

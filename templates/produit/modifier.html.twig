@@ -1,0 +1,36 @@
+{% extends "baseFrontOffice.html.twig" %}
+{% block title %}Modifier produit{% endblock %}
+{% block subheader %}
+			<div class="hero">
+				<div class="container">
+					<div class="row justify-content-between">
+						<div class="col-lg-5">
+							<div class="intro-excerpt">
+								<h1>Products</h1>
+							</div>
+						</div>
+						<div class="col-lg-7">
+							
+						</div>
+					</div>
+				</div>
+			</div>
+{% endblock %}
+{% block body %}
+<div align="center" style= "width: 50%; margin: 0 auto;">
+<h1>Modifie Product</h1>
+
+{{ form_start(formX,{'attr': {'novalidate': 'novalidate'}}) }}
+    {{ form_row(formX.titreProduit) }}
+    {{ form_row(formX.descriptionProduit) }}
+	{{ form_row(formX.photo) }}
+	{{ form_row(formX.ville) }}
+	{{ form_row(formX.choixEchange) }}
+	{{ form_row(formX.etat) }}
+	{{ form_row(formX.prix) }}
+    {# Affichage des erreurs #}
+
+    {{form_errors(formX)}}
+{{ form_end(formX) }}
+</div>
+{% endblock %}

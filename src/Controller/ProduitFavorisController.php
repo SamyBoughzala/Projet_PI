@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\WishList;
+use App\Entity\Produit;
 use App\Repository\ProduitRepository;
 use App\Repository\WishListRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

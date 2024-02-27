@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProduitRepository::class)]
 class Produit
@@ -17,44 +18,50 @@ class Produit
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:"this field cannot be blanked")]
     private ?string $titreProduit = null;
    
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank(message:"this field cannot be blanked")]
     private ?string $descriptionProduit = null;
 
     #[ORM\Column(length: 255, nullable:true)]
+    #[Assert\NotBlank(message:"this field cannot be blanked")]
     private ?string $photo = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:"this field cannot be blanked")]
     private ?string $ville = null;
 
     #[ORM\Column]
     private ?bool $choixEchange = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:"this field cannot be blanked")]
     private ?string $etat = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message:"this field cannot be blanked")]
     private ?float $prix = null;
 
     #[ORM\ManyToOne(inversedBy: 'produits')]
+    #[Assert\NotBlank(message:"this field cannot be blanked")]
     private ?Categorie $categorie = null;
 
     #[ORM\ManyToOne(inversedBy: 'produits')]
+    #[Assert\NotBlank(message:"this field cannot be blanked")]
     #[ORM\JoinColumn(nullable: false)]
     private ?Utilisateur $utilisateur = null;
 
-    #[ORM\OneToMany(mappedBy: 'produit', targetEntity: WishList::class)]
-    private Collection $wishLists;
-
-    #[ORM\ManyToOne(inversedBy: 'Produit')]
-    private ?WishList $wishList = null;
+    #[ORM\OneToMany(mappedBy: 'produit', targetEntity: Review::class, orphanRemoval: true)]
+    private Collection $reviews;
 
     public function __construct()
     {
-        $this->wishLists = new ArrayCollection();
+        $this->reviews = new ArrayCollection();
     }
+   
 
     public function getId(): ?int
     {
@@ -170,44 +177,33 @@ class Produit
     }
 
     /**
-     * @return Collection<int, WishList>
+     * @return Collection<int, Review>
      */
-    public function getWishLists(): Collection
+    public function getReviews(): Collection
     {
-        return $this->wishLists;
+        return $this->reviews;
     }
 
-    public function addWishList(WishList $wishList): static
+    public function addReview(Review $review): static
     {
-        if (!$this->wishLists->contains($wishList)) {
-            $this->wishLists->add($wishList);
-            $wishList->setProduit($this);
+        if (!$this->reviews->contains($review)) {
+            $this->reviews->add($review);
+            $review->setProduit($this);
         }
 
         return $this;
     }
 
-    public function removeWishList(WishList $wishList): static
+    public function removeReview(Review $review): static
     {
-        if ($this->wishLists->removeElement($wishList)) {
+        if ($this->reviews->removeElement($review)) {
             // set the owning side to null (unless already changed)
-            if ($wishList->getProduit() === $this) {
-                $wishList->setProduit(null);
+            if ($review->getProduit() === $this) {
+                $review->setProduit(null);
             }
         }
 
         return $this;
     }
 
-    public function getWishList(): ?WishList
-    {
-        return $this->wishList;
-    }
-
-    public function setWishList(?WishList $wishList): static
-    {
-        $this->wishList = $wishList;
-
-        return $this;
-    }
 }

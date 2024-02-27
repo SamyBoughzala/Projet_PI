@@ -2,4 +2,47 @@
 {% block title %}Produits{% endblock %}
 {% block body %}
 <h1>PRODUITS</h1>
+<div class="details" style="align: center;">
+                <div class="recentOrders">
+                    <div class="cardHeader">
+                        <h2>Product List</h2>
+                    </div>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <td>Photo</td>
+                                <td>Title</td>
+                                <td>Category</td>
+                                <td>Barter</td>
+                                <td>Actions</td>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                        {% for pr in product %}
+                            <tr>
+                                
+                                 	<div class="d-flex">
+                                    <td>
+											<img src="{{ asset('uploads/produits/' ~ pr.photo) }}" alt="" class="rounded-image" >
+                                    </td>
+									</div> 
+                                
+                                <td>{{ pr.titreProduit }}</td>
+                                <td>{{ pr.categorie.nomCategorie }}</td>
+                                <td>{{ pr.utilisateur.nom ~ ' ' ~ pr.utilisateur.prenom }}</td>
+                                <td>
+                                    <a href="#"><i class="fa-regular fa-eye" ></i></a>
+                                    <a href="{{ path('app_admin_produits_delete', { id: pr.id }) }}"><i class="fa-regular fa-circle-xmark" style="color: red;"></i></a>
+                                </td>
+                                
+                            </tr>
+                        {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
 {% endblock %}
