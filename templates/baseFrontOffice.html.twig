@@ -53,9 +53,11 @@
 										<div class="col-md-3">
 											<h5>Category 1</h5>
 											<ul class="list-unstyled">
-												<li><a class="dropdown-item subcategory-link" href="#">Subcategory 1</a></li>
-												<li><a class="dropdown-item subcategory-link" href="#">Subcategory 2</a></li>
-												<li><a class="dropdown-item subcategory-link" href="#">Subcategory 3</a></li>
+												{% for category in categories.findAll() %}
+													{% if category.type == 'product' %}
+														<li>{{ category.getNomCategorie() }}</li>
+													{% endif %}>
+												{% endfor %}>
 												<!-- Add more subcategories as needed -->
 											</ul>
 										</div>										
@@ -136,7 +138,7 @@
 					<div class="cardBox">
 						<div class="card">
 							<div>
-								<div class="numbers">Log Out</div>
+								<a href="/{{app.user ? 'logout' : 'loggin' }}"> <div class="numbers"> {{app.user ? 'Logout' : 'Login' }} </div> </a>
 							</div>
 							<div class="iconBx">
 								<i class="fa-solid fa-arrow-right-from-bracket"></i>
@@ -145,7 +147,11 @@
 
 						<div class="card">
 							<div>
-								<div class="numbers">transactions</div>
+								{% if app.user %}
+									<a href="{{ path('app_echange_produit_transactions', {'id': 1}) }}"> <div class="numbers">Transactions</div> </a>
+								{% else %}
+									<a href="{{ path('index') }}"> <div class="numbers">Register</div> </a>
+								{% endif %}
 							</div>
 							<div class="iconBx">
 								<i class="fa-regular fa-handshake"></i>

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Produit;
+use App\Entity\Utilisateur;
 use App\Entity\EchangeProduit;
 use App\Form\EchangeProduitType;
 use App\Repository\EchangeProduitRepository;
@@ -25,34 +26,33 @@ class EchangeProduitController extends AbstractController
         ]);
     }
 
-    #[Route('/new/{productId}', name: 'app_echange_produit_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager,int $productId,ProduitRepository $produitRepository,UtilisateurRepository $utilisateurRepository): Response
+    #[Route('/new/{id}', name: 'app_echange_produit_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager, int $id, ProduitRepository $produitRepository, UtilisateurRepository $utilisateurRepository): Response
     {
         $user = $this->getUser();
-        //$user = $utilisateurRepository->find(1);
+        $selectedProduct = $produitRepository->find($id);
         $userProducts = $produitRepository->findBy(['utilisateur' => $user]);
-
-        $selectedProduct = $produitRepository->find($productId);
         $echangeProduit = new EchangeProduit();
         $echangeProduit->setProduitIn($selectedProduct);
-
-        $form = $this->createForm(EchangeProduitType::class, $echangeProduit);
+        $form = $this->createForm(EchangeProduitType::class, $echangeProduit, [
+            'userProducts' => $userProducts,
+            'selectedProduct' => $selectedProduct,
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($echangeProduit);
             $entityManager->flush();
-
             return $this->redirectToRoute('app_echange_produit_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('echange_produit/new.html.twig', [
-            'echange_produit' => $echangeProduit,
+            'selectedProduct' => $selectedProduct,
             'userProducts' => $userProducts,
             'form' => $form,
-            //'form' => $form->createView(),
         ]);
     }
+
 
     #[Route('/{id}', name: 'app_echange_produit_show', methods: ['GET'])]
     public function show(EchangeProduit $echangeProduit): Response
@@ -63,9 +63,17 @@ class EchangeProduitController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_echange_produit_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, EchangeProduit $echangeProduit, EntityManagerInterface $entityManager): Response
+    public function edit(EchangeProduit $echangeProduit, Request $request, EntityManagerInterface $entityManager, ProduitRepository $produitRepository): Response
     {
-        $form = $this->createForm(EchangeProduitType::class, $echangeProduit);
+        $user = $this->getUser();
+        $userProducts = $produitRepository->findBy(['utilisateur' => $user]);
+        $selectedProduct = $echangeProduit->getProduitIn();
+
+        $form = $this->createForm(EchangeProduitType::class, $echangeProduit, [
+            'userProducts' => $userProducts,
+            'selectedProduct' => $selectedProduct,
+        ]);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -74,11 +82,14 @@ class EchangeProduitController extends AbstractController
             return $this->redirectToRoute('app_echange_produit_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('echange_produit/edit.html.twig', [
+        return $this->render('echange_produit/edit.html.twig', [
             'echange_produit' => $echangeProduit,
-            'form' => $form,
+            'userProducts' => $userProducts,
+            'form' => $form->createView(),
         ]);
     }
+
+
 
     #[Route('/{id}/delete', name: 'app_echange_produit_delete', methods: ['POST'])]
     public function delete(Request $request, EchangeProduit $echangeProduit, EntityManagerInterface $entityManager): Response
@@ -91,7 +102,7 @@ class EchangeProduitController extends AbstractController
         return $this->redirectToRoute('app_echange_produit_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/transactions', name: 'app_echange_produit_transactions')]
+    #[Route('/{id}/transactions', name: 'app_echange_produit_transactions')]
     public function transactions(EchangeProduitRepository $echangeProduitRepository, ProduitRepository $produitRepository): Response
     {
         // Get the current user
@@ -100,10 +111,10 @@ class EchangeProduitController extends AbstractController
         $userProducts = $produitRepository->findBy(['utilisateur' => $user]);
         $transactions = [];
         foreach ($userProducts as $product) {
-            $productTransactions = $echangeProduitRepository->findByProduitIn($product);
-            $transactions = array_merge($transactions, $productTransactions);
+            $productTransaction = $echangeProduitRepository->findBy(['produitIn' => $product]);
+            $transactions = array_merge($transactions, $productTransaction);
         }
-        // Render the template with the user's transacions
+        
         return $this->render('echange_produit/transactions.html.twig', [
             'transactions' => $transactions,
         ]);

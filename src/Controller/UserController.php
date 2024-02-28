@@ -23,11 +23,6 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class UserController extends AbstractController
 {
-
-   
-
-
-
     #[Route('/user', name: 'app_user')]
     public function index(): Response
     {
@@ -36,45 +31,30 @@ class UserController extends AbstractController
         ]);
     }
 
-
-
     #[Route('/users', name: 'app_user')]
     public function register(Request $request, ManagerRegistry $manager, UserPasswordHasherInterface $passwordHasher): Response
-{
-
-    
-    $user = new Utilisateur();
-    $form = $this->createForm(InscriptionType::class, $user );
-    $form->handleRequest($request);
-
-    
-    if($form->isSubmitted() && $form->isValid()) {
-
-        $plainPassword = $form->get('mot_de_passe')->getData();
-
-        $hashedPassword = $passwordHasher->hashPassword($user, $plainPassword);
-        $user->setMotDePasse($hashedPassword);
-
-      
+    { 
+        $user = new Utilisateur();
+        $form = $this->createForm(InscriptionType::class, $user );
+        $form->handleRequest($request);
 
         
-         
-        $em= $manager->getManager();
-        
-        $em->persist($user);
-        $em->flush();
-      
+        if($form->isSubmitted() && $form->isValid()) {
 
-        $userId = $user->getId();
+            $plainPassword = $form->get('mot_de_passe')->getData();
 
-
+            $hashedPassword = $passwordHasher->hashPassword($user, $plainPassword);
+            $user->setMotDePasse($hashedPassword);                 
+            $em= $manager->getManager();            
+            $em->persist($user);
+            $em->flush();        
+            $userId = $user->getId();
         return $this->redirectToRoute('app_login');
+        }
+        return $this->renderForm('user/inscrit.html.twig',[
+            'form'=>$form, 
+        ]);
     }
-    return $this->renderForm('user/inscrit.html.twig',[
-        'form'=>$form, 
-
-]);
-}
 
 
 
@@ -202,14 +182,11 @@ public function logout(SessionInterface $session): void
     throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
 }
 
-
-
 #[Route('/profile', name: 'app_profil')]
 public function Profil(): Response
 {
     return $this->render('user/profile.html.twig');
 }
-
 
 
 }

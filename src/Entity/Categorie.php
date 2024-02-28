@@ -23,6 +23,11 @@ class Categorie
         message: "Field must not contain numbers and must be at most 20 characters long."
     )]
     private ?string $nomCategorie = null;
+
+    #[ORM\Column(length: 20)]
+    #[Assert\NotBlank(message: "Field must not be empty.")]
+    #[Assert\Choice(choices: ['service', 'product'], message: "Invalid type.")]
+    private ?string $type = null;
     
 
     #[ORM\OneToMany(mappedBy: 'categorie', targetEntity: Service::class, orphanRemoval: true)]
@@ -50,6 +55,18 @@ class Categorie
     public function setNomCategorie(string $nomCategorie): static
     {
         $this->nomCategorie = $nomCategorie;
+
+        return $this;
+    }
+    
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): static
+    {
+        $this->type = $type;
 
         return $this;
     }

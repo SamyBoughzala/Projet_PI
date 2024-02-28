@@ -25,11 +25,14 @@
             <tbody>
                 {% for transaction in transactions %}
                     <tr>
-                        <td>{{ transaction }}</td>
+                        <td>{{ transaction.produitOut.getTitreProduit() }}</td>
                         <td><button  class="btn btn-primary">Validate The Exchange</button></td>
                     </tr>
+
+                {% endfor %}
             </tbody>       
         </table>
     </div>
     <a href="{{ path('index') }}" class="btn btn-success">Back Home</a>
+
 {% endblock %}

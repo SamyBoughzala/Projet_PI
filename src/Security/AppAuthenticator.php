@@ -70,7 +70,7 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
         $request->getSession()->set('user_role', $user->getRoles());
       
         }
-            return new RedirectResponse($this->urlGenerator->generate('app_profil')); //page d'accueil
+            return new RedirectResponse($this->urlGenerator->generate('index')); //page d'accueil
     }
 
     protected function getLoginUrl(Request $request): string
