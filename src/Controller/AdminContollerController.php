@@ -2,6 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Evenement;
+use App\Form\EvenementType;
+use App\Repository\EvenementRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -55,4 +59,5 @@ class AdminContollerController extends AbstractController
     {
         return $this->render('admin/utilisateurs.html.twig');
     }
+    
 }

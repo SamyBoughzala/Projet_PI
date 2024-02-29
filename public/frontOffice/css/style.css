@@ -30,7 +30,10 @@ a {
   a.more {
     font-weight: 600; }
 
-.custom-navbar {
+    .form-error {
+      color: red; }
+
+    .custom-navbar {
   background: #3b5d50 !important;
   padding-top: 20px;
   padding-bottom: 20px; }

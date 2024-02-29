@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\EvenementRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: EvenementRepository::class)]
 class Evenement
@@ -15,9 +16,11 @@ class Evenement
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:"The product name is required.")]
     private ?string $titreEvenement = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank(message:"Please add a discription.")]
     private ?string $descriptionEvenement = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -27,11 +30,15 @@ class Evenement
     private ?\DateTimeInterface $dateFin = null;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
     private ?Produit $produit = null;
 
     #[ORM\OneToOne(mappedBy: 'evenement', cascade: ['persist', 'remove'])]
     private ?ParticipationEvenement $participationEvenement = null;
+
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:"Please add your product's image address.")]
+    #[Assert\Url(message:"You must provide us with the image address.")]
+    private ?string $imgLink = null;
 
     public function getId(): ?int
     {
@@ -111,6 +118,18 @@ class Evenement
         }
 
         $this->participationEvenement = $participationEvenement;
+
+        return $this;
+    }
+
+    public function getImgLink(): ?string
+    {
+        return $this->imgLink;
+    }
+
+    public function setImgLink(string $imgLink): static
+    {
+        $this->imgLink = $imgLink;
 
         return $this;
     }

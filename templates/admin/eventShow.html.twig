@@ -1,0 +1,111 @@
+{% extends "baseBackOffice.html.twig" %}
+{% block title %}Event{% endblock %}
+{% block body %}
+    <div class="cardBox">
+                <div class="card">
+                    <div>
+                        <div class="numbers">1,504</div>
+                        <div class="cardName">Visiteurs par jour</div>
+                    </div>
+
+                    <div class="iconBx">
+                        <ion-icon name="eye-outline"></ion-icon>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div>
+                        <div class="numbers">80</div>
+                        <div class="cardName">Produits</div>
+                    </div>
+
+                    <div class="iconBx">
+                        <i class="fa-solid fa-boxes-stacked"></i>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div>
+                        <div class="numbers">24</div>
+                        <div class="cardName">Services</div>
+                    </div>
+
+                    <div class="iconBx">
+                        <i class="fa-regular fa-handshake"></i>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div>
+                        <div class="numbers">284</div>
+                        <div class="cardName">Comments</div>
+                    </div>
+
+                    <div class="iconBx">
+                        <ion-icon name="chatbubbles-outline"></ion-icon>
+                    </div>
+                </div>
+
+
+            </div>
+            
+            <!-- ================ Order Details List ================= -->
+
+            <div class="details">
+    <div class="recentOrders">
+        <div class="cardHeader">
+            <h2>the Product</h2>
+            <a href="{{ path('app_event_edit', {'id': evenement.id}) }}" class="btn">Edit</a>
+            <a href="{{ path('app_event_index', {'id': evenement.id}) }}" class="btn">Back</a>
+        </div>
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th>Id</th>
+                    <td>{{ evenement.id }}</td>
+                </tr>
+                <tr>
+                    <th>Title</th>
+                    <td>{{ evenement.titreEvenement }}</td>
+                </tr>
+                <tr>
+                    <th>Image</th>
+                    <td><img src="{{ evenement.imgLink }}" alt="Image" class="img-fluid" width="300" height="300"></td>
+                </tr>
+                <tr>
+                    <th>Description</th>
+                    <td>{{ evenement.descriptionEvenement }}</td>
+                </tr>
+                <tr>
+                    <th>Date Debut</th>
+                    <td>{{ evenement.dateDebut ? evenement.dateDebut|date('Y-m-d H:i:s') : '' }}</td>
+                </tr>
+                <tr>
+                    <th>Date Fin</th>
+                    <td>{{ evenement.dateFin ? evenement.dateFin|date('Y-m-d H:i:s') : '' }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+            <!-- ================= New Customers ================ -->
+                <div class="recentCustomers">
+                    <div class="cardHeader">
+                        <h2>Participating Customers</h2>
+                    </div>
+
+                    <table>
+                        <tr>
+                            {#<td width="60px">
+                                <div class="imgBx"><img src="{{asset('backOffice/imgs/customer02.jpg')}}" alt=""></div>
+                            </td>
+                            <td>
+                                <h4>David <br> <span>Italy</span></h4>
+                            </td>#}
+                            <td>no Participent found</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+{% endblock %}

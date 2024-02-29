@@ -1,0 +1,24 @@
+{{ form_start( form,{'attr': {'class':'form-horizontal','novalidate':'novalidate'}} ) }}
+{{ form_label(form.titreEvenement, 'Product Name') }}
+{{ form_widget(form.titreEvenement, {'attr': {'class': 'form-control'}}) }}
+<div style="color: red;">{{ form_errors(form.titreEvenement, {'attr': {'class': 'form-error'}})}}</div>
+
+{{ form_label(form.descriptionEvenement, 'Product Description') }}
+{{ form_widget(form.descriptionEvenement, {'attr': {'class': 'form-control'}}) }}
+<div style="color: red;">{{ form_errors(form.descriptionEvenement, {'attr': {'class': 'form-error'}}) }}</div>
+
+{{ form_label(form.dateDebut, 'Start Date') }}
+{{ form_widget(form.dateDebut, {'attr': {'class': 'form-control'}}) }}
+<div style="color: red;">{{ form_errors(form.dateDebut, {'attr': {'class': 'form-error'}}) }}</div>
+
+{{ form_label(form.dateFin, 'End Date') }}
+{{ form_widget(form.dateFin, {'attr': {'class': 'form-control'}}) }}
+<div style="color: red;">{{ form_errors(form.dateFin, {'attr': {'class': 'form-error'}}) }}</div>
+
+{{ form_label(form.imgLink, 'Image Link') }}
+{{ form_widget(form.imgLink, {'attr': {'class': 'form-control'}}) }}
+<div style="color: red;">{{ form_errors(form.imgLink, {'attr': {'class': 'form-error'}}) }}</div>
+
+<button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+
+{{ form_end(form) }}
