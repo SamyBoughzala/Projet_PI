@@ -20,7 +20,6 @@ class EchangeProduitType extends AbstractType
         
         $builder
             ->add('date_echange')
-            ->add('valide')
             ->add('produitIn', TextType::class, [
                 'disabled' => true, // Set the produitIn field as read-only
                 'data' => $selectedProduct->getTitreProduit(), // Set the data to the titreProduit of the first user product, adjust this according to your logic

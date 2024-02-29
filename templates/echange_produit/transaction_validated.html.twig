@@ -1,0 +1,48 @@
+{% extends "baseFrontOffice.html.twig" %}
+
+{% block title %} Product Exchange List Index {% endblock %}
+
+
+{% block body %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h4>Echange Produit</h4>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Produit In</th>
+            <th>Produit Out</th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr>
+              <td>{{ echangeProduit.getDateEchange()  | date("Y-m-d H:i:s") }}</td>
+              <td>
+                <ul>
+                  <li>Product In </li>
+                  <li>Titre Produit: {{ echangeProduit.produitIn.titreProduit }}</li>
+                  <li>Photo: {{ echangeProduit.produitIn.photo }}</li>
+                  <li>Ville: {{ echangeProduit.produitIn.ville }}</li>
+                  <li>Categorie: {{ echangeProduit.produitIn.categorie.getNomCategorie()  }}</li>
+                </ul>
+              </td>
+              <td>
+                <ul>
+                  <li>Product Out </li>
+                  <li>Titre Produit: {{ echangeProduit.produitOut.titreProduit }}</li>
+                  <li>Photo: {{ echangeProduit.produitOut.photo }}</li>
+                  <li>Ville: {{ echangeProduit.produitOut.ville }}</li>
+                  <li>Categorie: {{ echangeProduit.produitOut.categorie.getNomCategorie() }}</li>
+                </ul>
+              </td>
+            </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+ 
+
+{% endblock %}

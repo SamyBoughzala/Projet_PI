@@ -10,6 +10,7 @@ use App\Repository\EchangeProduitRepository;
 use App\Repository\ProduitRepository;
 use App\Repository\UtilisateurRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,7 +44,7 @@ class EchangeProduitController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($echangeProduit);
             $entityManager->flush();
-            return $this->redirectToRoute('app_echange_produit_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_echange_produit_transactions', ['id' => 1], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('echange_produit/new.html.twig', [
@@ -79,7 +80,7 @@ class EchangeProduitController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_echange_produit_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_echange_produit_transactions', ['id' => 1], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('echange_produit/edit.html.twig', [
@@ -98,8 +99,13 @@ class EchangeProduitController extends AbstractController
             $entityManager->remove($echangeProduit);
             $entityManager->flush();
         }
-
-        return $this->redirectToRoute('app_echange_produit_index', [], Response::HTTP_SEE_OTHER);
+        $user = $this->getUser();
+        if ($user->getRoles() == 'ROLE_ADMIN') {
+            return $this->redirectToRoute('app_echange_produit_index', [], Response::HTTP_SEE_OTHER);
+        }
+        else {
+            return $this->redirectToRoute('app_echange_produit_transactions', ['id' => 1], Response::HTTP_SEE_OTHER);
+        }
     }
 
     #[Route('/{id}/transactions', name: 'app_echange_produit_transactions')]
@@ -119,4 +125,25 @@ class EchangeProduitController extends AbstractController
             'transactions' => $transactions,
         ]);
     }
+
+    #[Route('/{id}/transactions/validate', name: 'app_echange_produit_transactions_validate')]
+    public function validate(Request $request, EchangeProduit $echangeProduit,$id,EchangeProduitRepository $echangeProduitRepository,ManagerRegistry $managerRegistry)
+    {
+        $em = $managerRegistry->getManager();
+
+        $echangeProduit = $echangeProduitRepository->find(['id' => $id]);
+
+        if (!$echangeProduit) {
+            throw $this->createNotFoundException('Echange produit not found.');
+        }
+
+        $echangeProduit->setValide(true);
+        $em->persist($echangeProduit);
+        $em->flush();
+
+        return $this->render('echange_produit/transaction_validated.html.twig', [
+            'echangeProduit' => $echangeProduit,
+        ]);
+    }
+    
 }
