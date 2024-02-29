@@ -10,7 +10,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: EchangeProduitRepository::class)]
 #[UniqueEntity(fields: ['produitIn', 'produitOut'], message: 'This exchange already exists')]
-#[UniqueEntity(fields: ['produitIn', 'produitIn'], message: 'The  Poruct In is the Same as product Out  ')]
+#[UniqueEntity(fields: ['produitIn', 'produitIn'], message: 'The  Poruct In is the Same as product Out ')]
 class EchangeProduit
 {
     #[ORM\Id]

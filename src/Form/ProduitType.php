@@ -43,7 +43,6 @@ class ProduitType extends AbstractType
                 'required' => true, // Set to true if the author selection is mandatory
     
             ])
-            ->add('Add_Product', SubmitType::class);
         ;
     }
 

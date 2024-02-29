@@ -1,4 +1,12 @@
 {% extends "baseFrontOffice.html.twig" %}
+        {% block CSS %}
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+		<link href="{{asset('frontOffice/css/bootstrap.min.css')}}" rel="stylesheet">
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+		<link href="{{asset('frontOffice/css/tiny-slider.css')}}" rel="stylesheet">
+		<link href="{{asset('frontOffice/css/style.css')}}" rel="stylesheet">
+        <link href="{{asset('ProductForm/style.css')}}" rel="stylesheet">
+        {% endblock %}
 {% block title %}Ajouter produit{% endblock %}
 {% block subheader %}
 			<div class="hero">
@@ -17,196 +25,53 @@
 			</div>
 {% endblock %}
 {% block body %}
-<div align="center" style="max-width: 50%; margin: 0 auto;">
-<h1>Add Product</h1>
+ {#    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content" style="padding: 10px 10px 10px 10px;">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Add your Product</h5><button class="btn p-1" type="button" data-bs-dismiss="modal" aria-label="Close"><span class="fas fa-times fs--1"></span></button>
+                                </div id="MyForm">
+                                {{ form_start(formulaire,{'attr': {'novalidate': 'novalidate'}}) }}
+                            {{ form_row(formulaire.titreProduit) }} 
+                            {{ form_row(formulaire.descriptionProduit) }}
+                            {{ form_row(formulaire.photo) }}
+                            {{ form_row(formulaire.ville) }}
+                            {{ form_row(formulaire.choixEchange) }}
+                            {{ form_row(formulaire.etat) }}
+                            {{ form_row(formulaire.prix) }}
+                            Affichage des erreurs  
+                            {{ form_errors(formulaire) }}
+                        {{ form_end(formulaire) }}
 
-{{ form_start(formulaire,{'attr': {'novalidate': 'novalidate'}}) }}
-    {{ form_row(formulaire.titreProduit) }} 
-    {{ form_row(formulaire.descriptionProduit) }}
-	{{ form_row(formulaire.photo) }}
-	{{ form_row(formulaire.ville) }}
-	{{ form_row(formulaire.choixEchange) }}
-	{{ form_row(formulaire.etat) }}
-	{{ form_row(formulaire.prix) }}
-     {#Affichage des erreurs  #}
-    {{ form_errors(formulaire) }}
-{{ form_end(formulaire) }}
-</div>  
-
-
-
-{#<div class="content-page">#}
-        <!-- Start content -->
-       {#  <div class="content">
-            <div class="container-fluid">
-
-                <div class="row">
-                    <h1>Add Product</h1>
-                </div>
-
-                <div class="row">
-
-                    <div class="col-md-12"  style="display: flex; justify-content: center;align-items:center;width: 100%" >
-                        <div class="card-box">
-                            <div class="dropdown pull-right">
-                                <a href="#" class="dropdown-toggle arrow-none card-drop" data-toggle="dropdown" aria-expanded="false">
-                                    <i class="mdi mdi-dots-vertical"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right">
-                                    <!-- item-->
-                                    <a href="javascript:void(0);" class="dropdown-item">Action</a>
-                                    <!-- item-->
-                                    <a href="javascript:void(0);" class="dropdown-item">Another action</a>
-                                    <!-- item-->
-                                    <a href="javascript:void(0);" class="dropdown-item">Something else</a>
-                                    <!-- item-->
-                                    <a href="javascript:void(0);" class="dropdown-item">Separated link</a>
                                 </div>
                             </div>
+                    </div> #}
 
-                            <h4 class="header-title m-t-0 m-b-30">Basic Form</h4>
-                            {{ form_start(formulaire, {attr: {novalidate: 'novalidate'}}) }}
+<div class="container-fluid px-1 py-5 mx-auto">
+    <div class="row d-flex justify-content-center">
+        <div class="col-xl-7 col-lg-8 col-md-9 col-11 text-center">
+            <h3>Add Your Product</h3>
+            <div class="card">
+                  {{ form_start(formulaire,{'attr': {'novalidate': 'novalidate'}}) }}
+                            {{ form_row(formulaire.titreProduit) }} 
+                            {{ form_row(formulaire.descriptionProduit) }}
+                            {{ form_row(formulaire.photo) }}
+                            {{ form_row(formulaire.ville) }}
+                            {{ form_row(formulaire.choixEchange) }}
+                            {{ form_row(formulaire.etat) }}
+                            {{ form_row(formulaire.prix) }}
+                            {{ form_row(formulaire.categorie) }}
+                            {{form_row(formulaire.utilisateur)}}
+                            <div style="align: right;">
+                            <button type="submit" class="green-button">Add Product </button>
+                          </div
+                            {{ form_errors(formulaire) }}
+                        {{ form_end(formulaire) }}
 
-                            <div class="form-group">
-                                <label for="nom">Title</label>
-
-                                {{ form_widget(formulaire.titreProduit, {'attr': {'class': 'form-control'}}) }}
-                                {{ form_errors(formulaire.titreProduit, {'attr': {'class': 'text-danger'}}) }}
-
-                            </div>
-                            <div class="form-group">
-                                <ProductType.phplabel for="nom">Prix*</ProductType.phplabel>
-
-                            <div class="form-group">
-                            {{ form_widget(formulaire.prix, {'attr': {'class': 'form-control'}}) }}
-                                {{ form_errors(formulaire.prix, {'attr': {'class': 'text-danger'}}) }}
-
-                            </div>
-
-                                <div class="form-group">
-                                    <ProductType.phplabel for="nom">Address</ProductType.phplabel>
-
-                                    <div class="form-group">
-                                        {{ form_widget(formulaire.ville, {'attr': {'class': 'form-control'}}) }}
-                                        {{ form_errors(formulaire.ville, {'attr': {'class': 'text-danger'}}) }}
-
-                                    </div>
-
-                                <div class="form-group">
-
-                                    <div class="col-sm-12">
-                                        <div class="card-box">
-
-                                            <div class="dropdown pull-right">
-                                                <a href="#" class="dropdown-toggle arrow-none card-drop" data-toggle="dropdown" aria-expanded="false">
-                                                    <i class="mdi mdi-dots-vertical"></i>
-                                                </a>
-                                                <div class="dropdown-menu dropdown-menu-right">
-                                                    <!-- item-->
-                                                    <a href="javascript:void(0);" class="dropdown-item">Action</a>
-                                                    <!-- item-->
-                                                    <a href="javascript:void(0);" class="dropdown-item">Another action</a>
-                                                    <!-- item-->
-                                                    <a href="javascript:void(0);" class="dropdown-item">Something else</a>
-                                                    <!-- item-->
-                                                    <a href="javascript:void(0);" class="dropdown-item">Separated link</a>
-                                                </div>
-                                            </div>
-
-                                            <h4 class="header-title m-t-0 m-b-30">Photo</h4>
-                                            {{ form_widget(formulaire.photo, {'attr': {'class': 'dropify','data-height':'300'}}) }}
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-
-                            <label for="nom">Description</label>
-
-                            {{ form_widget(formulaire.descriptionProduit, {'attr': {'class': 'form-control'}}) }}
-                            {{ form_errors(formulaire.descriptionProduit, {'attr': {'class': 'text-danger'}}) }}
-
-                                </div>
-                                <div class="form-group">
-
-                                    <label for="nom">State</label>
-
-                                    {{ form_widget(formulaire.etat, {'attr': {'class': 'form-control'}}) }}
-                                    {{ form_errors(formulaire.etat, {'attr': {'class': 'text-danger'}}) }}
-
-                                </div>
-                               {#  <div class="form-group">
-
-                                <label for="nom">Couleur</label>
-
-
-                            {{ form_widget(f.coleur, {'attr': {'class': 'form-control'}}) }}
-                                    {{ form_errors(f.coleur, {'attr': {'class': 'text-danger'}}) }}
-
-                                </div>
-
-                                <div class="form-group text-right m-b-0">
-                            {{ form_widget(f.Submit, {'attr': {'class': 'btn btn-primary waves-effect waves-light'}}) }}
-                                    <button type="reset" class="btn btn-secondary waves-effect waves-light m-l-5">Reset
-                                    </button>
-
-                            </div>
-
-
-                            {{ form_end(formulaire) }}
-{#                            <form action="#" data-parsley-validate="" >#}
-{#                                <div class="form-group">#}
-{#                                    <label for="userName">User Name*</label>#}
-{#                                    <input type="text" name="nick" parsley-trigger="change" required="" placeholder="Enter user name" class="form-control" id="userName">#}
-{#                                </div>#}
-{#                                <div class="form-group">#}
-{#                                    <label for="emailAddress">Email address*</label>#}
-{#                                    <input type="email" name="email" parsley-trigger="change" required="" placeholder="Enter email" class="form-control" id="emailAddress">#}
-{#                                </div>#}
-{#                                <div class="form-group">#}
-{#                                    <label for="pass1">Password*</label>#}
-{#                                    <input id="pass1" type="password" placeholder="Password" required="" class="form-control">#}
-{#                                </div>#}
-{#                                <div class="form-group">#}
-{#                                    <label for="passWord2">Confirm Password *</label>#}
-{#                                    <input data-parsley-equalto="#pass1" type="password" required="" placeholder="Password" class="form-control" id="passWord2">#}
-{#                                </div>#}
-{#                                <div class="form-group">#}
-{#                                    <div class="checkbox">#}
-{#                                        <input id="remember-1" type="checkbox" data-parsley-multiple="remember-1">#}
-{#                                        <label for="remember-1"> Remember me </label>#}
-{#                                    </div>#}
-{#                                </div>#}
-
-{#                                <div class="form-group text-right m-b-0">#}
-{#                                    <button class="btn btn-primary waves-effect waves-light" type="submit">#}
-{#                                        Submit#}
-{#                                    </button>#}
-{#                                    <button type="reset" class="btn btn-secondary waves-effect waves-light m-l-5">#}
-{#                                        Cancel#}
-{#                                    </button>#}
-{#                                </div>#}
-
-{#                            </form>#}
-          {#              </div>
-                    </div>
-
-                </div>
             </div>
         </div>
     </div>
-    <script type="text/javascript">
-        $('.dropify').dropify({
-            messages: {
-                'default': 'Drag and drop a file here or click',
-                'replace': 'Drag and drop or click to replace',
-                'remove': 'Remove',
-                'error': 'Ooops, something wrong appended.'
-            },
-            error: {
-                'fileSize': 'The file size is too big (1M max).'
-            }
-        });
-    </script>#}
+</div>
+
 
 {% endblock %}
