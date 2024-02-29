@@ -45,4 +45,24 @@ class ProduitRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+// In your Symfony repository (e.g., ProduitRepository)
+
+// In your Symfony repository (e.g., ProduitRepository)
+public function searchProduitByPriceRanges( $priceRanges)
+    {
+        $em = $this->getEntityManager();
+
+        
+        [$min, $max] = explode('-', $priceRanges);
+
+        return $em
+        ->createQuery(
+            'SELECT a from App\Entity\Produit a WHERE 
+            a.prix BETWEEN ?1 AND ?2')
+            ->setParameter(1,$min)
+            ->setParameter(2,$max)
+            ->getResult();
+    }
 }
+
+
