@@ -154,5 +154,10 @@
     },
     "twig/extra-bundle": {
         "version": "v3.8.0"
-    }
+    },
+
+    "search":
+    path: /search
+    methods: ['GET']
+    controller: App\Controller\ReclamationController::search
 }
