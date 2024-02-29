@@ -1,0 +1,19 @@
+{# templates/verify_code.html.twig #}
+
+
+
+{% block title %}Vérification du Code{% endblock %}
+
+{% block body %}
+    <h1>Vérification du Code</h1>
+
+    {% if error %}
+        <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
+
+    <form action="{{ path('verify_code') }}" method="post">
+        <label for="code">Entrez le code :</label>
+        <input type="text" id="code" name="code" required>
+        <button type="submit">Valider</button>
+    </form>
+{% endblock %}

@@ -9,17 +9,21 @@ use App\Form\ProfilType;
 use App\Repository\UtilisateurRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 
 
 
-
-use Symfony\Component\HttpFoundation\Session\SessionInterface; 
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Mailer\MailerInterface;
 
 class UserController extends AbstractController
 {
@@ -38,14 +42,21 @@ class UserController extends AbstractController
 
 
 
-    #[Route('/users', name: 'app_user')]
-    public function register(Request $request, ManagerRegistry $manager, UserPasswordHasherInterface $passwordHasher): Response
+    #[Route('/inscription', name: 'app_user')]
+    public function register(Request $request, ManagerRegistry $manager, UserPasswordHasherInterface $passwordHasher,MailerInterface $mailer): Response
 {
 
     
     $user = new Utilisateur();
     $form = $this->createForm(InscriptionType::class, $user );
     $form->handleRequest($request);
+
+    
+    $random_bytes = random_bytes(10);
+    // Convertir les octets en une chaîne de caractères ASCII valide
+    $ascii_string = mb_convert_encoding($random_bytes, 'ASCII');
+    // Utiliser AsciiSlugger avec la chaîne ASCII
+    $code = (new AsciiSlugger())->slug($ascii_string)->toString();
 
     
     if($form->isSubmitted() && $form->isValid()) {
@@ -55,9 +66,19 @@ class UserController extends AbstractController
         $hashedPassword = $passwordHasher->hashPassword($user, $plainPassword);
         $user->setMotDePasse($hashedPassword);
 
-      
+        $user->setRoles(['ROLE_USER']);
 
-        
+        $user->setAuthCode($code);
+    
+    $email = (new Email())
+    ->from('Bensalahons428@gmail.com')
+    ->to($user->getEmail())
+    ->subject('Code d\'authentification pour SwapNshare')
+    ->html('Votre code d\'authentification est : ' . $code);
+
+    $mailer->send($email);
+
+       
          
         $em= $manager->getManager();
         
@@ -68,8 +89,11 @@ class UserController extends AbstractController
         $userId = $user->getId();
 
 
+    // Stocker le code dans l'entité Utilisateur
+ 
         return $this->redirectToRoute('app_login');
     }
+
     return $this->renderForm('user/inscrit.html.twig',[
         'form'=>$form, 
 
@@ -212,4 +236,36 @@ public function Profil(): Response
 
 
 
+
+#[Route('/verify-code',name:'verify_code', methods:['GEt'])]
+public function verificationCodeForm(): Response
+{
+    return $this->render('security/2fa_form.html.twig');
 }
+
+
+
+/*#[Route('/verify-code', name:'verify_code_submit', methods:['POST'])]
+public function verifyCodeAction(Request $request, UrlGeneratorInterface  $urlGenerator)
+{
+    $codeSaisi = $request->request->get('code');
+
+    $codeEnregistre = $request->getSession()->get('user_Auth');
+
+    if ($codeSaisi === $codeEnregistre) {
+        // Redirection si le code est correct
+        return $this->redirectToRoute('app_profil');
+    } else {
+        // Gérer le cas où les codes ne correspondent pas
+        // Vous pouvez rediriger vers une autre page, afficher un message d'erreur, etc.
+        return $this->render('security/2fa_form.html.twig', [
+            'error' => 'Le code est incorrect.'
+        ]);
+    }*/
+
+
+}
+
+
+
+

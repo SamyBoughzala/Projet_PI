@@ -68,9 +68,10 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
         $request->getSession()->set('user_address', $user->getAdresse());
         $request->getSession()->set('user_score', $user->getScore());
         $request->getSession()->set('user_role', $user->getRoles());
+        $request->getSession()->set('user_Auth', $user->getAuthCode());
       
         }
-            return new RedirectResponse($this->urlGenerator->generate('app_profil')); //page d'accueil
+            return new RedirectResponse($this->urlGenerator->generate('verify_code')); //page d'accueil
     }
 
     protected function getLoginUrl(Request $request): string

@@ -7,13 +7,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\JsonType;
 use Doctrine\ORM\Mapping as ORM;
+use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Constraints\Json;
 
 #[ORM\Entity(repositoryClass: UtilisateurRepository::class)]
-class Utilisateur implements PasswordAuthenticatedUserInterface ,UserInterface
+class Utilisateur implements PasswordAuthenticatedUserInterface ,UserInterface,TwoFactorInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -49,6 +50,13 @@ class Utilisateur implements PasswordAuthenticatedUserInterface ,UserInterface
 
     #[ORM\Column(type:"json")]
     private  array $roles= [];
+
+
+    
+      #[ORM\Column(nullable:true)]
+     private ?string  $authCode;
+
+
 
     #[ORM\OneToMany(mappedBy: 'utilisateur', targetEntity: Commentaire::class, orphanRemoval: true)]
     private Collection $commentaires;
@@ -101,7 +109,7 @@ class Utilisateur implements PasswordAuthenticatedUserInterface ,UserInterface
         return $this;
     }
 
-
+   
 
     public function getAdresse(): ?string
     {
@@ -159,6 +167,20 @@ class Utilisateur implements PasswordAuthenticatedUserInterface ,UserInterface
     public function setScore(?float $score): static
     {
         $this->score = $score;
+
+        return $this;
+    }
+
+
+
+    public function getAuthCode(): ?string
+    {
+        return $this->authCode;
+    }
+
+    public function setAuthCode(string $authCode): self
+    {
+        $this->authCode = $authCode;
 
         return $this;
     }
@@ -335,4 +357,45 @@ class Utilisateur implements PasswordAuthenticatedUserInterface ,UserInterface
         return $this->mot_de_passe;
        
     }
+
+
+
+    public function isEmailAuthEnabled(): bool
+    {
+        return true; // This can be a persisted field to switch email code authentication on/off
+    }
+
+    public function getEmailAuthRecipient(): string
+    {
+        return $this->email;
+    }
+
+    public function getEmailAuthCode(): string
+    {
+        if (null === $this->authCode) {
+            throw new \LogicException('The email authentication code was not set');
+        }
+
+        return $this->authCode;
+    }
+
+    public function setEmailAuthCode(string $authCode): void
+    {
+        $this->authCode = $authCode;
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
