@@ -23,12 +23,13 @@ body {
     align-items: center;
   }
 
+  
+
   .add-button {
     display: flex;
     justify-content: flex-end;
     align-items: center;
     padding-bottom: 30px;
-    margin-right: 50px;
   }
 
   .icon-service {

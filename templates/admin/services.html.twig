@@ -1,18 +1,17 @@
 {% extends "baseBackOffice.html.twig" %}
 {% block title %}Services{% endblock %}
 {% block body %}
-<h1>Services</h1>
 
-            <div class="details" style="align: center;">
+            <div class="detailss" style="align: center;">
                 <div class="recentOrders">
                     <div class="cardHeader">
                         <h2>Service List</h2>
                     </div>
 
-                    <table>
+                    <table style="width: 100%">
                         <thead>
                             <tr>
-                                <td>Image</td>
+                                <td></td>
                                 <td>Title</td>
                                 <td>Category</td>
                                 <td>Barter</td>
@@ -35,7 +34,9 @@
                                 <td>{{ service.utilisateur.nom ~ ' ' ~ service.utilisateur.prenom }}</td>
                                 <td>
                                     <a href="#"><i class="fa-regular fa-eye" ></i></a>
+                                    <i class="fa-solid fa-check"></i>
                                     <a href="{{ path('suppression_service', { id: service.id }) }}"><i class="fa-regular fa-circle-xmark" style="color: red;"></i></a>
+                                    
                                 </td>
                                 
                             </tr>

@@ -60,22 +60,44 @@
 {% block body %}
 		<div class="untree_co-section product-section before-footer-section">
 		    <div class="container">
+				<button type="button" class="filter-button" data-bs-toggle="dropdown" aria-expanded="false">
+					Filter by category<i class="fas fa-filter"></i>
+				</button>
 				<div class="add-button">
 				    <a href="{{ path('add_service') }}" class="green-button"> <i class="fa-solid fa-plus"></i> Add a service</a>
+				</div> 
+
+
+				<div class="dropdown-menu filter-dropdown">
+					<div class="filter-category">
+						<h6>Category</h6>
+						<ul>
+						{% for category in categories %}
+						<li>
+						   <a href="{{ path('FiltredServices', {id: category.id }) }}"> <input type="checkbox" id="category-electronics" name="category" value="electronics"></a>
+							<a href="{{ path('FiltredServices', {id: category.id }) }}">{{category.nomCategorie}}</a>
+						</li>
+						{% endfor %}
+
+						</ul>
+					</div>
 				</div>
+
+				
 		      	<div class="row">
-				 {% for service in services %}
+				
+				 {% for article in pagination %}
 
 		      		<!-- Start Column 1 -->
 					<div class="col-12 col-md-4 col-lg-3 mb-5">
-						<a class="product-item" href="{{ path('service', {id : service.id}) }}">
-							<img src="{{ asset('uploads/services/' ~ service.photo) }}" class="img-fluid product-thumbnail" style="width: 512px; height: 212px;" >
+						<a class="product-item" href="{{ path('service', {id : article.id}) }}">
+							<img src="{{ asset('uploads/services/' ~ article.photo) }}" class="img-fluid product-thumbnail" style="width: 512px; height: 212px;" >
 							<div class="service-category">
 							    <i class="fa-solid fa-list-ul icon-service"></i>
-								<p class="service-text">{{ service.categorie.nomCategorie }}</p>
+								<p class="service-text">{{ article.categorie.nomCategorie }}</p>
 							</div>
-							<h2 class="product-title">{{ service.titreService}}</h2>
-							<h3 class="product-title">{{ service.utilisateur.nom ~ ' ' ~ service.utilisateur.prenom }}</h3>
+							<h2 class="product-title">{{ article.titreService}}</h2>
+							<h3 class="product-title">{{ article.utilisateur.nom ~ ' ' ~ article.utilisateur.prenom }}</h3>
 
 
 							<span class="icon-cross" href="">
@@ -85,6 +107,11 @@
 					</div> 
 					<!-- End Column 1 -->
 				 {% endfor %}
+				 <div class="navigation">
+				    {{ knp_pagination_render(pagination) }}
+				 </div>
+
+
 
 		      	</div>
 		    </div>

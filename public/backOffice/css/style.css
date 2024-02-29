@@ -268,6 +268,9 @@ body {
   grid-gap: 30px;
   /* margin-top: 10px; */
 }
+
+
+
 .rounded-image {
   width: 70px; /* Adjust the width as needed */
   height: 70px; /* Adjust the height as needed */
@@ -283,7 +286,14 @@ body {
   box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
   border-radius: 20px;
 }
-
+.details .recentOrderss {
+  position: relative;
+  min-height: 500px;
+  background: var(--white);
+  padding: 20px;
+  box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+  border-radius: 20px;
+}
 .details .cardHeader {
   display: flex;
   justify-content: space-between;
