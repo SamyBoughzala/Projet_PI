@@ -28,7 +28,7 @@ class EchangeProduitController extends AbstractController
     }
 
     #[Route('/new/{id}', name: 'app_echange_produit_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, int $id, ProduitRepository $produitRepository, UtilisateurRepository $utilisateurRepository): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, int $id, ProduitRepository $produitRepository): Response
     {
         $user = $this->getUser();
         $selectedProduct = $produitRepository->find($id);

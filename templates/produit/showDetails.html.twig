@@ -69,7 +69,7 @@
 
 
                     <div class="d-flex align-items-center mb-4 pt-2">
-					{% if  oneproduct.utilisateur.id == 1 %}
+					{% if  oneproduct.utilisateur.id != app.user.getId() %}
 					    <a href="{{ path('app_echange_produit_new', { id: oneproduct.id }) }}">
 						    <button class="btn btn-primary px-3" style="margin-right: 10px;"><i class="fa fa-sync-alt"></i> Exchange</button>
                         </a>

@@ -53,12 +53,13 @@
 										<div class="col-md-3">
 											<h5>Category 1</h5>
 											<ul class="list-unstyled">
+												
+												{#
 												{% for category in categories.findAll() %}
 													{% if category.type == 'product' %}
 														<li>{{ category.getNomCategorie() }}</li>
 													{% endif %}>
-												{% endfor %}>
-												<!-- Add more subcategories as needed -->
+												{% endfor %}> #}
 											</ul>
 										</div>										
 										<div class="col-md-3">

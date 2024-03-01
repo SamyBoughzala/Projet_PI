@@ -12,6 +12,7 @@
                     <th>Date Of Exchange</th>
                     <th>Valid</th>
                     <th>Actions</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -24,8 +25,8 @@
                             <a href="{{ path('app_echange_service_edit', {'id': echange_service.id}) }}">edit</a>
                         </td>
                         <td>   
-                            <form method="post" action="{{ path('app_echange_produit_delete', {'id': echange_produit.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
-                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ echange_produit.id) }}">
+                            <form method="post" action="{{ path('app_echange_service_delete', {'id': echange_service.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ echange_service.id) }}">
                                 <button class="btn btn-danger">Delete</button>
                             </form>  
                         </td>
@@ -38,6 +39,5 @@
             </tbody>
         </table>
 
-        <a href="{{ path('app_echange_service_new') }}" class="btn btn-success">Create new</a>
     </div>
 {% endblock %}
