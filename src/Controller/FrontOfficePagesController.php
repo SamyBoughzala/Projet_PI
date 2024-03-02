@@ -12,6 +12,9 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+
 
 class FrontOfficePagesController extends AbstractController
 {
@@ -104,6 +107,42 @@ class FrontOfficePagesController extends AbstractController
         ]);
     }
 
+    #[Route('{id}/transactions/validate_produit/generate-pdf/', name: 'generate_pdf')]
+    public function generatePdfAction2($id,EchangeProduitRepository $echangeProduitRepository): Response
+    {
+        // Create an instance of Dompdf
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $dompdf = new Dompdf($options);
+        $echangeProduit = $echangeProduitRepository->find(['id' => $id]);
+        // Render the current template
+        $html = $this->renderView('front_office_pages/transaction_service_validated.html.twig', [
+            'id' => $id,
+            'echangeService'=> $echangeProduit,
+        ]);
+        // Load HTML into Dompdf
+        $dompdf->loadHtml($html);
+
+        // Set paper size and orientation
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Render the PDF
+        $dompdf->render();
+
+        // Output the generated PDF
+        $pdfContent = $dompdf->output();
+        
+        // Return a response with the PDF content
+        return new Response(
+            $pdfContent,
+            Response::HTTP_OK,
+            [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="document.pdf"',
+            ]
+        );
+    }
+
     #[Route('/transactions/validate_service/{id}', name: 'app_echange_service_transactions_validate')]
     public function validate_service( EchangeService $echangeService,$id,EchangeServiceRepository $echangeServiceRepository,ManagerRegistry $managerRegistry)
     {
@@ -123,5 +162,42 @@ class FrontOfficePagesController extends AbstractController
             'echangeService' => $echangeService,
         ]);
     }
+
+
+    #[Route('/transactions/validate_service/{id}/generate-pdf/', name: 'generate_pdf')]
+    public function generatePdfAction($id,EchangeServiceRepository $echangeServiceRepository): Response
+    {
+        // Create an instance of Dompdf
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $dompdf = new Dompdf($options);
+        $echangeService = $echangeServiceRepository->find(['id' => $id]);
+        // Render the current template
+        $html = $this->renderView('front_office_pages/transaction_service_validated.html.twig', [
+            'id' => $id,
+            'echangeService'=> $echangeService,
+        ]);
+        // Load HTML into Dompdf
+        $dompdf->loadHtml($html);
+
+        // Set paper size and orientation
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Render the PDF
+        $dompdf->render();
+
+        // Output the generated PDF
+        $pdfContent = $dompdf->output();
+        
+        // Return a response with the PDF content
+        return new Response(
+            $pdfContent,
+            Response::HTTP_OK,
+            [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="document.pdf"',
+            ]
+        );
+    }       
 
 }

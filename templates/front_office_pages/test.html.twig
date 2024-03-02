@@ -23,6 +23,7 @@
                   {% for echange_service in echange_services %}
                     <tr>
                         <td>{{ echange_service.id }}</td>
+                        <td>{{ echange_service.produitIn.utilisateur.id }}</td>
                         <td>{{ echange_service.dateEchange ? echange_service.dateEchange|date('Y-m-d H:i:s') : '' }}</td>
                         <td>{{ echange_service.valide ? 'Yes' : 'No' }}</td>
                         <td>
