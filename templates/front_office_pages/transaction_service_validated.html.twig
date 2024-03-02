@@ -1,0 +1,46 @@
+{% extends "baseFrontOffice.html.twig" %}
+
+{% block title %} Product Exchange List Index {% endblock %}
+
+
+{% block body %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h4>Echange Service</h4>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Service In</th>
+            <th>Service Out</th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr>
+              <td>{{ echangeService.getDateEchange()  | date("Y-m-d H:i:s") }}</td>
+              <td>
+                <ul>
+                  <li>Titre Service: {{ echangeService.ServiceIn.titreService }}</li>
+                  <li>Photo: <img src="{{ asset('/uploads/services/' ~ echangeService.ServiceIn.photo) }}" alt="Service In Photo" width="200" height="150"></li>
+                  <li>Ville: {{ echangeService.ServiceIn.ville }}</li>
+                  <li>Categorie: {{ echangeService.ServiceIn.categorie.getNomCategorie()  }}</li>
+                </ul>
+              </td>
+              <td>
+                <ul>
+                  <li>Titre Service: {{ echangeService.ServiceOut.titreService }}</li>
+                  <li>Photo: <img src="{{ asset('/uploads/services/' ~ echangeService.ServiceOut.photo) }}" alt="Service Out Photo" width="200" height="150"></li>
+                  <li>Ville: {{ echangeService.ServiceOut.ville }}</li>
+                  <li>Categorie: {{ echangeService.ServiceOut.categorie.getNomCategorie() }}</li>
+                </ul>
+              </td>
+            </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+ 
+
+{% endblock %}

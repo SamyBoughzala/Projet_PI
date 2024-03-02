@@ -107,43 +107,5 @@ class EchangeProduitController extends AbstractController
             return $this->redirectToRoute('app_echange_produit_transactions', ['id' => 1], Response::HTTP_SEE_OTHER);
         }
     }
-
-    #[Route('/{id}/transactions', name: 'app_echange_produit_transactions')]
-    public function transactions(EchangeProduitRepository $echangeProduitRepository, ProduitRepository $produitRepository): Response
-    {
-        // Get the current user
-        $user = $this->getUser();
-        // Fetch user's products
-        $userProducts = $produitRepository->findBy(['utilisateur' => $user]);
-        $transactions = [];
-        foreach ($userProducts as $product) {
-            $productTransaction = $echangeProduitRepository->findBy(['produitIn' => $product]);
-            $transactions = array_merge($transactions, $productTransaction);
-        }
-        
-        return $this->render('echange_produit/transactions.html.twig', [
-            'transactions' => $transactions,
-        ]);
-    }
-
-    #[Route('/{id}/transactions/validate', name: 'app_echange_produit_transactions_validate')]
-    public function validate(Request $request, EchangeProduit $echangeProduit,$id,EchangeProduitRepository $echangeProduitRepository,ManagerRegistry $managerRegistry)
-    {
-        $em = $managerRegistry->getManager();
-
-        $echangeProduit = $echangeProduitRepository->find(['id' => $id]);
-
-        if (!$echangeProduit) {
-            throw $this->createNotFoundException('Echange produit not found.');
-        }
-
-        $echangeProduit->setValide(true);
-        $em->persist($echangeProduit);
-        $em->flush();
-
-        return $this->render('echange_produit/transaction_validated.html.twig', [
-            'echangeProduit' => $echangeProduit,
-        ]);
-    }
     
 }

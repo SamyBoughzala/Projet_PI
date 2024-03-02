@@ -46,13 +46,17 @@
                        
 						<p>{{ service.descriptionService }}</p>
 						<div class="card_area d-flex align-items-center">
-							
-                            {% if service.utilisateur.id == app.user.getId() %}
-                                <a class="icon_btn" href="{{ path('modifier_service', { id: service.id }) }}"><i class="fa-regular fa-pen-to-square"></i></a>
-                                <a class="icon_btn" href="{{ path('supprimer_service', { id: service.id }) }}"><i class="fa-solid fa-trash"></i></a>
-                            {% else %}
+
+							{% if app.user %}
+								{% if service.utilisateur.id == app.user.getId() %}
+									<a class="icon_btn" href="{{ path('modifier_service', { id: service.id }) }}"><i class="fa-regular fa-pen-to-square"></i></a>
+									<a class="icon_btn" href="{{ path('supprimer_service', { id: service.id }) }}"><i class="fa-solid fa-trash"></i></a>
+								{% else %}
                                 <a class="primary-btn" href="{{ path('app_echange_service_new' , { id: service.id }) }}"><i class="fa-solid fa-right-left" style="padding-right: 10px;"> </i> Exchange</a>
-                            {% endif %}
+                            	{% endif %}
+							{% else %}
+								<a class="primary-btn" href="{{ path('app_login') }}"><i class="fa-solid fa-right-left" style="padding-right: 10px;"> </i> Login to exchange</a>
+							{% endif %}
 						</div>
 					</div>
 				</div>

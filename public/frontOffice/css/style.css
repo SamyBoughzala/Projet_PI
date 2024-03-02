@@ -15,7 +15,6 @@ body {
   line-height: 28px;
   color: #6a6a6a;
   font-size: 14px;
-<<<<<<< HEAD
   background-color: #FAEBEF; }
 
   .service-category {
@@ -63,6 +62,7 @@ body {
     cursor: pointer;
     text-decoration: none;
   }
+
   .service-category {
     display: flex;
     justify-content: flex-end;
@@ -82,19 +82,7 @@ body {
     margin: 0.5;
   }
 
-  .green-button {
-    background-color: #3b5d50;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    text-decoration: none;
-  }
-=======
-  margin-bottom: 50px;
-  background-color: #faebef; }
->>>>>>> origin/ines_jendoubi
+  
 
 a {
   text-decoration: none;
@@ -176,13 +164,13 @@ a {
 
 .hero {
   background: #3b5d50;
-  padding: calc(4rem - 30px) 0 0rem 0; }
+  padding: calc(2rem - 30px) 0; }
   @media (min-width: 768px) {
     .hero {
-      padding: calc(4rem - 30px) 0 4rem 0; } }
+      padding: calc(2rem - 30px) 0 2rem 0; } }
   @media (min-width: 992px) {
     .hero {
-      padding: calc(8rem - 30px) 0 8rem 0; } }
+      padding: calc(4rem - 30px) 0 4rem 0; } }
   .hero .intro-excerpt {
     position: relative;
     z-index: 4; }
@@ -198,7 +186,8 @@ a {
         font-size: 54px; } }
   .hero p {
     color: rgba(255, 255, 255, 0.5);
-    margin-botom: 30px; }
+    margin-bottom: 30px;
+   }
   .hero .hero-img-wrap {
     position: relative; }
     .hero .hero-img-wrap img {
@@ -390,15 +379,13 @@ a {
     line-height: 22px;
     color: #6a6a6a; }
 
-.we-help-section {
-  padding: 7rem 0; }
-  .we-help-section .imgs-grid {
-    display: -ms-grid;
-    display: grid;
-    -ms-grid-columns: (1fr)[27];
-    grid-template-columns: repeat(27, 1fr);
-    position: relative; 
-  }
+    .we-help-section .imgs-grid {
+      display: -ms-grid;
+      display: grid;
+      -ms-grid-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+      grid-template-columns: repeat(27, 1fr);
+      position: relative; 
+    }
     .we-help-section .imgs-grid:before {
       position: absolute;
       content: "";

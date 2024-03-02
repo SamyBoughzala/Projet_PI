@@ -24,6 +24,7 @@
                   <li>Product In </li>
                   <li>Titre Produit: {{ echangeProduit.produitIn.titreProduit }}</li>
                   <li>Photo: {{ echangeProduit.produitIn.photo }}</li>
+                  <li>Photo: <img src="{{ asset('/uploads/produits/' ~ echangeProduit.produitIn.photo) }}" alt="Produit In Photo" width="200" height="150"></li>
                   <li>Ville: {{ echangeProduit.produitIn.ville }}</li>
                   <li>Categorie: {{ echangeProduit.produitIn.categorie.getNomCategorie()  }}</li>
                 </ul>
@@ -32,7 +33,7 @@
                 <ul>
                   <li>Product Out </li>
                   <li>Titre Produit: {{ echangeProduit.produitOut.titreProduit }}</li>
-                  <li>Photo: {{ echangeProduit.produitOut.photo }}</li>
+                  <li>Photo: <img src="{{ asset('/uploads/produits/' ~ echangeProduit.produitOut.photo) }}" alt="Produit Out Photo" width="200" height="150"></li>
                   <li>Ville: {{ echangeProduit.produitOut.ville }}</li>
                   <li>Categorie: {{ echangeProduit.produitOut.categorie.getNomCategorie() }}</li>
                 </ul>

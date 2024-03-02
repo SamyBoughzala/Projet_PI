@@ -41,9 +41,8 @@ class EchangeServiceController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($echangeService);
             $entityManager->flush();
-            return $this->redirectToRoute('app_echange_service_transactions', ['id' => 1], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_echange_produit_transactions', ['id' => 1], Response::HTTP_SEE_OTHER);
         }
-
         return $this->renderForm('echange_service/new.html.twig', [
             'echange_service' => $echangeService,
             'form' => $form,
@@ -83,47 +82,13 @@ class EchangeServiceController extends AbstractController
             $entityManager->remove($echangeService);
             $entityManager->flush();
         }
-
-        return $this->redirectToRoute('app_echange_service_index', [], Response::HTTP_SEE_OTHER);
-    }
-
-    
-    #[Route('/{id}/transactions_service', name: 'app_echange_service_transactions')]
-    public function transactions(echangeServiceRepository $echangeServiceRepository, ServiceRepository $serviceRepository): Response
-    {
-        // Get the current user
         $user = $this->getUser();
-        // Fetch user's services
-        $userServices = $serviceRepository->findBy(['utilisateur' => $user]);
-        $transactions = [];
-        foreach ($userServices as $service) {
-            $serviceTransaction = $echangeServiceRepository->findBy(['serviceIn' => $service]);
-            $transactions = array_merge($transactions, $serviceTransaction);
+        if ($user->getRoles() == 'ROLE_ADMIN') {
+            return $this->redirectToRoute('app_echange_service_index', [], Response::HTTP_SEE_OTHER);
         }
-        
-        return $this->render('echange_produit/transactions.html.twig', [
-            'transactions' => $transactions,
-        ]);
+        else {
+            return $this->redirectToRoute('app_echange_produit_transactions', ['id' => 1], Response::HTTP_SEE_OTHER);
+        }
     }
 
-    #[Route('/{id}/transactions_service/validate', name: 'app_echange_service_transactions_validate')]
-    public function validate(Request $request, EchangeService $echangeService,$id,EchangeServiceRepository $echangeServiceRepository,ManagerRegistry $managerRegistry)
-    {
-        $em = $managerRegistry->getManager();
-
-        $echangeService = $echangeServiceRepository->find(['id' => $id]);
-
-        if (!$echangeService) {
-            throw $this->createNotFoundException('Echange service not found.');
-        }
-
-        $echangeService->setValide(true);
-        $em->persist($echangeService);
-        $em->flush();
-
-        return $this->render('echange_service/transaction_validated.html.twig', [
-            'echangeService' => $echangeService,
-        ]);
-    }
-    
 }
