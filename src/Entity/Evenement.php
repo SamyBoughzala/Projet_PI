@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\EvenementRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: EvenementRepository::class)]
 class Evenement
@@ -15,15 +16,26 @@ class Evenement
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:"The product name is required.")]
     private ?string $titreEvenement = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank(message:"The description cannot be blank.")]
+    #[Assert\Length(
+        max: 255,
+        maxMessage: "The description cannot be longer than {{ limit }} characters."
+    )]
     private ?string $descriptionEvenement = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Assert\NotNull(message: "The start date cannot be null.")]
+    #[Assert\Type(\DateTimeInterface::class, message: "The start date must be a valid date.")]
     private ?\DateTimeInterface $dateDebut = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Assert\NotNull(message: "The end date cannot be null.")]
+    #[Assert\Type(\DateTimeInterface::class, message: "The end date must be a valid date.")]
+    #[Assert\GreaterThan(propertyPath: 'dateDebut', message: "The end date must be after the start date.")]
     private ?\DateTimeInterface $dateFin = null;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
@@ -32,6 +44,13 @@ class Evenement
 
     #[ORM\OneToOne(mappedBy: 'evenement', cascade: ['persist', 'remove'])]
     private ?ParticipationEvenement $participationEvenement = null;
+
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "The status cannot be blank.")]
+    #[Assert\Choice(choices: ['Accepted','Waitlisted', 'Declined'], message: "Choose a valid status.")]
+    private ?string $status = 'Waitlisted';
+
+
 
     public function getId(): ?int
     {
@@ -114,4 +133,17 @@ class Evenement
 
         return $this;
     }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): static
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
 }
