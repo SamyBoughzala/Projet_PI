@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Evenement;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
  * @extends ServiceEntityRepository<Evenement>
@@ -27,6 +28,14 @@ class EvenementRepository extends ServiceEntityRepository
             ->select('COUNT(e.id)')
             ->getQuery()
             ->getSingleScalarResult();
+    }
+
+    public function findAllSortedByDate(): array
+    {
+        return $this->createQueryBuilder('e')
+            ->orderBy('e.dateDebut', 'DESC')
+            ->getQuery()
+            ->getResult();
     }
 
 //    /**

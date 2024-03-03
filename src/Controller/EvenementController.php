@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Produit;
 use App\Entity\Evenement;
 use App\Entity\Utilisateur;
+use App\Entity\ParticipationEvenement;
 use App\Form\EvenementType;
 use App\Repository\EvenementRepository;
 use App\Repository\ProduitRepository;
@@ -56,9 +57,18 @@ class EvenementController extends AbstractController
     #[Route('/{id}', name: 'app_evenement_show', methods: ['GET'])]
     public function show(Evenement $evenement): Response
     {
-        return $this->render('evenement/show.html.twig', [
-            'evenement' => $evenement,
-        ]);
+        $user = $this->getUser();
+        $productUser = $evenement->getProduit()->getUtilisateur();
+        if ($user == $productUser){
+            return $this->render('evenement/show.html.twig', [
+                'evenement' => $evenement,
+            ]);
+        }
+        else {
+            return $this->render('evenement/showP.html.twig', [
+                'evenement' => $evenement,
+            ]);
+        }
     }
 
     #[Route('/{id}/edit', name: 'app_evenement_edit', methods: ['GET', 'POST'])]
@@ -90,11 +100,70 @@ class EvenementController extends AbstractController
         return $this->redirectToRoute('app_evenement_index', [], Response::HTTP_SEE_OTHER);
     }
 
+    #[Route('/participation/{id}', name: 'participation')]
+    public function participate(Evenement $evenement, EntityManagerInterface $entityManager, Request $request): Response
+    {
+        // Get the current user
+        $user = $this->getUser();
+        if (!$user) {
+            throw new AccessDeniedHttpException('You must be logged in to participate.');
+        }
+
+        // Create a new participation
+        $participation = new ParticipationEvenement();
+        $participation->setEvenement($evenement);
+        $participation->setUtilisateur($user);
+
+        // Get offer value from request (if applicable)
+        $offerValue = $request->request->get('offer'); // Assuming offer comes from a form
+        if ($offerValue !== null) {
+            $participation->setOffre($offerValue);
+        }
+
+        // Save the changes
+        $entityManager->persist($participation);
+        try {
+            $entityManager->flush();
+            $this->addFlash('success', 'You have successfully participated in the event!');
+        } catch (Exception $e) {
+            $this->addFlash('error', 'An error occurred during participation: ' . $e->getMessage());
+        }
+
+        // Redirect to event list or specific page
+        return $this->redirectToRoute('app_evenement_index');
+    }
+
+
+
     #[Route('/{id}/admin', name: 'app_event_index', methods: ['GET'])]
     public function eventIndex(EvenementRepository $evenementRepository): Response
     {
         return $this->render('evenementAdmin/eventIndex.html.twig', [
             'evenements' => $evenementRepository->findAll(),
+        ]);
+    }
+
+    #[Route('/admin/new', name: 'app_event_new', methods: ['GET', 'POST'])]
+    public function newEvent(Request $request, EntityManagerInterface $entityManager, ProduitRepository $produitRepository): Response
+    {
+        $user = $this->getUser();
+        $userProducts = $produitRepository->findBy(['utilisateur' => $user]);
+        $evenement = new Evenement();
+        $form = $this->createForm(EvenementType::class, $evenement, [
+            'userProducts' => $userProducts,
+        ]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($evenement);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_evenement_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('evenementAdmin/eventNew.html.twig', [
+            'evenement' => $evenement,
+            'form' => $form,
         ]);
     }
 
@@ -132,7 +201,7 @@ class EvenementController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_event_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_event_index',['id'=>1], Response::HTTP_SEE_OTHER);
     }
 
     public function showEventCount(EvenementRepository $evenementRepository): Response
@@ -150,8 +219,7 @@ class EvenementController extends AbstractController
         $evenement->setStatus('Accepted');
         $entityManager->flush();
 
-        // You might want to return a redirect or a confirmation page here
-        return $this->redirectToRoute('app_event_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_event_index', ['id'=>1], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/admin/decline/{id}', name: 'event_decline')]
@@ -160,8 +228,26 @@ class EvenementController extends AbstractController
         $evenement->setStatus('Declined');
         $entityManager->flush();
 
-        // Similarly, redirect or show a page as confirmation
-        return $this->redirectToRoute('app_event_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_event_index', ['id'=>1], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/admin/{id}/calendar', name: 'event_calendar')]
+    public function calendar(EvenementRepository $evenementRepository)
+    {
+        $events = $evenementRepository->findAll();
+        $rdvs = [];
+        foreach($events as $event){
+            $rdvs[] = [
+                'id' => $event->getId(),
+                'start' => $event->getDateDebut()->format('Y-m-d H:i:s'),
+                'end' => $event->getDateFin()->format('Y-m-d H:i:s'),
+                'title' => $event->getTitreEvenement(),
+                'description' => $event->getDescriptionEvenement(),
+            ];
+        }
+        $data = json_encode($rdvs);
+
+        return $this->render('evenementAdmin/eventCalendar.html.twig', compact('data'));
     }
 
 }

@@ -10,6 +10,7 @@
         <div class="cardHeader">
             <h2>the Product</h2>
             <a href="{{ path('app_event_edit', {'id': evenement.id}) }}" class="btn">Edit</a>
+            {{ include('evenementAdmin/eventDelete.html.twig') }}
             <a href="{{ path('event_accept', {'id': evenement.id}) }}" class="btn">Accept</a>
             <a href="{{ path('event_decline', {'id': evenement.id}) }}" class="btn">Decline</a>
             <a href="{{ path('app_event_index', {'id': evenement.id}) }}" class="btn">Back</a>

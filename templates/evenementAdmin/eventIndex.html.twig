@@ -35,7 +35,7 @@
                 <div class="recentOrders" style="width: 100%;">
                     <div class="cardHeader">
                         <h2>Recent Orders</h2>
-                        <a href="#" class="btn">View All</a>
+                        <a href="{{ path('event_calendar', {'id': 1}) }}" class="btn">View All</a>
                     </div>
 
                     <table>
@@ -79,9 +79,8 @@
                                 </td>
 
                                 <td>
-                                    <a href="{{ path('app_event_show', {'id': evenement.id}) }}" class="btn">Details</a>
-                                    <a class="btn">{{ include('evenementAdmin/eventDelete.html.twig') }}</a>
-                                 </td>
+                                    <a href="{{ path('app_event_show', {'id': evenement.id}) }}" class="btn">Details</a>                               
+                                </td>
                             </tr>
 
                         {% else %}

@@ -1,7 +1,6 @@
 {% extends "baseFrontOffice.html.twig" %}
 
 {% block body %}
-    <h1>{{ evenement.titreEvenement }}</h1>
 
     <div class="untree_co-section before-footer-section">
   <div class="container">
@@ -9,8 +8,7 @@
     <table class="table">
         <tbody>
             <tr>
-                <th>Id</th>
-                <td>{{ evenement.id }}</td>
+                <th><h1>{{ evenement.titreEvenement }}</h1></th>
             </tr>
             <tr>
                 <th><img src="{{ asset('/uploads/produits/' ~ evenement.produit.photo) }}" alt="Image" class="img-fluid" width="200" height="300"></th>
