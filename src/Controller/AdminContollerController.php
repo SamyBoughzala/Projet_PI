@@ -2,8 +2,12 @@
 
 namespace App\Controller;
 
+use App\Repository\CategorieRepository;
 use App\Repository\ServiceRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -16,11 +20,20 @@ class AdminContollerController extends AbstractController
     }
 
     #[Route('/admin/services', name: 'app_admin_services')]
-    public function services(ServiceRepository $serviceRepository): Response
+    public function services(EntityManagerInterface $em, PaginatorInterface $paginatorInterface,CategorieRepository $categorieRepository, Request $request): Response
     {
-        $services= $serviceRepository->findAll();
+        $categories= $categorieRepository->findAll();
+        $qb = $em->createQueryBuilder();
+        $qb->select('s')->from("App:Service", 's');
+        $query=$qb->getQuery();
+        $pagination= $paginatorInterface->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            5
+        );
         return $this->render('admin/services.html.twig',[
-            'services'=>$services
+            'categories'=>$categories,
+            'pagination'=>$pagination
         ]);
     }
 

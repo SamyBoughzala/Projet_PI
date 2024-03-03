@@ -1,8 +1,10 @@
 {% extends "baseBackOffice.html.twig" %}
+
 {% block title %}Services{% endblock %}
 {% block body %}
 
-            <div class="detailss" style="align: center;">
+
+            <div class="details" style="align: center; margin-top: 20px">
                 <div class="recentOrders">
                     <div class="cardHeader">
                         <h2>Service List</h2>
@@ -11,7 +13,7 @@
                     <table style="width: 100%">
                         <thead>
                             <tr>
-                                <td></td>
+                                <td>Image</td>
                                 <td>Title</td>
                                 <td>Category</td>
                                 <td>Barter</td>
@@ -20,7 +22,7 @@
                         </thead>
 
                         <tbody>
-                        {% for service in services %}
+                        {% for service in pagination %}
                             <tr>
                                 
                                  	<div class="d-flex">
@@ -32,9 +34,12 @@
                                 <td>{{ service.titreService }}</td>
                                 <td>{{ service.categorie.nomCategorie }}</td>
                                 <td>{{ service.utilisateur.nom ~ ' ' ~ service.utilisateur.prenom }}</td>
-                                <td>
-                                    <a href="#"><i class="fa-regular fa-eye" ></i></a>
-                                    <i class="fa-solid fa-check"></i>
+                                <td >
+                                    <a href="{{ path('details_service',{id: service.id }) }}" style="margin-right: 10px; "><i class="fa-regular fa-eye" ></i></a>
+
+                                    {% if service.valid == false %}
+                                    <a href="{{ path('valider_service', { id: service.id }) }}"  style="margin-right: 10px; color: green; "><i class="fa-solid fa-check"></i></a>
+                                    {% endif %}
                                     <a href="{{ path('suppression_service', { id: service.id }) }}"><i class="fa-regular fa-circle-xmark" style="color: red;"></i></a>
                                     
                                 </td>
@@ -44,7 +49,14 @@
 
                         </tbody>
                     </table>
+
+                 
                 </div>
+                
+				    {{ knp_pagination_render(pagination) }}
 
             </div>
+
+
 {% endblock %}
+

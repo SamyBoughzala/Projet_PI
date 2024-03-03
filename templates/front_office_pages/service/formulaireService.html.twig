@@ -22,24 +22,27 @@
 	<h2> Update Service</h2>
 
 
-	{{ form_start(formService,{'attr': {'novalidate': 'novalidate'}}) }}
-    {{ form_row(formService.titreService) }}
-    {{ form_row(formService.descriptionService) }}
-    {{ form_row(formService.photo , {
-			'attr': {
-				'class': 'form-control',
-				'style': 'color: green; max-width: 250px;'
-			    },
-           'label': 'Image'}) }}
-	{{ form_row(formService.ville) }}
-	{{ form_row(formService.choixEchange) }}
-	{{ form_row(formService.utilisateur) }}
-    {{ form_row(formService.categorie) }}
-    {# Affichage des erreurs #}
+			{{ form_start(formService,{'attr': {'novalidate': 'novalidate'}}) }}
+			{{ form_row(formService.titreService) }}
+			{{ form_row(formService.descriptionService) }}
+			{{ form_row(formService.photo , {
+					'attr': {
+						'class': 'form-control',
+						'style': 'color: green; max-width: 250px;'
+						},
+				'label': 'Image'}) }}
+			{{ form_row(formService.ville) }}
+			{{ form_row(formService.choixEchange) }}
+{# 			<div style="display: none;">
+			{{ form_row(formService.valid) }}
+			</div>  #}
+			{{ form_row(formService.utilisateur) }}
+			{{ form_row(formService.categorie) }}
+			{# Affichage des erreurs #}
 
-        {{ form_errors(formService) }}
+				{{ form_errors(formService) }}
 
-{{ form_end(formService) }}
+		{{ form_end(formService) }}
 
 	</div>
 

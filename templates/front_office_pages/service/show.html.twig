@@ -39,7 +39,7 @@
 						<h3>{{ service.titreService }}</h3>
 						<ul class="list">
 							<li><a class="active" href="#"><span>Category:</span> {{ service.categorie.nomCategorie }}</a></li>
-                            <li><a class="active" href="#" style="padding-right: 10px;"><span>Barter:</span> {{ service.utilisateur.nom ~ ' ' ~ service.utilisateur.prenom }}</a>  <a href="#"><i class="fa-regular fa-bell"></i></a></li>
+                            <li><a class="active" href="#" style="padding-right: 10px;"><span>Barter:</span> {{ service.utilisateur.nom ~ ' ' ~ service.utilisateur.prenom }}</a>  <a href="{{ path('abonner',{idSer: service.id, id:service.utilisateur.id }) }}"><i class="fa-regular fa-bell"></i></a></li>
                             <li><a class="active" href="#"><span>Phone:</span> {{ service.utilisateur.telephone }}</a></li>
                             <li><span> Description : </span></li>
 						</ul>
@@ -75,6 +75,7 @@
 							{% if pagination|length >0 %}
 							{% for commentaire in pagination %}
 								<div class="review_item">
+								<div class="wrapper">
 									<div class="media">
 										<div class="d-flex">
 											<img src="{{ asset('uploads/' ~ commentaire.utilisateur.photo ) }}" alt="" class="rounded-image">
@@ -94,6 +95,7 @@
 											</div>
 										</div>
 									</div>
+								</div>
 									<p>{{ commentaire.description }}</p>
 								</div>
 							{% endfor %}
@@ -125,7 +127,18 @@
 		</div>
 	</section>
 	<!--================End Product Description Area =================-->
+<style>
+.wrapper {
+  display: flex; /* Make the wrapper a flex container */
+  justify-content: space-between; /* Align items at opposite ends */
+}
 
+.add-button,
+.col-lg-3.col-md-4 {
+  /* Adjust styling for individual divs if needed */
+}
+
+</style>
 {% endblock %}
 
         {% block JS%}

@@ -21,24 +21,27 @@
 	<div align="center" style="max-width: 50%; margin: 0 auto;">
 	<h2> Add Service</h2>
 
-{{ form_start(formServiceAjout,{'attr': {'novalidate': 'novalidate'}}) }}
-    {{ form_row(formServiceAjout.titreService) }}
-    {{ form_row(formServiceAjout.descriptionService) }}
-    {{ form_row(formServiceAjout.photo, {
-			'attr': {
-				'class': 'form-control',
-				'style': 'color: green; max-width: 250px;'
-			}
-}) }}
-	{{ form_row(formServiceAjout.ville) }}
-	{{ form_row(formServiceAjout.choixEchange) }}
-	{{ form_row(formServiceAjout.utilisateur) }}
-    {{ form_row(formServiceAjout.categorie) }}
-    {# Affichage des erreurs #}
-    <div style="color: red;">
-        {{ form_errors(formServiceAjout) }}
-    </div>
-{{ form_end(formServiceAjout) }}
+		{{ form_start(formServiceAjout,{'attr': {'novalidate': 'novalidate'}}) }}
+			{{ form_row(formServiceAjout.titreService) }}
+			{{ form_row(formServiceAjout.descriptionService) }}
+			{{ form_row(formServiceAjout.photo, {
+					'attr': {
+						'class': 'form-control',
+						'style': 'color: green; max-width: 250px;'
+					}
+		}) }}
+			{{ form_row(formServiceAjout.ville) }}
+			{{ form_row(formServiceAjout.choixEchange) }}
+{# 			<div style="display: none;">
+			{{ form_row(formService.valid) }}
+			</div>  #}
+			{{ form_row(formServiceAjout.utilisateur) }}
+			{{ form_row(formServiceAjout.categorie) }}
+			{# Affichage des erreurs #}
+			<div style="color: red;">
+				{{ form_errors(formServiceAjout) }}
+			</div>
+		{{ form_end(formServiceAjout) }}
 
 	</div>
 

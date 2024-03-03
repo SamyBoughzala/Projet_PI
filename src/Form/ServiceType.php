@@ -40,6 +40,7 @@ class ServiceType extends AbstractType
                 'required' => true, // Set to true if the author selection is mandatory
     
             ])
+            //->add('valid',null,['label'=>'valid', 'empty_data' => ''])
             ->add('Add_Service', SubmitType::class)
         ;
     }

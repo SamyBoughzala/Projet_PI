@@ -45,4 +45,15 @@ class ServiceRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+public function findService($requestString)
+    {
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.titreService LIKE :val AND e.valid = :val2') // Using LIKE for partial matching
+            ->setParameter('val', '%' . $requestString . '%') // Adding % to both sides of the string
+            ->setParameter('val2', true)
+            ->orderBy('e.id', 'ASC')
+            ->getQuery();
+    }
+
 }
