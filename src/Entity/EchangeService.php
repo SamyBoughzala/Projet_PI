@@ -35,57 +35,45 @@ class EchangeService
     #[ORM\Column(nullable: true)]
     #[Assert\IsTrue(message: 'Valid Box must be Checked.')]
     private ?bool $valide = null;
-
+    
     public function getId(): ?int
     {
         return $this->id;
     }
-
     public function getServiceIn(): ?Service
     {
         return $this->serviceIn;
     }
-
     public function setServiceIn(Service $serviceIn): static
     {
         $this->serviceIn = $serviceIn;
-
         return $this;
     }
-
     public function getServiceOut(): ?Service
     {
         return $this->serviceOut;
     }
-
     public function setServiceOut(Service $serviceOut): static
     {
         $this->serviceOut = $serviceOut;
-
         return $this;
     }
-
     public function getDateEchange(): ?\DateTimeInterface
     {
         return $this->date_echange;
     }
-
     public function setDateEchange(\DateTimeInterface $date_echange): static
     {
         $this->date_echange = $date_echange;
-
         return $this;
     }
-
     public function isValide(): ?bool
     {
         return $this->valide;
     }
-
     public function setValide(?bool $valide): static
     {
         $this->valide = $valide;
-
         return $this;
     }
 }

@@ -182,6 +182,6 @@ class FrontOfficePagesController extends AbstractController
                 'Content-Disposition' => 'inline; filename="document.pdf"',
             ]
         );
-    } 
+    }
  
 }

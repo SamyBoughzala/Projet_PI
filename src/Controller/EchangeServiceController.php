@@ -91,6 +91,28 @@ class EchangeServiceController extends AbstractController
         }
     }
 
-
-
+    #[Route('/filter_service/{id}', name: 'app_exchange_service_filter')]
+    public function filter(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $startDate = $request->query->get('startDate');
+        $endDate = $request->query->get('endDate');
+        $qb = $entityManager->getRepository(EchangeService::class)->createQueryBuilder('e');
+        $qb->where('e.date_echange >= :startDate')
+            ->setParameter('startDate', new \DateTime($startDate));
+        $qb->andWhere('e.date_echange <= :endDate')
+            ->setParameter('endDate', new \DateTime($endDate));
+        $echange_services = $qb->getQuery()->getResult();
+        $filteredData = [];
+        foreach ($echange_services as $echangeService) {
+            $filteredData[] = [
+                'id' => $echangeService->getId(),
+                'dateEchange' => $echangeService->getDateEchange()->format('Y-m-d H:i:s'), // Format date for JSON
+                'valide' => $echangeService->isValide(),
+            ];
+        }
+        $echange_services=$filteredData;
+        return $this->render('echange_service/index.html.twig', [
+            'echange_services' => $echange_services
+        ]);
+    }
 }

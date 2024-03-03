@@ -45,6 +45,17 @@ class EchangeServiceRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
- 
+    public function findByDateRange(string $startDate, string $endDate): array
+    {
+        $qb = $this->createQueryBuilder('e');
+
+        $qb->where('e.dateEchange >= :startDate')
+            ->setParameter('startDate', new \DateTime($startDate));
+
+        $qb->andWhere('e.dateEchange <= :endDate')
+            ->setParameter('endDate', new \DateTime($endDate));
+
+        return $qb->getQuery()->getResult();
+    }
 
 }
