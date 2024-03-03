@@ -8,6 +8,7 @@
 	<link href="{{asset('frontOffice/css/tiny-slider.css')}}" rel="stylesheet">
 	<link href="{{asset('frontOffice/css/style.css')}}" rel="stylesheet">
 	<link href="{{asset('backOffice/css/style.css')}}" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/gutenberg-css@0.6">
 {% endblock %}
 
 
@@ -27,7 +28,7 @@
               <h5>Exchanged Item  </h5>
               <ul class="list-unstyled">
                 <li><strong>Titre Service:</strong> {{ echangeService.ServiceIn.titreService }}</li>
-                <li><strong>Photo:</strong> <img src="{{ asset('/uploads/services/' ~ echangeService.ServiceIn.photo) }}" alt="Service In Photo" class="img-fluid"></li>
+                <li><strong>Photo:</strong> <img src="{{ imageSrc1 }}" alt="Service In Photo" class="img-fluid"></li>
                 <li><strong>Ville:</strong> {{ echangeService.ServiceIn.ville }}</li>
                 <li><strong>Categorie:</strong> {{ echangeService.ServiceIn.categorie.getNomCategorie() }}</li>
               </ul>
@@ -36,7 +37,7 @@
               <h5>Item Given </h5>
               <ul class="list-unstyled">
                 <li><strong>Titre Service:</strong> {{ echangeService.ServiceOut.titreService }}</li>
-                <li><strong>Photo:</strong> <img src="{{ asset('/uploads/services/' ~ echangeService.ServiceOut.photo) }}" alt="Service Out Photo" class="img-fluid"></li>
+                <li><strong>Photo:</strong> <img src="{{ imageSrc2 }}" alt="Service Out Photo" class="img-fluid"></li>
                 <li><strong>Ville:</strong> {{ echangeService.ServiceOut.ville }}</li>
                 <li><strong>Categorie:</strong> {{ echangeService.ServiceOut.categorie.getNomCategorie() }}</li>
               </ul>
@@ -56,7 +57,7 @@
             <br>
               <!-- Download Button -->
                
-            <a href="{{ path('generate_pdf' ,{'id':echangeService.id }) }}" class="btn btn-primary" width="50px" height"50px">Download PDF</a>
+            <a href="{{ path('generate_pdf' ,{'id':echangeService.id }) }}" class="btn btn-primary">Download PDF</a>
             </div>
           </div>
         </div>

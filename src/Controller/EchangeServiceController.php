@@ -9,6 +9,7 @@ use App\Repository\ServiceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -41,7 +42,7 @@ class EchangeServiceController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($echangeService);
             $entityManager->flush();
-            return $this->redirectToRoute('app_echange_produit_transactions', ['id' => 1], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_echange_service_transactions', ['id' => 1], Response::HTTP_SEE_OTHER);
         }
         return $this->renderForm('echange_service/new.html.twig', [
             'echange_service' => $echangeService,
@@ -68,7 +69,6 @@ class EchangeServiceController extends AbstractController
 
             return $this->redirectToRoute('app_echange_service_index', [], Response::HTTP_SEE_OTHER);
         }
-
         return $this->renderForm('echange_service/edit.html.twig', [
             'echange_service' => $echangeService,
             'form' => $form,
@@ -87,8 +87,10 @@ class EchangeServiceController extends AbstractController
             return $this->redirectToRoute('app_echange_service_index', [], Response::HTTP_SEE_OTHER);
         }
         else {
-            return $this->redirectToRoute('app_echange_produit_transactions', ['id' => 1], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_echange_service_transactions', ['id' => 1], Response::HTTP_SEE_OTHER);
         }
     }
+
+
 
 }

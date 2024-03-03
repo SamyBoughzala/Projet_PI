@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Controller;
-
 use App\Entity\EchangeProduit;
 use App\Entity\EchangeService;
+use App\Entity\Produit;
+use App\Entity\Service;
 use App\Repository\EchangeProduitRepository;
 use App\Repository\EchangeServiceRepository;
 use App\Repository\ProduitRepository;
@@ -14,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Dompdf\Dompdf;
 use Dompdf\Options;
-
+use App\Services\QrcodeService as ServicesQrcodeService;
 
 class FrontOfficePagesController extends AbstractController
 {
@@ -107,32 +108,24 @@ class FrontOfficePagesController extends AbstractController
         ]);
     }
 
-    #[Route('{id}/transactions/validate_produit/generate-pdf/', name: 'generate_pdf')]
+
+    #[Route('/transactions/validate_produit/{id}/generate-pdf/', name: 'generate_pdf')]
     public function generatePdfAction2($id,EchangeProduitRepository $echangeProduitRepository): Response
-    {
-        // Create an instance of Dompdf
+    {   
         $options = new Options();
+        $options->setChroot(dirname(__DIR__));
+        $options->setIsRemoteEnabled(true);
         $options->set('isHtml5ParserEnabled', true);
         $dompdf = new Dompdf($options);
         $echangeProduit = $echangeProduitRepository->find(['id' => $id]);
-        // Render the current template
-        $html = $this->renderView('front_office_pages/transaction_service_validated.html.twig', [
+        $html = $this->renderView('front_office_pages/transaction_validated.html.twig', [
             'id' => $id,
-            'echangeService'=> $echangeProduit,
+            'echangeProduit'=> $echangeProduit,
         ]);
-        // Load HTML into Dompdf
         $dompdf->loadHtml($html);
-
-        // Set paper size and orientation
         $dompdf->setPaper('A4', 'portrait');
-
-        // Render the PDF
         $dompdf->render();
-
-        // Output the generated PDF
         $pdfContent = $dompdf->output();
-        
-        // Return a response with the PDF content
         return new Response(
             $pdfContent,
             Response::HTTP_OK,
@@ -147,9 +140,7 @@ class FrontOfficePagesController extends AbstractController
     public function validate_service( EchangeService $echangeService,$id,EchangeServiceRepository $echangeServiceRepository,ManagerRegistry $managerRegistry)
     {
         $em = $managerRegistry->getManager();
-
         $echangeService = $echangeServiceRepository->find(['id' => $id]);
-
         if (!$echangeService) {
             throw $this->createNotFoundException('Echange service not found.');
         }
@@ -157,7 +148,6 @@ class FrontOfficePagesController extends AbstractController
         $echangeService->setValide(true);
         $em->persist($echangeService);
         $em->flush();
-
         return $this->render('front_office_pages/transaction_service_validated.html.twig', [
             'echangeService' => $echangeService,
         ]);
@@ -167,29 +157,23 @@ class FrontOfficePagesController extends AbstractController
     #[Route('/transactions/validate_service/{id}/generate-pdf/', name: 'generate_pdf')]
     public function generatePdfAction($id,EchangeServiceRepository $echangeServiceRepository): Response
     {
-        // Create an instance of Dompdf
-        $options = new Options();
-        $options->set('isHtml5ParserEnabled', true);
-        $dompdf = new Dompdf($options);
+
+        $dompdf = new Dompdf([
+            "chroot" => __DIR__
+        ] );
         $echangeService = $echangeServiceRepository->find(['id' => $id]);
-        // Render the current template
+        $servicePhotoPath = 'public/uploads/services/'.$echangeService->getServiceOut()->getPhoto();
+
         $html = $this->renderView('front_office_pages/transaction_service_validated.html.twig', [
             'id' => $id,
             'echangeService'=> $echangeService,
         ]);
-        // Load HTML into Dompdf
         $dompdf->loadHtml($html);
 
-        // Set paper size and orientation
         $dompdf->setPaper('A4', 'portrait');
-
-        // Render the PDF
         $dompdf->render();
 
-        // Output the generated PDF
         $pdfContent = $dompdf->output();
-        
-        // Return a response with the PDF content
         return new Response(
             $pdfContent,
             Response::HTTP_OK,
@@ -198,6 +182,6 @@ class FrontOfficePagesController extends AbstractController
                 'Content-Disposition' => 'inline; filename="document.pdf"',
             ]
         );
-    }       
-
+    } 
+ 
 }
