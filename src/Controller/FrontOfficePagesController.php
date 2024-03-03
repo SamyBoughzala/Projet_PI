@@ -16,6 +16,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use App\Services\QrcodeService as ServicesQrcodeService;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 
 class FrontOfficePagesController extends AbstractController
 {
@@ -137,7 +139,7 @@ class FrontOfficePagesController extends AbstractController
     }
 
     #[Route('/transactions/validate_service/{id}', name: 'app_echange_service_transactions_validate')]
-    public function validate_service( EchangeService $echangeService,$id,EchangeServiceRepository $echangeServiceRepository,ManagerRegistry $managerRegistry)
+    public function validate_service(MailerInterface $mailer, EchangeService $echangeService,$id,EchangeServiceRepository $echangeServiceRepository,ManagerRegistry $managerRegistry)
     {
         $em = $managerRegistry->getManager();
         $echangeService = $echangeServiceRepository->find(['id' => $id]);
@@ -148,6 +150,17 @@ class FrontOfficePagesController extends AbstractController
         $echangeService->setValide(true);
         $em->persist($echangeService);
         $em->flush();
+        // Prepare and send the email
+        $email = (new Email())
+        ->from('Wassef.Ammar@esprit.tn')
+        ->to($echangeService->getServiceIn()->getUtilisateur()->getEmail())
+        ->subject('Your transaction has been validated')
+        ->html($this->renderView('front_office_pages/email_transaction_validated.html.twig', [
+            'utilisateur' => $this->getUser(),
+            'echangeService' => $echangeService,
+        ]));
+        $mailer->send($email);
+
         return $this->render('front_office_pages/transaction_service_validated.html.twig', [
             'echangeService' => $echangeService,
         ]);
