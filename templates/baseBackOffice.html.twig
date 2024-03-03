@@ -123,14 +123,7 @@
                     </a>
                 </li>
 
-                <li>
-                    <a href="#">
-                        <span class="icon">
-                            <ion-icon name="log-out-outline"></ion-icon>
-                        </span>
-                        <span class="title">Sign Out</span>
-                    </a>
-                </li>
+
             </ul>
         </div>
 
@@ -150,7 +143,15 @@
                 </div>
 
                 <div class="user">
-                    <img src="{{asset('backOffice/imgs/customer01.jpg')}}" alt="">
+                    <img src="{{asset(app.session.get('image'))}}" alt="">
+                </div>
+                <div>
+                    <a href="{{path('app_logout')}}">
+                        <span class="icon">
+                            <ion-icon name="log-out-outline"></ion-icon>
+                        </span>
+                        <span class="title">Sign Out</span>
+                    </a>
                 </div>
             </div>
            

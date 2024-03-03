@@ -4,7 +4,10 @@ namespace App\Form;
 
 use App\Entity\Utilisateur;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -56,10 +59,10 @@ class InscriptionType extends AbstractType
             ->add('email',EmailType::class,[
                 'constraints' => [
                     new Assert\NotBlank([
-                        'message' => 'Veuillez entrer votre adresse e-mail.'
+                        'message' => 'Please entre your  e-mail.'
                     ]), 
                     new Assert\Email([
-                        'message' => 'Veuillez entrer une adresse e-mail valide.'
+                        'message' => 'Please  e-mail valid.'
                     ]),    
 
                   
@@ -125,7 +128,20 @@ class InscriptionType extends AbstractType
                 
                 
                 )
-    
+
+
+                ->add('gender', ChoiceType::class, [
+                    'label' => 'Gender',
+                    'choices' => [
+                        'Femme' => 'femme',
+                        'Homme' => 'homme',
+                    ],
+                    'expanded' => true,
+                    'multiple' => false,
+                    'required' => true,
+                ])
+
+
         ->add('Submit',SubmitType::class)
         
         ;

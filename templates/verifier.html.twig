@@ -18,15 +18,16 @@
 		<link href="{{asset('frontOffice/css/style.css')}}" rel="stylesheet">
         {% endblock %}
 		<title>{% block title %}Home{% endblock %}</title>
-</head>
+	</head>
 
-<body>
+	<body>
+
 		<!-- Start Header/Navigation -->
 		<nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
 
 			<div class="container">
-			    <p class="navbar-brand ">  Authentification </p>
-				<p class="navbar-brand" >SwapNshare<span>.</span></p>
+			    <p class="navbar-brand ">  Verificate code  </p>
+				<a class="navbar-brand" href="{{path('index')}}">SwapNshare<span>.</span></a>
 			
                
 			</div>
@@ -43,18 +44,49 @@
         {% block body %}
 		
        {% endblock %}
-
-
-		<!-- End Footer Section -->	
-</body>
 		<!-- Start Footer Section -->
+		<footer class="footer-section">
+			<div class="container relative">
 
+				<div class="sofa-img">
+					<img src="{{asset('frontOffice/images/sofa.png')}}" alt="Image" class="img-fluid">
+				</div>
+
+			
+				</div>
+
+				<div class="row g-5 mb-5">
+					<div class="col-lg-4">
+						
+
+					
+
+				<div class="border-top copyright">
+					<div class="row pt-4">
+						<div class="col-lg-6">
+							<p class="mb-2 text-center text-lg-start">Copyright &copy;<script>document.write(new Date().getFullYear());</script>. All Rights Reserved. 
+            </p>
+						</div>
+
+						<div class="col-lg-6 text-center text-lg-end">
+							<ul class="list-unstyled d-inline-flex ms-auto">
+								<li class="me-4"><a href="#">Terms &amp; Conditions</a></li>
+								<li><a href="#">Privacy Policy</a></li>
+							</ul>
+						</div>
+
+					</div>
+				</div>
+
+			</div>
+		</footer>
+		<!-- End Footer Section -->	
 
         {% block JS%}
 		<script src="{{asset('frontOffice/js/bootstrap.bundle.min.js')}}"></script>
 		<script src="{{asset('frontOffice/js/tiny-slider.js')}}"></script>
 		<script src="{{asset('frontOffice/js/custom.js')}}"></script>
         {% endblock %}
-
+	</body>
 
 </html>

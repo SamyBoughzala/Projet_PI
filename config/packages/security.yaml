@@ -20,7 +20,9 @@ security:
             lazy: true 
             provider: app_user_provider
             pattern: ^/
-            custom_authenticator: App\Security\AppAuthenticator
+            custom_authenticator: 
+                - App\Security\AppAuthenticator
+               
             logout: 
                   path: app_logout
                 # where to redirect after logout
@@ -41,8 +43,20 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-          - { path: ^/admin, roles: ROLE_ADMIN }
-          - { path: ^/users, roles: ROLE_USER }
+        - { path: ^/user, roles: ROLE_USER }  # Removed extra space
+        - { path: ^/D/, roles: ROLE_ADMIN }  # Removed extra space
+        #- { path: ^/e/, roles: ROLE_ADMIN }
+        - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/admin/home, roles: ROLE_ADMIN }
+        - { path: ^/admin/services, roles: ROLE_ADMIN }
+        - { path: ^/admin/categories, roles: ROLE_ADMIN }
+        - { path: ^/admin/produits, roles: ROLE_ADMIN }
+        - { path: ^/admin/reclamations, roles: ROLE_ADMIN }
+        - { path: ^/admin/messages, roles: ROLE_ADMIN }
+        - { path: ^/admin/commandes, roles: ROLE_ADMIN }
+        - { path: ^/admin/utilisateurs, roles: ROLE_ADMIN }
+        - { path: ^/admin/addadmin, roles: ROLE_ADMIN }
+
 
    
 

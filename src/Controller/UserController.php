@@ -2,23 +2,29 @@
 
 namespace App\Controller;
 
+use App\Entity\Offre;
+use App\Enum\UsersRoles;
 use App\Entity\Utilisateur;
-use App\Form\AuthentificationType;
+
+use App\Form\ForgotPasswordType;
+use Doctrine\Bundle\FixturesBundle;
 use App\Form\InscriptionType;
 use App\Form\ProfilType;
 use App\Repository\UtilisateurRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Mime\Email;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
 
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use Symfony\Component\String\Slugger\AsciiSlugger;
+
+
 
 
 
@@ -28,7 +34,7 @@ use Symfony\Component\Mailer\MailerInterface;
 class UserController extends AbstractController
 {
 
-   
+
 
 
 
@@ -42,8 +48,8 @@ class UserController extends AbstractController
 
 
 
-    #[Route('/inscription', name: 'app_user')]
-    public function register(Request $request, ManagerRegistry $manager, UserPasswordHasherInterface $passwordHasher,MailerInterface $mailer): Response
+    #[Route('/inscription', name: 'app_userr')]
+    public function register(Request $request, UserPasswordHasherInterface $passwordHasher,MailerInterface $mailer): Response
 {
 
     
@@ -51,12 +57,19 @@ class UserController extends AbstractController
     $form = $this->createForm(InscriptionType::class, $user );
     $form->handleRequest($request);
 
-    
     $random_bytes = random_bytes(10);
-    // Convertir les octets en une chaîne de caractères ASCII valide
-    $ascii_string = mb_convert_encoding($random_bytes, 'ASCII');
-    // Utiliser AsciiSlugger avec la chaîne ASCII
-    $code = (new AsciiSlugger())->slug($ascii_string)->toString();
+
+    // Convert bytes to ASCII string
+$ascii_string = mb_convert_encoding($random_bytes, 'ASCII');
+
+// Use AsciiSlugger to generate a slug
+$slug = (new \Symfony\Component\String\Slugger\AsciiSlugger())->slug($ascii_string)->toString();
+
+// Extract alphanumeric characters only
+$alphanumeric_code = preg_replace('/[^a-zA-Z0-9]/', '', $slug);
+
+// Take the first 6 characters
+$final_code = substr($alphanumeric_code, 0, 6);
 
     
     if($form->isSubmitted() && $form->isValid()) {
@@ -66,32 +79,41 @@ class UserController extends AbstractController
         $hashedPassword = $passwordHasher->hashPassword($user, $plainPassword);
         $user->setMotDePasse($hashedPassword);
 
-        $user->setRoles(['ROLE_USER']);
+        $user->setRole(UsersRoles::USER);
 
-        $user->setAuthCode($code);
-    
+
+        $sexe = $form->get('gender')->getData();
+
+        if ($sexe === 'femme') {
+            $user->setImageName('femme.png');
+        } elseif ($sexe === 'homme') {
+            $user->setImageName('m2H7G6H7H7Z5G6m2.png');
+        } else {
+            $user->setImageName('default.png');
+        }
+        
+        #$user->setImageName("m2H7G6H7H7Z5G6m2.png");
+
+
+
+
+
+
+
+
+
+
+        $user->setAuthCode($final_code);
     $email = (new Email())
     ->from('Bensalahons428@gmail.com')
     ->to($user->getEmail())
     ->subject('Code d\'authentification pour SwapNshare')
-    ->html('Votre code d\'authentification est : ' . $code);
+    ->html('Votre code d\'authentification est : ' . $final_code);
 
     $mailer->send($email);
-
-       
-         
-        $em= $manager->getManager();
-        
-        $em->persist($user);
-        $em->flush();
-      
-
-        $userId = $user->getId();
-
-
-    // Stocker le code dans l'entité Utilisateur
- 
-        return $this->redirectToRoute('app_login');
+    $session = $request->getSession();
+    $session->set('temp_user', $user);
+    return $this->redirectToRoute('app_verify_code');
     }
 
     return $this->renderForm('user/inscrit.html.twig',[
@@ -100,7 +122,67 @@ class UserController extends AbstractController
 ]);
 }
 
+    #[Route('/Forgot', name: 'app_Forgot')]
+    public function forgot(Request $request, UserPasswordHasherInterface $passwordHasher, UtilisateurRepository $utilisateurs, EntityManagerInterface $entityManager): Response
+    {
+        $error = "";
+        $form = $this->createForm(ForgotPasswordType::class);
+        $form->handleRequest($request);
 
+        if ($form->isSubmitted() && $form->isValid()) {
+            $email = $form->get('email')->getData();
+            $user = $utilisateurs->findOneByEmail($email);
+
+            if (!$user) {
+                $error = "Invalid email address.";
+            } else {
+                $newPassword = $form->get('newPassword')->getData();
+                $hashedPassword = $passwordHasher->hashPassword($user, $newPassword);
+                $user->setMotDePasse($hashedPassword);
+                $entityManager->flush();
+                return $this->redirectToRoute('app_login');
+            }
+        }
+
+        return $this->render('user/Forgot.html.twig', [
+            'form' => $form->createView(),
+            'error' => $error
+        ]);
+    }
+
+
+    #[Route('/verify_code', name: 'app_verify_code')]
+public function verify_code(Request $request,ManagerRegistry $manager): Response
+{
+    if ($request->isMethod('POST')) {
+        $submittedCode = $request->request->get('auth_code'); // Assuming 'auth_code' is the name of the input field
+        $session = $request->getSession();
+        $user = $session->get('temp_user');
+    
+        if ($user && $user->getAuthCode() === $submittedCode) {
+            $em= $manager->getManager();
+             $em->persist($user);
+              $em->flush();
+            $session->remove('temp_user');
+            return $this->redirectToRoute('app_login');
+
+            // Code is valid, do something
+        } else {
+           $error="CODE INVALID";
+           return $this->render('security/2fa_form.html.twig', [
+            "erroCode"=>$error
+        ]);
+        }
+    
+    }
+    
+ return $this->render('security/2fa_form.html.twig', [
+            
+ ]);
+
+
+
+}
 
 
 /* #[Route('/authentification/{id}', name: 'app_authentification')]
@@ -176,8 +258,14 @@ public function editau(ManagerRegistry $manager,UtilisateurRepository  $utilisat
           $em->persist($utili);
           $em->flush();
           
-        $userId = $utili->getId();
-           return $this->redirectToRoute('app_edit',  ['id' => $userId]); 
+      
+          $userId = $utili->getId();
+          $session = $req->getSession();
+          $session->set('user_id', $userId);
+
+        
+       
+           return $this->redirectToRoute('app_profil',['user'=>$utili]); 
 
       }
         
@@ -193,8 +281,8 @@ public function editau(ManagerRegistry $manager,UtilisateurRepository  $utilisat
   
   
 
-#[Route(path: '/loggin', name: 'app_login')]
-public function login(AuthenticationUtils $authenticationUtils): Response
+#[Route(path: '/login', name: 'app_login')]
+public function login(AuthenticationUtils $authenticationUtils,SessionInterface $session): Response
 {
     // if ($this->getUser()) {
     //     return $this->redirectToRoute('target_path');
@@ -205,33 +293,23 @@ public function login(AuthenticationUtils $authenticationUtils): Response
     // last username entered by the user
     $lastUsername = $authenticationUtils->getLastUsername();
 
+
     return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
 }
 
-#[Route(path: '/logout', name: 'app_logout')]
-
-
-public function logout(SessionInterface $session): void
-{   
-    if ($session->has('user_id') ) {
-        $session->remove('user_id');
-        $session->remove('user_role');
-        $session->remove('user_email');
-        $session->remove('user_address');
-        $session->remove('user_phonenumber');
-        $session->remove('user_score');
-        $session->remove('user_name');
+    #[Route('/logout', name: 'app_logout')]
+    public function logout()
+    {
+        // This controller will not be executed, as the route is handled by Symfony's security system.
     }
-
-    throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
-}
 
 
 
 #[Route('/profile', name: 'app_profil')]
 public function Profil(): Response
 {
-    return $this->render('user/profile.html.twig');
+    
+    return $this->render('user/profile.html.twig',["user"=>$this->getUser()]);
 }
 
 
