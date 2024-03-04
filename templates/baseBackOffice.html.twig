@@ -147,7 +147,7 @@
 
                 <div class="search">
                     <label>
-                        <input type="text" placeholder="Search here">
+                        <input type="text" placeholder="Search here" id="searchInput"  onchange="Search(this)">
                         <ion-icon name="search-outline"></ion-icon>
                     </label>
                 </div>
@@ -177,6 +177,41 @@
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-KCrnlVuJaFHANdhzqr9hLwQ9shCtz7zYeGUAqFq8rvuIpE9VBQIWsluDHCeIBw" crossorigin="anonymous"></script>
     
+ <script>
+    function Search(checkbox) {
+        const sortBy = checkbox.value;
+        const currentUrl = new URL(window.location.href);
+        currentUrl.searchParams.set('searchValue', sortBy);
+        window.location.href = currentUrl.toString();
+        
+    }
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+		<script>
+			$(document).ready( function() {
+				$('#searchInput').autocomplete({
+					source: '/autocomplete', // Assuming the source is a URL
+					minLength: 1
+				}).data('ui-autocomplete')._renderItem = function(ul, item) {
+					// Customize the rendering of each item
+					return $('<li>')
+						.append('<div class="custom-suggestion">' + item.label + '</div>')
+						.data('ui-autocomplete-item', item)
+						.appendTo(ul);
+				};
+
+				// Delegate the click event to the suggestions
+				$(document).on('click', '.ui-autocomplete li', function() {
+					var item = $(this).data('ui-autocomplete-item');
+					if (item && item.id) {
+						// Include additional path details (e.g., photo) in the URL
+						window.location.href = '/service/' + encodeURIComponent(item.id) + '/' + encodeURIComponent(item.photo);
+					}
+				});
+			}); 
+       </script>
+<style>
 </body>
 
 </html>

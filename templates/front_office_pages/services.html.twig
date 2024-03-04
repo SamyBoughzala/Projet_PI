@@ -85,28 +85,32 @@
 							</label>
 							</div>
 						</div>
+						
+						<button type="button" class="filter-button dropdown-toggle" data-bs-toggle="dropdown" style="height: 50px;" aria-expanded="false">
+							Filter by category
+						</button>
+					
+
+						<div class="dropdown-menu filter-dropdown">
+							<div class="filter-category">
+								<ul>
+								{% for category in categories %}
+								<li>
+									<a href="{{ path('FiltredServices', {id: category.id }) }}">{{category.nomCategorie}}</a>
+								</li>
+								{% endfor %}
+
+								</ul>
+							</div>
+						</div>
 					</div>
-{# 						<button type="button" class="filter-button" data-bs-toggle="dropdown" aria-expanded="false">
-							Filter by category<i class="fas fa-filter"></i>
-						</button> #}
 
 
 
-				<div class="dropdown-menu filter-dropdown">
-					<div class="filter-category">
-						<h6>Category</h6>
-						<ul>
-						{% for category in categories %}
-						<li>
-						   <a href="{{ path('FiltredServices', {id: category.id }) }}"> <input type="checkbox" id="category-electronics" name="category" value="electronics"></a>
-							<a href="{{ path('FiltredServices', {id: category.id }) }}">{{category.nomCategorie}}</a>
-						</li>
-						{% endfor %}
 
-						</ul>
-					</div>
-				</div>
+
  
+{% if pagination|length > 0 %}
 				
 		      	<div class="row">
 				
@@ -136,7 +140,10 @@
 				 </div>
 
 
+                    {% else %}
+                    <h2 style="align: center">No Services to show</2>
 
+                    {% endif %}
 		      	</div>
 		    </div>
 		</div>
@@ -183,6 +190,70 @@
 .add-button,
 .col-lg-3.col-md-4 {
   /* Adjust styling for individual divs if needed */
+}
+
+.filter-button {
+  background-color: #3b5d50; /* Adjust background color */
+  color: white; /* Adjust text color */
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px; /* Adjust border radius */
+  cursor: pointer;
+  display: flex;
+  align-items: center; /* Align text and icon vertically */
+  transition: background-color 0.2s ease-in-out; /* Add a smooth hover effect */
+}
+
+.filter-button:hover {
+  background-color: #3b5d50; /* Adjust hover background color */
+}
+
+
+.dropdown-menu {
+  background-color: white; /* Adjust background color */
+  border: 1px solid #ccc; /* Adjust border color */
+  border-radius: 5px; /* Adjust border radius */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+  padding: 10px;
+  min-width: 150px; /* Adjust minimum width */
+  position: absolute; /* Position relative to button (adjust if needed) */
+  z-index: 1; /* Ensure dropdown appears above other elements */
+  display: none; /* Initially hidden */
+}
+
+.dropdown-menu.show { /* Add class for open state */
+  display: block;
+}
+
+.filter-category {
+  padding: 5px 0; /* Add some padding for separation */
+  border-bottom: 1px solid #ddd; /* Add a subtle divider line */
+  margin-bottom: 5px; /* Add some bottom margin */
+}
+
+.filter-category h6 {
+  font-weight: bold;
+  margin-bottom: 5px; /* Adjust margin for spacing */
+}
+
+.filter-category ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.filter-category li {
+  padding: 5px 0; /* Adjust padding for spacing */
+}
+
+.filter-category li a {
+  text-decoration: none;
+  color: #333;
+  display: block; /* Make entire list item clickable */
+}
+
+.filter-category li a:hover {
+  background-color: #f1f1f1; /* Add hover background color */
 }
 
 </style>

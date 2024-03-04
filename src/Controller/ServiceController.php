@@ -63,7 +63,11 @@ class ServiceController extends AbstractController
         $qb = $em->createQueryBuilder();
         $category= $categorieRepository->find($id);
         $categories= $categorieRepository->findAll();
-        $qb->select('s')->from("App:Service", 's')->where('s.categorie = :cat')->setParameter('cat', $category);
+        $qb->select('s')
+        ->from("App:Service", 's')
+        ->where('s.categorie = :cat AND s.valid = :val')
+        ->setParameter('cat', $category)
+        ->setParameter('val', true);
         $query=$qb->getQuery();
         $pagination= $paginatorInterface->paginate(
             $query,
@@ -75,6 +79,73 @@ class ServiceController extends AbstractController
             'categories'=>$categories,
             'pagination'=>$pagination
         ]);
+    }
+
+    #[Route('admin/services/category/{id}', name: 'FiltredAdminServices')]
+    public function filtreByCategory($id, EntityManagerInterface $em, PaginatorInterface $paginatorInterface,  Request $request, CategorieRepository $categorieRepository): Response
+    {
+        $qb = $em->createQueryBuilder();
+        $category= $categorieRepository->find($id);
+        $categories= $categorieRepository->findAll();
+        $qb->select('s')
+        ->from("App:Service", 's')
+        ->where('s.categorie = :cat')
+        ->setParameter('cat', $category);
+        $query=$qb->getQuery();
+        $pagination= $paginatorInterface->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            2
+        );
+        
+        return $this->render('admin/services.html.twig',[
+            'categories'=>$categories,
+            'pagination'=>$pagination
+        ]);
+    }
+
+
+    #[Route('admin/services/ByValidation', name: 'FiltredServicesByValidation')]
+    public function filtreByValidationServices( EntityManagerInterface $em, PaginatorInterface $paginatorInterface,  Request $request, CategorieRepository $categorieRepository): Response
+    {
+        $qb = $em->createQueryBuilder();
+        $valid= $request->get('valid');
+        $categories= $categorieRepository->findAll();
+        if($valid){
+            $qb->select('s')
+            ->from("App:Service", 's')
+            ->where('s.valid = :val')
+            ->setParameter('val', true);
+            $query=$qb->getQuery();
+            $pagination= $paginatorInterface->paginate(
+                $query,
+                $request->query->getInt('page', 1),
+                4
+            );
+            
+            return $this->render('admin/services.html.twig',[
+                'categories'=>$categories,
+                'pagination'=>$pagination
+            ]);
+        }else{
+            $qb->select('s')
+            ->from("App:Service", 's')
+            ->where('s.valid = :val')
+            ->setParameter('val', false);
+            $query=$qb->getQuery();
+            $pagination= $paginatorInterface->paginate(
+                $query,
+                $request->query->getInt('page', 1),
+                4
+            );
+            
+            return $this->render('admin/services.html.twig',[
+                'categories'=>$categories,
+                'pagination'=>$pagination
+            ]);
+        }
+        
+
     }
 
     #[Route('/service/{id}', name: 'service')]
@@ -135,7 +206,7 @@ class ServiceController extends AbstractController
             if($image){
                 $imageName =  bin2hex(random_bytes(10)) .'.'. $image->guessExtension();
                 $image->move(
-                    'F:\ESPRIT\SwapNShare2\Projet_PI'. '/public/uploads/services',
+                    $this->getParameter('kernel.project_dir'). '/public/uploads/services',
                     $imageName
                 );
             }
@@ -165,7 +236,7 @@ class ServiceController extends AbstractController
             if($image){
                 $imageName =  bin2hex(random_bytes(10)) .'.'. $image->guessExtension();
                 $image->move(
-                    'F:\ESPRIT\SwapNShare2\Projet_PI'. '/public/uploads/services',
+                    $this->getParameter('kernel.project_dir'). '/public/uploads/services',
                     $imageName
                 );
             }
@@ -200,7 +271,7 @@ class ServiceController extends AbstractController
         $email= (new Email())
         ->from("wassefammar17@gmail.com")
         //->to($service->getUtilisateur()->getEmail())
-        ->to("wassefammar17@gmail.com")
+        ->to($service->getUtilisateur()->getEmail())
         ->subject("Service Rejection")
         ->html(
          "   <style>

@@ -20,21 +20,38 @@ class AdminContollerController extends AbstractController
     }
 
     #[Route('/admin/services', name: 'app_admin_services')]
-    public function services(EntityManagerInterface $em, PaginatorInterface $paginatorInterface,CategorieRepository $categorieRepository, Request $request): Response
+    public function services(ServiceRepository $serviceRepository , EntityManagerInterface $em, PaginatorInterface $paginatorInterface,CategorieRepository $categorieRepository, Request $request): Response
     {
         $categories= $categorieRepository->findAll();
-        $qb = $em->createQueryBuilder();
-        $qb->select('s')->from("App:Service", 's');
-        $query=$qb->getQuery();
-        $pagination= $paginatorInterface->paginate(
-            $query,
-            $request->query->getInt('page', 1),
-            5
-        );
-        return $this->render('admin/services.html.twig',[
-            'categories'=>$categories,
-            'pagination'=>$pagination
-        ]);
+        $seachValue= $request->get('searchValue');
+        if($seachValue){
+            
+            $query=$serviceRepository->findService($seachValue);
+            $pagination= $paginatorInterface->paginate(
+                $query,
+                $request->query->getInt('page', 1),
+                5
+            );
+            return $this->render('admin/services.html.twig',[
+                'categories'=>$categories,
+                'pagination'=>$pagination
+            ]);
+        }
+        else{
+            $qb = $em->createQueryBuilder();
+            $qb->select('s')->from("App:Service", 's');
+            $query=$qb->getQuery();
+            $pagination= $paginatorInterface->paginate(
+                $query,
+                $request->query->getInt('page', 1),
+                5
+            );
+            return $this->render('admin/services.html.twig',[
+                'categories'=>$categories,
+                'pagination'=>$pagination
+            ]);
+        }
+
     }
 
     #[Route('/admin/categories', name: 'app_admin_categories')]
