@@ -4,7 +4,10 @@ namespace App\Repository;
 
 use App\Entity\Produit;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 
 /**
  * @extends ServiceEntityRepository<Produit>
@@ -60,9 +63,70 @@ public function searchProduitByPriceRanges( $priceRanges)
             'SELECT a from App\Entity\Produit a WHERE 
             a.prix BETWEEN ?1 AND ?2')
             ->setParameter(1,$min)
-            ->setParameter(2,$max)
-            ->getResult();
+            ->setParameter(2,$max);
     }
+
+    public function findProduit($requestString)
+    {
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.titreProduit LIKE :val') // Using LIKE for partial matching
+            ->setParameter('val', '%' . $requestString . '%') // Adding % to both sides of the string
+            ->orderBy('e.id', 'ASC')
+            ->getQuery();
+    }
+
+    public function findNameProduct($requestString)
+    {
+          $results= $this->createQueryBuilder('e')
+            ->andWhere('e.titreProduit LIKE :val') // Using LIKE for partial matching
+            ->setParameter('val', '%' . $requestString . '%') // Adding % to both sides of the string
+            ->orderBy('e.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+
+            $suggestions = [];
+            foreach ($results as $result) {
+                $suggestions[] = $result->getTitreProduit();
+            }
+
+            return $suggestions;
+    }
+
+    public function findSortedByReviews()
+    {
+        // Custom DQL query to select products ordered by reviews
+        $dql = '
+            SELECT p
+            FROM App\Entity\Produit p
+            LEFT JOIN p.reviews r
+            GROUP BY p
+            ORDER BY AVG(r.note) DESC
+        ';
+
+        $query = $this->getEntityManager()->createQuery($dql);
+
+        // Execute the query and return the result
+        return $query;
+    }
+
+    public function findOrderedByDate()
+    {
+        // Custom DQL query to select products ordered by date (assuming 'date' is a field in Produit)
+        $dql = '
+            SELECT p
+            FROM App\Entity\Produit p
+            ORDER BY p.date DESC
+        ';
+
+        $query = $this->getEntityManager()->createQuery($dql);
+
+        // Execute the query and return the result
+        return $query;
+    }
+  
+
 }
+
+
 
 

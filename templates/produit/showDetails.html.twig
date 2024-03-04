@@ -48,28 +48,32 @@
                 </div>
             </div>
 
-            <div class="col-lg-7 h-auto mb-30">
-                <div class="h-100 bg-light p-30">
+            <div  id="product-details" class="col-lg-7 h-auto mb-30">
+                <div class="h-100 bg-light p-30" >
                     <h3>{{ oneproduct.titreProduit }}</h3>
                     <div class="d-flex mb-3">
                         <div class="text-primary mr-2">
-                            <small class="fas fa-star"></small>
-                            <small class="fas fa-star"></small>
-                            <small class="fas fa-star"></small>
-                            <small class="fas fa-star-half-alt"></small>
-                            <small class="far fa-star"></small>
+                              {% for i in 1..5 %}
+                                    {% if averageReview >= i %}
+                                    <small class="fas fa-star"></small>
+                                    {% elseif averageReview > (i - 0.5) %}
+                                    <small class="fas fa-star-half-alt"></small>
+                                    {% else %}
+                                    <small class="far fa-star"></small>
+                                    {% endif %}
+                            {% endfor %}
                         </div>
-                        <small class="pt-1">(99 Reviews)</small>
+                        <small class="pt-1">( {{reviewCount ~ ' '}} Reviews)</small>
                     </div>
                     <h3 class="font-weight-bold mb-4">{{oneproduct.prix ~' DT' }}</h3>
 					<h5 class="font-weight-bold mb-4"><i class="fa-solid fa-layer-group"></i> {{' ' ~ oneproduct.categorie.nomCategorie }}</h5>
 					<h5 class="font-weight-bold mb-4"><i class="fa-solid fa-user"></i>{{' ' ~ oneproduct.utilisateur.nom ~ ' ' ~ oneproduct.utilisateur.prenom}}</h5>
 					<h5 class="font-weight-bold mb-4"><i class="fa-solid fa-phone"></i>{{' ' ~ oneproduct.utilisateur.telephone }}</h5>
-
+                    <h5 class="font-weight-bold mb-4"><i class="fa-solid fa-ethereum"></i>{{ ' ' ~ oneproduct.etat }}</h5>
 
 
                     <div class="d-flex align-items-center mb-4 pt-2">
-					{% if  oneproduct.utilisateur.id == 1 %}
+					{% if  oneproduct.utilisateur.id == 2 %}
 					 <a href="#">
 						<button class="btn btn-primary px-3" style="margin-right: 10px;"><i class="fa fa-sync-alt"></i> Exchange</button>
                      </a>
@@ -86,10 +90,13 @@
 					</a>
 					{% endif %}
                     </div>
-                    <div class="d-flex pt-2">
+                    {% set url = 0 %}
+                    <div class="d-flex pt-2"  id="social-media-icons" >
+
                         <strong class="text-dark mr-2">Share on:</strong>
                         <div class="d-inline-flex">
-                            <a class="text-dark px-2" href="">
+                        {% set mediaId = "YOUR_MEDIA_ID" %}
+                            <a class="text-dark px-2" href=" https://twitter.com/intent/tweet?url={{ oneproduct.titreProduit|url_encode ~ " " ~ oneproduct.descriptionProduit|url_encode }}&media={{ oneproduct.photo|url_encode }}" class="math-inline">
                                 <i class="fab fa-facebook-f"></i>
                             </a>
                             <a class="text-dark px-2" href="">
@@ -111,7 +118,7 @@
                 <div class="bg-light p-30">
                     <div class="nav nav-tabs mb-4">
                         <a class="nav-item nav-link text-dark active" data-toggle="tab" href="#tab-pane-1">Description</a>
-                        <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-3">Reviews (0)</a>
+                        <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-3">Reviews ({{ reviewCount }})</a>
                     </div>
                     <div class="tab-content">
                         <div class="tab-pane fade show active" id="tab-pane-1">
@@ -141,12 +148,16 @@
                                     <h4 class="mb-4">Leave a review</h4>
                                     <div class="d-flex my-3">
                                         <p class="mb-0 mr-2">Your Rating * :</p>
-                                        <div class="text-primary">
-                                            <i class="far fa-star"></i>
-                                            <i class="far fa-star"></i>
-                                            <i class="far fa-star"></i>
-                                            <i class="far fa-star"></i>
-                                            <i class="far fa-star"></i>
+                                        <div class="text-primary" >
+                                           <a href="{{ path('review',{idP: oneproduct.id, note: 1}) }}" style="color: #FFD333"><i class="far fa-star"></i></a>
+
+                                           <a href="{{ path('review',{idP: oneproduct.id, note: 2}) }}"><i class="far fa-star"style="color: #FFD333"></i></a>
+
+                                           <a href="{{ path('review',{idP: oneproduct.id, note: 3}) }}"><i class="far fa-star"style="color: #FFD333"></i></a>
+
+                                           <a href="{{ path('review',{idP: oneproduct.id, note: 4}) }}"><i class="far fa-star"style="color: #FFD333"></i></a>
+
+                                           <a href="{{ path('review',{idP: oneproduct.id, note: 5}) }}"><i class="far fa-star"style="color: #FFD333"></i></a>
                                         </div>
                                     </div>
                                 </div>
@@ -169,8 +180,89 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
     <script src="{{ asset('lib/easing/easing.min.js') }}"></script>
     <script src="{{ asset('lib/owlcarousel/owl.carousel.min.js') }}"></script>
+    <script src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v14.0"></script>
+   
 
 
     <!-- Template Javascript -->
     <script src="{{ asset('js/main.js') }}"></script>
+
+
+
+
+ <script>
+        async function getProductDetails(productId) {
+            const response = await fetch(`/api/products/${productId}`);
+            const productDetails = await response.json();
+            
+            // Update product details displayed in the UI
+            document.getElementById('product-details').innerHTML = `
+                <h1><span class="math-inline">\{productDetails\.title\}</h1\>
+<p\></span>{productDetails.description}</p>
+                <img src="<span class="math-inline">\{productDetails\.image\}" alt\="</span>{productDetails.title}">
+            `;
+        }
+
+        function shareOnSocialMedia(platform, productId) {
+            console.log(`Clicked on ${platform} icon`);
+
+            getProductDetails(productId)
+                .then(productDetails => {
+                    const currentUrl = window.location.href;
+                    let shareUrl;
+
+                    switch (platform) {
+                        case 'facebook':
+                            // Ensure Facebook SDK is loaded (check for recent version)
+                            if (typeof FB !== 'undefined') {
+                                FB.ui({
+                                    method: 'share',
+                                    href: currentUrl,
+                                    title: productDetails.title,
+                                });
+                            } else {
+                                console.warn('Facebook sharing requires the Facebook SDK');
+                            }
+                            break;
+                        case 'twitter':
+                            // Implement Twitter's Intent API
+                            shareUrl = `https://twitter.com/intent/tweet?url=<span class="math-inline">\{encodeURIComponent\(currentUrl\)\}&text\=</span>{encodeURIComponent(productDetails.title)}`;
+                            break;
+                        case 'pinterest':
+                            // Use Pinterest's Pin It button
+                            shareUrl = `https://www.pinterest.com/pin/create/button/?url=<span class="math-inline">\{encodeURIComponent\(currentUrl\)\}&description\=</span>{encodeURIComponent(productDetails.title)}`;
+                            break;
+                        default:
+                            console.warn(`Sharing to ${platform} not yet implemented`);
+                            return; // Handle unsupported platforms gracefully
+                    }
+
+                    if (shareUrl) {
+                        window.open(shareUrl, '_blank');
+                    }
+                })
+                .catch(error => console.error('Error fetching product details:', error));
+        }
+
+        // Attach click event listener to social media icons
+        const socialMediaIcons = document.getElementById('social-media-icons');
+        socialMediaIcons.addEventListener('click', function (event) {
+            const targetId = event.target.id;
+
+            if (targetId === 'facebook-icon') {
+                shareOnSocialMedia('facebook', document.getElementById('product-details').dataset.productId);
+            } else if (targetId === 'twitter-icon') {
+                shareOnSocialMedia('twitter', document.getElementById('product-details').dataset.productId); // Implement Twitter sharing logic
+            } else if (targetId === 'pinterest-icon') {
+                } else if (targetId === 'pinterest-icon') {
+                shareOnSocialMedia('pinterest', document.getElementById('product-details').dataset.productId); // Pinterest sharing logic
+            } else {
+                console.warn('Clicked on an unrecognized social media icon');
+            }
+        });
+    </script>
+
+
+
+
 {% endblock %}
