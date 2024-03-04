@@ -35,9 +35,20 @@ class AdminContollerController extends AbstractController
     }
 
     #[Route('/admin/reclamations', name: 'app_admin_reclamations')]
-    public function reclamations(ReclamationRepository $reclamationRepository): Response
+    public function reclamations(ReclamationRepository $reclamationRepository, Request $request): Response
     {
+        $orderByDate = $request->get('orderByDate');
         $reclamations = $reclamationRepository->findAll();
+
+
+
+        if ($orderByDate) {
+            $reclamation = $reclamationRepository->findOrderedByDate();
+            return $this->render('admin/reclamations.html.twig', [
+                'reclamations' => $reclamation,
+
+            ]);
+        }
         return $this->render('admin/reclamations.html.twig', [
             'reclamations' => $reclamations
         ]);

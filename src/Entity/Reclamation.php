@@ -36,6 +36,9 @@ class Reclamation
     #[ORM\Column(length: 50)]
     private ?string $status = null;
 
+    #[ORM\Column(length: 50)]
+    private ?string $urgence = null;
+
 
 
     public function getId(): ?int
@@ -99,6 +102,18 @@ class Reclamation
     public function setStatus(string $status): static
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getUrgence(): ?string
+    {
+        return $this->urgence;
+    }
+
+    public function setUrgence(string $urgence): static
+    {
+        $this->urgence = $urgence;
 
         return $this;
     }

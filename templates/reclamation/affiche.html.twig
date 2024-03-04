@@ -41,6 +41,7 @@
             <th>Description</th>
             <th>Actions</th>
             <th>Status</th>
+            <th>Urgency Level</th>
             
         </tr>
     </thead>
@@ -53,6 +54,7 @@
             <td>{{ object.utilisateur.telephone }}</td>
             <td>{{ object.titreR }}</td>
             <td>{{ object.descriptionR}}</td>
+            
             
            
         
@@ -82,6 +84,7 @@
                             {% endif %}
     
         </td> 
+        <td>{{ object.urgence}}</td>
             
        
         </tr>
