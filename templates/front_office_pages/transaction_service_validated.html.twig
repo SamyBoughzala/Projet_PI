@@ -54,9 +54,8 @@
             </div>
             <div class="col-md-6 text-right">
             <br>
-              <!-- Download Button -->
-               
-            <a href="{{ path('generate_pdf' ,{'id':echangeService.id }) }}" class="btn btn-primary" width="50px" height"50px">Download PDF</a>
+              <a href="{{ path('generate_pdf' ,{'id':echangeService.id }) }}" class="btn btn-primary" width="50px" height"50px">Download PDF</a>
+              <a href="{{ path('app_screenshot', {'id': echangeService.id}) }}" class="btn btn-primary">ScreenShot Image</a>
             </div>
           </div>
         </div>

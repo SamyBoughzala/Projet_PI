@@ -85,6 +85,7 @@
         </div>
     </div>
 </div>
+<br><br><br><br><br>
 {% endblock %}
 
 {% block custom_js %}
@@ -99,7 +100,9 @@
         productDescriptionForm.addEventListener('submit', async function (event) {
             event.preventDefault();
             const descriptionInput = document.getElementById('product-description-input').value;
+            console.log(descriptionInput);
             try {
+                
                 const response = await fetch('/api/generate-product-description', {
                     method: 'POST',
                     headers: {
@@ -108,12 +111,12 @@
                     body: JSON.stringify({ description: descriptionInput })
                 });
                 const data = await response.json();
+                console.log(data)
                 outputDiv.innerHTML = data.description;
             } catch (error) {
                 console.error('Error:', error);
             }
         });
-
         taggingForm.addEventListener('submit', async function (event) {
             event.preventDefault();
             const tagsInput = document.getElementById('tagging-input').value;

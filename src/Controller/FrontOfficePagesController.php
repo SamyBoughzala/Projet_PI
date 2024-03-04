@@ -15,8 +15,14 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Dompdf\Dompdf;
 use Dompdf\Options;
+use GuzzleHttp\Client;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
+use Orhanerday\OpenAi\OpenAi;
+use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 class FrontOfficePagesController extends AbstractController
 {
@@ -99,22 +105,17 @@ class FrontOfficePagesController extends AbstractController
     public function validate_produit( EchangeProduit $echangeProduit,$id,EchangeProduitRepository $echangeProduitRepository,ManagerRegistry $managerRegistry)
     {
         $em = $managerRegistry->getManager();
-
         $echangeProduit = $echangeProduitRepository->find(['id' => $id]);
-
         if (!$echangeProduit) {
             throw $this->createNotFoundException('Echange produit not found.');
         }
-
         $echangeProduit->setValide(true);
         $em->persist($echangeProduit);
         $em->flush();
-
         return $this->render('front_office_pages/transaction_validated.html.twig', [
             'echangeProduit' => $echangeProduit,
         ]);
     }
-
 
     #[Route('/transactions/validate_produit/{id}/generate-pdf/', name: 'generate_pdf')]
     public function generatePdfAction2($id,EchangeProduitRepository $echangeProduitRepository): Response
@@ -157,7 +158,7 @@ class FrontOfficePagesController extends AbstractController
         $em->flush();
         // Prepare and send the email
         $email = (new Email())
-        ->from('Wassef.Ammar@esprit.tn')
+        ->from('wassefammar17@gmail.com')
         ->to($echangeService->getServiceIn()->getUtilisateur()->getEmail())
         ->subject('Your transaction has been validated')
         ->html($this->renderView('front_office_pages/email_transaction_validated.html.twig', [
@@ -202,6 +203,89 @@ class FrontOfficePagesController extends AbstractController
         );
     }
 
-    
- 
+    #[Route('/transactions/validate_service/{id}/screenshot/', name: 'app_screenshot')]
+    public function Screenshot(Request $request,$id,EchangeServiceRepository $echangeServiceRepository,ManagerRegistry $managerRegistry): Response
+    {
+        $em = $managerRegistry->getManager();
+        $echangeService = $echangeServiceRepository->find(['id' => $id]);
+        if (!$echangeService) {
+            throw $this->createNotFoundException('Echange produit not found.');
+        }
+        $em->persist($echangeService);
+        $em->flush();
+        
+        $htmlContent = $this->renderView('front_office_pages/transaction_service_validated.html.twig', [
+            'echangeService' => $echangeService,
+        ]);
+        $crawler = new Crawler($htmlContent);
+        $htmlContent = $crawler->html();
+        $cssContent = '.container {margin-top: 20px;}.card-header {padding: 10px;}.card-body { padding: 20px;}.card-footer { padding: 10px;}.card-footer .row { margin-top: 10px;}.list-unstyled {list-style: none;padding: 0;}.list-unstyled li {margin-bottom: 10px;}.font-weight-bold{font-weight: bold;}'; // Add your CSS content here
+        $client = new Client();
+        $res = $client->request('POST', 'https://hcti.io/v1/image', [
+            'auth' => ['cae56d5f-d7d7-4b1e-a556-394503edc813', '51fd2853-6278-49d3-9588-e5cc35f199fb'],
+            'form_params' => ['html' => $htmlContent, 'css' => $cssContent]
+        ]);
+        $responseBody = json_decode($res->getBody(), true);
+        $imageUrl = $responseBody['url'];
+        return new RedirectResponse($imageUrl);
+    }
+
+    #[Route('/transactions/validate_produit/{id}//takeScreenshot/', name: 'app_takeScreenshot', methods: ['POST'])]
+    public function takeScreenshot(Request $request,$id, EchangeProduit $echangeProduit, EchangeProduitRepository $echangeProduitRepository, ManagerRegistry $managerRegistry): Response
+    {
+        $em = $managerRegistry->getManager();
+        $echangeProduit = $echangeProduitRepository->find(['id' => $id]);
+        if (!$echangeProduit) {
+            throw $this->createNotFoundException('Echange produit not found.');
+        }
+        $em->persist($echangeProduit);
+        $em->flush();
+        
+        $htmlContent = $this->renderView('front_office_pages/transaction_validated.html.twig', [
+            'echangeProduit' => $echangeProduit,
+        ]);
+        $crawler = new Crawler($htmlContent);
+        $htmlContent = $crawler->html();
+        $cssContent = '.container {margin-top: 20px;}.card-header {padding: 10px;}.card-body { padding: 20px;}.card-footer { padding: 10px;}.card-footer .row { margin-top: 10px;}.list-unstyled {list-style: none;padding: 0;}.list-unstyled li {margin-bottom: 10px;}.font-weight-bold{font-weight: bold;}'; // Add your CSS content here
+        $client = new Client();
+        $res = $client->request('POST', 'https://hcti.io/v1/image', [
+            'auth' => ['cae56d5f-d7d7-4b1e-a556-394503edc813', '51fd2853-6278-49d3-9588-e5cc35f199fb'],
+            'form_params' => ['html' => $htmlContent, 'css' => $cssContent]
+        ]);
+        $responseBody = json_decode($res->getBody(), true);
+        $imageUrl = $responseBody['url'];
+        return new RedirectResponse($imageUrl);
+        
+    }
+
+    #[Route('/ai-tools', name: 'ai_tools')]
+    public function aiTools(): Response
+    {
+        return $this->render('front_office_pages/AITOOLS.html.twig');
+    }
+
+    #[Route('/api/generate-product-description', name: 'api_generate_product_description', methods: ['POST'])]
+    public function generateProductDescription(Request $request): JsonResponse
+    {
+        dump($request->getContent());
+        $inputText = json_decode($request->getContent(), true)['description'] ?? '';
+        $openai = new OpenAi('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');
+        try {
+            $response = $openai->completion([
+                'model' => 'text-davinci-003',
+                'prompt' => 'this is a bartering website and you are tasked of providing a description for an article to help the user add a product description to his article IMPORTANT return only the product description and nothing else AGAIN IMPORTANT return only the product description and nothing else the product is ' .$inputText ,
+                'max_tokens' => 200,
+                'temperature' => 0.9, 
+            ]);
+            // Get the generated text from the response
+            $generatedText = json_decode($response, true);
+            $generatedText = $generatedText["choices"][0]["text"];
+            dump($generatedText);
+            // Return the generated text as JSON response
+            return new JsonResponse(['description' => $generatedText]);
+        } catch (\Exception $e) {
+            // Handle any exceptions
+            return new JsonResponse(['error' => $e->getMessage()], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 }

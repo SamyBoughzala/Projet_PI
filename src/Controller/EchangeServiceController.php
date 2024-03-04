@@ -87,7 +87,7 @@ class EchangeServiceController extends AbstractController
             return $this->redirectToRoute('app_echange_service_index', [], Response::HTTP_SEE_OTHER);
         }
         else {
-            return $this->redirectToRoute('app_echange_service_transactions', ['id' => 1], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_echange_service_index', [], Response::HTTP_SEE_OTHER);
         }
     }
 
