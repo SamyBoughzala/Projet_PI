@@ -90,26 +90,7 @@
 					</a>
 					{% endif %}
                     </div>
-                    {% set url = 0 %}
-                    <div class="d-flex pt-2"  id="social-media-icons" >
-
-                        <strong class="text-dark mr-2">Share on:</strong>
-                        <div class="d-inline-flex">
-                        {% set mediaId = "YOUR_MEDIA_ID" %}
-                            <a class="text-dark px-2" href=" https://twitter.com/intent/tweet?url={{ oneproduct.titreProduit|url_encode ~ " " ~ oneproduct.descriptionProduit|url_encode }}&media={{ oneproduct.photo|url_encode }}" class="math-inline">
-                                <i class="fab fa-facebook-f"></i>
-                            </a>
-                            <a class="text-dark px-2" href="">
-                                <i class="fab fa-twitter"></i>
-                            </a>
-                            <a class="text-dark px-2" href="">
-                                <i class="fab fa-linkedin-in"></i>
-                            </a>
-                            <a class="text-dark px-2" href="">
-                                <i class="fab fa-pinterest"></i>
-                            </a>
-                        </div>
-                    </div>
+                   
                 </div>
             </div>
         </div>
