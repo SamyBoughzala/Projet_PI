@@ -37,7 +37,6 @@
 							</thead>
 							<tbody>
 								{% for transaction in productTransactions %}
-
 									<tr>
 										<td>{{ transaction.produitOut.getTitreProduit() }}</td>
 										<td>{{ transaction.produitIn.getTitreProduit() }}</td>
@@ -53,7 +52,6 @@
 										{% else %}
 											<td>Pending</td>
 										{% endif %}
-										
 									</tr>
 								{% endfor %}
 								{% for transaction in pendingProducts %}

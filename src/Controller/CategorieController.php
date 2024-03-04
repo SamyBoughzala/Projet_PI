@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/categorie')]
+#[Route('admin/categorie')]
 class CategorieController extends AbstractController
 {
     #[Route('/', name: 'app_categorie_index', methods: ['GET'])]
@@ -28,14 +28,11 @@ class CategorieController extends AbstractController
         $categorie = new Categorie();
         $form = $this->createForm(CategorieType::class, $categorie);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($categorie);
             $entityManager->flush();
-
             return $this->redirectToRoute('app_categorie_index', [], Response::HTTP_SEE_OTHER);
         }
-
         return $this->renderForm('categorie/new.html.twig', [
             'categorie' => $categorie,
             'form' => $form,
@@ -55,13 +52,11 @@ class CategorieController extends AbstractController
     {
         $form = $this->createForm(CategorieType::class, $categorie);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
             return $this->redirectToRoute('app_categorie_index', [], Response::HTTP_SEE_OTHER);
         }
-
         return $this->renderForm('categorie/edit.html.twig', [
             'categorie' => $categorie,
             'form' => $form,
@@ -75,7 +70,6 @@ class CategorieController extends AbstractController
             $entityManager->remove($categorie);
             $entityManager->flush();
         }
-
         return $this->redirectToRoute('app_categorie_index', [], Response::HTTP_SEE_OTHER);
     }
 }

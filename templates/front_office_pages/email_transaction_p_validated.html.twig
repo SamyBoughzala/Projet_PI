@@ -47,12 +47,12 @@
         <h1>Transaction Validated</h1>
         <p>Hello , My Name is {{ utilisateur.nom }} {{ utilisateur.prenom }}</p>
         <p>Your transaction has been successfully validated. Here are the details:</p>
-        <p><strong>Transaction ID:</strong> {{ echangeService.id }}</p>
-        <p><strong>Date:</strong> {{ echangeService.getDateEchange() | date('Y-m-d H:i:s') }}</p>
+        <p><strong>Transaction ID:</strong> {{ echangeProduit.id }}</p>
+        <p><strong>Date:</strong> {{ echangeProduit.getDateEchange() | date('Y-m-d H:i:s') }}</p>
         <p><strong>Product Details:</strong> </p>
         <ul>
-            <li><strong>Name:</strong> {{ echangeService.ServiceOut.titreService }}</li>
-            <li><strong>Description:</strong> {{ echangeService.ServiceOut.descriptionService }}</li>
+            <li><strong>Name:</strong> {{ echangeProduit.ProduitOut.titreProduit }}</li>
+            <li><strong>Description:</strong> {{ echangeProduit.ProduitOut.descriptionProduit }}</li>
         </ul>
         <p>Thank you for the exchange !</p>
         <a href="{{ path('app_echange_produit_transactions') }}" class="button">View Transaction</a>

@@ -105,5 +105,30 @@ class EchangeProduitController extends AbstractController
             return $this->redirectToRoute('app_echange_produit_transactions', ['id' => 1], Response::HTTP_SEE_OTHER);
         }
     }
-    
+
+    #[Route('/filter_produit/{id}', name: 'app_exchange_produit_filter')]
+    public function filter(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $startDate = $request->query->get('startDate');
+        $endDate = $request->query->get('endDate');
+        $qb = $entityManager->getRepository(EchangeProduit::class)->createQueryBuilder('e');
+        $qb->where('e.date_echange >= :startDate')
+            ->setParameter('startDate', new \DateTime($startDate));
+        $qb->andWhere('e.date_echange <= :endDate')
+            ->setParameter('endDate', new \DateTime($endDate));
+        $echange_produits = $qb->getQuery()->getResult();
+        $filteredData = [];
+        foreach ($echange_produits as $echangeProduit) {
+            $filteredData[] = [
+                'id' => $echangeProduit->getId(),
+                'dateEchange' => $echangeProduit->getDateEchange()->format('Y-m-d H:i:s'), // Format date for JSON
+                'valide' => $echangeProduit->isValide(),
+            ];
+        }
+        $echange_produits=$filteredData;
+        return $this->render('echange_produit/index.html.twig', [
+            'echange_produits' => $echange_produits
+        ]);
+    }
 }
+

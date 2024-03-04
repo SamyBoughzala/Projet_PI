@@ -19,8 +19,8 @@ class Categorie
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message:"Field must not be empty.")]
     #[Assert\Regex(
-        pattern: "/^\D{0,20}$/",
-        message: "Field must not contain numbers and must be at most 20 characters long."
+        pattern: "/^\D{0,30}$/",
+        message: "Field must not contain numbers and must be at most 30 characters long."
     )]
     private ?string $nomCategorie = null;
 

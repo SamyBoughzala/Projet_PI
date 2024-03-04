@@ -42,7 +42,7 @@ class EchangeServiceController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($echangeService);
             $entityManager->flush();
-            return $this->redirectToRoute('app_echange_service_transactions', ['id' => 1], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('index');
         }
         return $this->renderForm('echange_service/new.html.twig', [
             'echange_service' => $echangeService,

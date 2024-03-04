@@ -20,8 +20,14 @@ use Symfony\Component\Mime\Email;
 
 class FrontOfficePagesController extends AbstractController
 {
-    #[Route('/home', name: 'index')]
+    #[Route('/', name: 'index')]
     public function index(): Response
+    {
+        return $this->render('front_office_pages/index.html.twig');
+    }
+
+    #[Route('/home', name: 'home')]
+    public function home(): Response
     {
         return $this->render('front_office_pages/index.html.twig');
     }
@@ -195,5 +201,7 @@ class FrontOfficePagesController extends AbstractController
             ]
         );
     }
+
+    
  
 }

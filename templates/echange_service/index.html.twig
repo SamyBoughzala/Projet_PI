@@ -2,6 +2,73 @@
 
 {% block title %} Service Exchange List Index {% endblock %}
 
+{% block custom_css %}
+<style>
+    /* Container holding the filter elements */
+    .filter-container {
+        display: flex;
+        align-items: center;
+    }
+
+    /* Styling for the date input */
+    .date-input {
+        position: relative;
+    }
+
+    .date-input input[type="date"] {
+        padding: 12px 20px;
+        border: 2px solid #3b5d50; /* Dark green border */
+        border-radius: 10px;
+        font-size: 16px;
+        transition: border-color 0.3s ease;
+    }
+
+    /* Styling for the icon */
+    .date-input .icon {
+        position: absolute;
+        top: 50%;
+        right: 20px;
+        transform: translateY(-50%);
+        color: #3b5d50; /* Dark green color */
+        cursor: pointer;
+        transition: color 0.3s ease;
+    }
+
+    /* Hover effect for the icon */
+    .date-input .icon:hover {
+        color: #2a4339; /* Darker green on hover */
+    }
+
+    /* Styling for the filter button */
+    .filter-button {
+        padding: 15px 30px;
+        background-color: #3b5d50; /* Dark green background */
+        color: #fff; /* White text */
+        border: none;
+        border-radius: 30px; /* Rounded button */
+        font-size: 18px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        animation: pulse 1.5s infinite alternate; /* Pulse animation */
+    }
+
+    /* Hover effect for the filter button */
+    .filter-button:hover {
+        background-color: #2a4339; /* Darker green on hover */
+    }
+
+    /* Pulse animation */
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+        }
+        100% {
+            transform: scale(1.05); /* Slightly larger size */
+        }
+    }
+</style>
+{% endblock %}
+
 {% block body %}
 <br>
     <div class="details">
@@ -12,7 +79,9 @@
                     <input type="date" id="start_date" name="start_date">
                     <label for="end_date">End Date:</label>
                     <input type="date" id="end_date" name="end_date">
-                    
+                    <button type="button" id="filter-button"class="status delivered">
+                            <a href="{{ path('app_exchange_service_filter', {'id': 1})}}" > Filter</a>
+                    </button>
                 </div>
             </div>
             <script>
@@ -44,10 +113,8 @@
                 }
                 });
             </script>
+            
             <table id= "echange_service_table">
-                <button type="button" id="filter-button">
-                    <a href="{{ path('app_exchange_service_filter', {'id': 1})}}" > Filter</a>
-                </button>
                 <thead>
                   <tr>
                       <th>Id</th>

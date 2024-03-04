@@ -19,6 +19,18 @@
 		<link href="{{asset('backOffice/css/style.css')}}" rel="stylesheet">
         {% endblock %}
 		<title>{% block title %}Home{% endblock %}</title>
+		<script>
+			window.embeddedChatbotConfig = {
+			chatbotId: "LyxMnR06ZGw3d2-HLbHT_",
+			domain: "www.chatbase.co"
+			}
+			</script>
+			<script
+			src="https://www.chatbase.co/embed.min.js"
+			chatbotId="LyxMnR06ZGw3d2-HLbHT_"
+			domain="www.chatbase.co"
+			defer>
+		</script>
 	</head>
 
 	<body>
@@ -46,70 +58,27 @@
 							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownCategories" role="button" aria-expanded="false">
 								Categories
 							</a>
-							<div class=" mega-menu" id="dropdown-cat-menu"aria-labelledby="navbarDropdownCategories">
+							<div class=" mega-menu" id="dropdown-cat-menu" aria-labelledby="navbarDropdownCategories">
 								<div class="container">
 									<div class="row">
-										<h1>Products </h1>
-										<div class="col-md-3">
-											<h5>Category 1</h5>
-											<ul class="list-unstyled">
-												
-												{#
-												{% for category in categories.findAll() %}
-													{% if category.type == 'product' %}
-														<li>{{ category.getNomCategorie() }}</li>
-													{% endif %}>
-												{% endfor %}> #}
-											</ul>
-										</div>										
-										<div class="col-md-3">
-											<h5>Category 2</h5>
-											<ul class="list-unstyled">
-												<li><a class="dropdown-item subcategory-link " href="#">Subcategory 1</a></li>
-												<li><a class="dropdown-item subcategory-link"  href="#">Subcategory 2</a></li>
-												<li><a class="dropdown-item subcategory-link" href="#">Subcategory 3</a></li>
-												<!-- Add more subcategories as needed -->
-											</ul>
-										</div>
-										<div class="col-md-3">
-											<h5>Category 3</h5>
-											<ul class="list-unstyled">
-												<li><a class="dropdown-item subcategory-link" href="#">Subcategory 1</a></li>
-												<li><a class="dropdown-item subcategory-link" href="#">Subcategory 2</a></li>
-												<li><a class="dropdown-item subcategory-link" href="#">Subcategory 3</a></li>
-												<!-- Add more subcategories as needed -->
-											</ul>
-										</div>
-										<div class="col-md-3">
-											<h5>Category 4</h5>
-											<ul class="list-unstyled">
-												<li><a class="dropdown-item subcategory-link" href="#">Subcategory 1</a></li>
-												<li><a class="dropdown-item subcategory-link" href="#">Subcategory 2</a></li>
-												<li><a class="dropdown-item subcategory-link" href="#">Subcategory 3</a></li>
-												<!-- Add more subcategories as needed -->
-											</ul>
-										</div>
-									</div>
-									<h1>Service </h1>
-									<div class="row">
-										<div class="col-md-3">
-											<h5>Category 1</h5>
-											<ul class="list-unstyled">
-												<li><a class="dropdown-item subcategory-link" href="#">Subcategory 1</a></li>
-												<li><a class="dropdown-item subcategory-link" href="#">Subcategory 2</a></li>
-												<li><a class="dropdown-item subcategory-link" href="#">Subcategory 3</a></li>
-												<!-- Add more subcategories as needed -->
-											</ul>
-										</div>										
-										<div class="col-md-3">
-											<h5>Category 2</h5>
-											<ul class="list-unstyled">
-												<li><a class="dropdown-item subcategory-link " href="#">Subcategory 1</a></li>
-												<li><a class="dropdown-item subcategory-link"  href="#">Subcategory 2</a></li>
-												<li><a class="dropdown-item subcategory-link" href="#">Subcategory 3</a></li>
-												<!-- Add more subcategories as needed -->
-											</ul>
-										</div>
+										{% for category in categories.findAll() %}
+											{% if category.type == 'product' %}
+												<div class="col-md-3">
+													<ul class="list-unstyled">
+														<li><a class="dropdown-item subcategory-link" href="/services">{{ category.getNomCategorie() }}</a></li>
+													</ul>
+												</div>	
+											{% endif %}
+										{% endfor %}
+										{% for category in categories.findAll() %}
+											{% if category.type == 'service' %}
+												<div class="col-md-3">
+													<ul class="list-unstyled">
+														<li><a class="dropdown-item subcategory-link" href="/services">{{ category.getNomCategorie() }}</a></li>
+													</ul>
+												</div>	
+											{% endif %}
+										{% endfor %}
 									</div>
 								</div>
 							</div>
