@@ -25,13 +25,15 @@ class ReponseController extends AbstractController
         ]);
     }
 
-    #[Route('/reponse/affiche/{id}', name: 'app_affiche_reponse')]
+    #[Route('/reponse/affiche/{id}', name: 'app_affiche_reponse', methods: ['GET', 'POST'])]
     public function list(ReponseRepository $autrepos, $id, ReclamationRepository $reclamationRepository): Response
     {
         $reclamation = $reclamationRepository->find($id);
+
         $reponses = $autrepos->findOneBy(["reponse" => $reclamation]);
         return $this->render('reponse/afficheREP.html.twig', [
             'reponse' => $reponses,
         ]);
     }
+    
 }

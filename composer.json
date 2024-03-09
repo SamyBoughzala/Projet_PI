@@ -49,6 +49,7 @@
         "twilio/sdk": "^7.16"
     },
     "config": {
+        
         "allow-plugins": {
             "composer/package-versions-deprecated": true,
             "php-http/discovery": true,

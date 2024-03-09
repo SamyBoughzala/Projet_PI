@@ -139,11 +139,16 @@
                 </div>
 
                 <div class="search">
-                    <label>
-                        <input type="text" placeholder="Search here" id="searchInput"  onchange="Search(this)">
-                        <ion-icon name="search-outline"></ion-icon>
-                    </label>
+                  
+                    <form action="{{ path('search_reclamation') }}"  method="GET">
+                        <label>
+                            <input type="text" name="q" placeholder="Search here">
+                            <button type="submit"><ion-icon name="search-outline"></ion-icon></button>
+                        </label>
+                    </form>
+                  
                 </div>
+                
 
                 <div class="user">
                     <img src="{{asset(app.session.get('image'))}}" alt="">

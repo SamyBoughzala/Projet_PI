@@ -5,11 +5,14 @@ namespace App\Controller;
 use App\Entity\Utilisateur;
 use App\Enum\UsersRoles;
 use App\Form\InscriptionType;
+use App\Repository\CategorieRepository;
 use App\Repository\ProduitRepository;
 use App\Repository\ReclamationRepository;
 use App\Repository\ServiceRepository;
 use App\Repository\UtilisateurRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,14 +30,39 @@ class AdminController extends AbstractController
     }
 
     #[Route('/admin/services', name: 'app_admin_services')]
-    public function services(ServiceRepository $serviceRepository): Response
+    public function services(ServiceRepository $serviceRepository , EntityManagerInterface $em, PaginatorInterface $paginatorInterface,CategorieRepository $categorieRepository, Request $request): Response
     {
-        $services= $serviceRepository->findAll();
-        return $this->render('admin/services.html.twig',[
-            'services'=>$services
-        ]);
-    }
+        $categories= $categorieRepository->findAll();
+        $seachValue= $request->get('searchValue');
+        if($seachValue){
+            
+            $query=$serviceRepository->findService($seachValue);
+            $pagination= $paginatorInterface->paginate(
+                $query,
+                $request->query->getInt('page', 1),
+                5
+            );
+            return $this->render('admin/services.html.twig',[
+                'categories'=>$categories,
+                'pagination'=>$pagination
+            ]);
+        }
+        else{
+            $qb = $em->createQueryBuilder();
+            $qb->select('s')->from("App:Service", 's');
+            $query=$qb->getQuery();
+            $pagination= $paginatorInterface->paginate(
+                $query,
+                $request->query->getInt('page', 1),
+                5
+            );
+            return $this->render('admin/services.html.twig',[
+                'categories'=>$categories,
+                'pagination'=>$pagination
+            ]);
+        }
 
+    }
 
     #[Route('/admin/categories', name: 'app_admin_categories')]
     public function categories(): Response
@@ -43,20 +71,61 @@ class AdminController extends AbstractController
     }
 
     #[Route('/admin/produits', name: 'app_admin_produits')]
-    public function produits(ProduitRepository $ProduitRepository): Response
+    public function produits(PaginatorInterface $paginatorInterface , EntityManagerInterface $entityManagerInterface, Request $request, ProduitRepository $ProduitRepository , CategorieRepository $categorieRepository): Response
     {
-        return $this->render('admin/produits.html.twig', ['product'=>$ProduitRepository->findAll()
+        $valeur=$request->get('valeur');
+        if($valeur){
+            $category=$categorieRepository->find($valeur);
+            $query = $entityManagerInterface->createQueryBuilder()
+            ->select('p')->from('App:Produit', 'p')
+                ->where('p.categorie = :cat')->setParameter('cat', $category) ->getQuery();
+            $pagiantion= $paginatorInterface->paginate(
+                $query,
+                $request->query->getInt('page',1),
+                5
+            );
+               return $this->render('admin/produits.html.twig', [            
+                'product'=> $pagiantion,
+                'categories'=> $categorieRepository->findAll()
+                
+            ]);
+        }
+            
+        $query = $entityManagerInterface->createQueryBuilder()
+        ->select('p')->from('App:Produit', 'p')->getQuery();
+
+        $pagiantion= $paginatorInterface->paginate(
+            $query,
+            $request->query->getInt('page',1),
+            5
+        );
+           return $this->render('admin/produits.html.twig', [            
+            'product'=> $pagiantion,
+            'categories'=> $categorieRepository->findAll()
+            
         ]);
     }
 
     #[Route('/admin/reclamations', name: 'app_admin_reclamations')]
-    public function reclamations(ReclamationRepository $reclamationRepository): Response
+    public function reclamations(ReclamationRepository $reclamationRepository, Request $request): Response
     {
+        $orderByDate = $request->get('orderByDate');
         $reclamations = $reclamationRepository->findAll();
+
+
+
+        if ($orderByDate) {
+            $reclamation = $reclamationRepository->findOrderedByDate();
+            return $this->render('admin/reclamations.html.twig', [
+                'reclamations' => $reclamation,
+
+            ]);
+        }
         return $this->render('admin/reclamations.html.twig', [
             'reclamations' => $reclamations
         ]);
     }
+
 
     #[Route('/admin/messages', name: 'app_admin_messages')]
     public function messages(): Response

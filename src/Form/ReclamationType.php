@@ -44,6 +44,18 @@ class ReclamationType extends AbstractType
 
                 ],
             ])
+            ->add('urgence', ChoiceType::class, [
+                'label' => 'Urgency Level', 'empty_data' => '',
+                'placeholder' => 'Select a level',
+                'choices' => [
+                    'Low' => 'Low',
+                    'Normal' => 'Normal',
+                    'High' => 'High',
+                    'Urgent' => 'Urgent',
+                    'Critical' => 'Critical',
+
+                ],
+            ])
             ->add('descriptionR', null, [
                 'label' => 'description',
                 'empty_data' => ''

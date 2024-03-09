@@ -33,6 +33,12 @@ class Reclamation
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date = null;
 
+    #[ORM\Column(length: 50)]
+    private ?string $status = null;
+
+    #[ORM\Column(length: 50)]
+    private ?string $urgence = null;
+
 
 
     public function getId(): ?int
@@ -84,6 +90,30 @@ class Reclamation
     public function setDate(\DateTimeInterface $date): static
     {
         $this->date = $date;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): static
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getUrgence(): ?string
+    {
+        return $this->urgence;
+    }
+
+    public function setUrgence(string $urgence): static
+    {
+        $this->urgence = $urgence;
 
         return $this;
     }
