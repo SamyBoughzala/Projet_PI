@@ -39,7 +39,7 @@
 						<h3>{{ service.titreService }}</h3>
 						<ul class="list">
 							<li><a class="active" href="#"><span>Category:</span> {{ service.categorie.nomCategorie }}</a></li>
-                            <li><a class="active" href="#"><span>Barter:</span> {{ service.utilisateur.nom ~ ' ' ~ service.utilisateur.prenom }}</a></li>
+                            <li><a class="active" href="#" style="padding-right: 10px;"><span>Barter:</span> {{ service.utilisateur.nom ~ ' ' ~ service.utilisateur.prenom }}</a>  <a href="{{ path('abonner',{idSer: service.id, id:service.utilisateur.id }) }}"><i class="fa-regular fa-bell"></i></a></li>
                             <li><a class="active" href="#"><span>Phone:</span> {{ service.utilisateur.telephone }}</a></li>
                             <li><span> Description : </span></li>
 						</ul>
@@ -73,15 +73,17 @@
 					<div class="row">
 						<div class="col-lg-6">
 							<div class="comment_list">
-							{% if commentaires|length >0 %}
-							{% for commentaire in commentaires %}
+							{% if pagination|length >0 %}
+							{% for commentaire in pagination %}
 								<div class="review_item">
+								<div class="wrapper">
 									<div class="media">
 										<div class="d-flex">
 											<img src="{{ asset('uploads/' ~ commentaire.utilisateur.photo ) }}" alt="" class="rounded-image">
 										</div>
 										<div class="media-body">
-										   <h4>{{ commentaire.utilisateur.nom ~ ' ' ~ commentaire.utilisateur.prenom }}</h4>
+										   <h4>{{ commentaire.utilisateur.nom ~ ' ' ~ commentaire.utilisateur.prenom ~ ' '}}  </h4>
+										   
 
 											<div class="button-container">
 												
@@ -94,9 +96,13 @@
 											</div>
 										</div>
 									</div>
+								</div>
 									<p>{{ commentaire.description }}</p>
 								</div>
 							{% endfor %}
+								<div class="navigation">
+									{{ knp_pagination_render(pagination) }}
+								</div>
 							{% else %}
 							  <h2>No comments for the moment</h2>
 							{% endif %}
@@ -117,111 +123,23 @@
 						</div>
 					</div>
 				</div>
-{# 				<div class="tab-pane fade show active" id="review" role="tabpanel" aria-labelledby="review-tab">
-					<div class="row">
-						<div class="col-lg-6">
-							<div class="review_list">
-								<div class="review_item">
-									<div class="media">
-										<div class="d-flex">
-											<img src="img/product/review-1.png" alt="">
-										</div>
-										<div class="media-body">
-											<h4>Blake Ruiz</h4>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-										</div>
-									</div>
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-										dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-										commodo</p>
-								</div>
-								<div class="review_item">
-									<div class="media">
-										<div class="d-flex">
-											<img src="img/product/review-2.png" alt="">
-										</div>
-										<div class="media-body">
-											<h4>Blake Ruiz</h4>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-										</div>
-									</div>
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-										dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-										commodo</p>
-								</div>
-								<div class="review_item">
-									<div class="media">
-										<div class="d-flex">
-											<img src="{{ asset('frontOffice/Show/img/product/review-3.png') }}" alt="">
-										</div>
-										<div class="media-body">
-											<h4>Blake Ruiz</h4>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-										</div>
-									</div>
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-										dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-										commodo</p>
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-6">
-							<div class="review_box">
-								<h4>Add a Review</h4>
-								<p>Your Rating:</p>
-								<ul class="list">
-									<li><a href="#"><i class="fa fa-star"></i></a></li>
-									<li><a href="#"><i class="fa fa-star"></i></a></li>
-									<li><a href="#"><i class="fa fa-star"></i></a></li>
-									<li><a href="#"><i class="fa fa-star"></i></a></li>
-									<li><a href="#"><i class="fa fa-star"></i></a></li>
-								</ul>
-								<form class="row contact_form" action="contact_process.php" method="post" id="contactForm" novalidate="novalidate">
-									<div class="col-md-12">
-										<div class="form-group">
-											<input type="text" class="form-control" id="name" name="name" placeholder="Your Full name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Your Full name'">
-										</div>
-									</div>
-									<div class="col-md-12">
-										<div class="form-group">
-											<input type="email" class="form-control" id="email" name="email" placeholder="Email Address" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email Address'">
-										</div>
-									</div>
-									<div class="col-md-12">
-										<div class="form-group">
-											<input type="text" class="form-control" id="number" name="number" placeholder="Phone Number" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Phone Number'">
-										</div>
-									</div>
-									<div class="col-md-12">
-										<div class="form-group">
-											<textarea class="form-control" name="message" id="message" rows="1" placeholder="Review" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Review'"></textarea></textarea>
-										</div>
-									</div>
-									<div class="col-md-12 text-right">
-										<button type="submit" value="submit" class="primary-btn">Submit Now</button>
-									</div>
-								</form>
-							</div>
-						</div>
-					</div>
-				</div> #}
+
 			</div>
 		</div>
 	</section>
 	<!--================End Product Description Area =================-->
+<style>
+.wrapper {
+  display: flex; /* Make the wrapper a flex container */
+  justify-content: space-between; /* Align items at opposite ends */
+}
 
+.add-button,
+.col-lg-3.col-md-4 {
+  /* Adjust styling for individual divs if needed */
+}
+
+</style>
 {% endblock %}
 
         {% block JS%}

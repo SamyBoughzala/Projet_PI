@@ -47,6 +47,9 @@ class Service
     #[Assert\NotBlank(message:"The user is mandatory")]
     private ?Utilisateur $utilisateur = null;
 
+    #[ORM\Column]
+    private ?bool $valid = null;
+
     public function __construct()
     {
         $this->commentaires = new ArrayCollection();
@@ -167,6 +170,18 @@ class Service
     public function setUtilisateur(?Utilisateur $utilisateur): static
     {
         $this->utilisateur = $utilisateur;
+
+        return $this;
+    }
+
+    public function isValid(): ?bool
+    {
+        return $this->valid;
+    }
+
+    public function setValid(bool $valid): static
+    {
+        $this->valid = $valid;
 
         return $this;
     }

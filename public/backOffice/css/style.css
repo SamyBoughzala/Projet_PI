@@ -238,6 +238,69 @@ body {
   box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
 }
 
+.product-card-margin {
+  margin-top: 50px; /* Adjust the margin value */
+}
+
+.product-card {
+  background-color: #fff;
+  border-radius: 5px;
+  padding: 20px;
+  margin: 0 auto; /* Center the card horizontally */
+  width: 400px; /* Adjust width as needed */
+  text-align: center;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* Box shadow properties */
+
+}
+
+.rounded-img {
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+  margin: 0 auto;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.user-img {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  margin-right: 5px;
+}
+
+.buttons {
+  margin-top: 15px;
+}
+
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 3px;
+  margin: 5px;
+  cursor: pointer;
+}
+
+/* Optional button styles */
+button:first-child {
+  background-color: #ccc;
+}
+
+button:nth-child(2) {
+  background-color: #2ECC71;
+  color: #fff;
+}
+
+.button:last-child {
+  background-color: #E74C3C;
+  color: #fff;
+}
+
 .cardBox .card .numbers {
   position: relative;
   font-weight: 500;
@@ -275,6 +338,9 @@ body {
   grid-gap: 30px;
   /* margin-top: 10px; */
 }
+
+
+
 .rounded-image {
   width: 70px; /* Adjust the width as needed */
   height: 70px; /* Adjust the height as needed */
