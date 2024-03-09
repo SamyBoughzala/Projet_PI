@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Controller;
-
 use App\Repository\CategorieRepository;
+use App\Repository\ProduitRepository;
 use App\Repository\ServiceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -61,9 +61,39 @@ class AdminContollerController extends AbstractController
     }
 
     #[Route('/admin/produits', name: 'app_admin_produits')]
-    public function produits(): Response
+    public function produits(PaginatorInterface $paginatorInterface , EntityManagerInterface $entityManagerInterface, Request $request, ProduitRepository $ProduitRepository , CategorieRepository $categorieRepository): Response
     {
-        return $this->render('admin/produits.html.twig');
+        $valeur=$request->get('valeur');
+        if($valeur){
+            $category=$categorieRepository->find($valeur);
+            $query = $entityManagerInterface->createQueryBuilder()
+            ->select('p')->from('App:Produit', 'p')
+                ->where('p.categorie = :cat')->setParameter('cat', $category) ->getQuery();
+            $pagiantion= $paginatorInterface->paginate(
+                $query,
+                $request->query->getInt('page',1),
+                5
+            );
+               return $this->render('admin/produits.html.twig', [            
+                'product'=> $pagiantion,
+                'categories'=> $categorieRepository->findAll()
+                
+            ]);
+        }
+            
+        $query = $entityManagerInterface->createQueryBuilder()
+        ->select('p')->from('App:Produit', 'p')->getQuery();
+
+        $pagiantion= $paginatorInterface->paginate(
+            $query,
+            $request->query->getInt('page',1),
+            5
+        );
+           return $this->render('admin/produits.html.twig', [            
+            'product'=> $pagiantion,
+            'categories'=> $categorieRepository->findAll()
+            
+        ]);
     }
 
     #[Route('/admin/reclamations', name: 'app_admin_reclamations')]

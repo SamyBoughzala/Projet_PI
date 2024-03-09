@@ -57,6 +57,9 @@ class Produit
     #[ORM\OneToMany(mappedBy: 'produit', targetEntity: Review::class, orphanRemoval: true)]
     private Collection $reviews;
 
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $date = null;
+
     public function __construct()
     {
         $this->reviews = new ArrayCollection();
@@ -206,4 +209,17 @@ class Produit
         return $this;
     }
 
+    public function getDate(): ?\DateTimeInterface
+    {
+        return $this->date;
+    }
+
+    public function setDate(?\DateTimeInterface $date): static
+    {
+        $this->date = $date;
+
+        return $this;
+    }
+
+ 
 }

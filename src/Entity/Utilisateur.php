@@ -462,8 +462,6 @@ class Utilisateur implements PasswordAuthenticatedUserInterface ,UserInterface,T
         return $this;
     }
 
-
-
     public function isEmailAuthEnabled(): bool
     {
         return true; // This can be a persisted field to switch email code authentication on/off
@@ -487,6 +485,7 @@ class Utilisateur implements PasswordAuthenticatedUserInterface ,UserInterface,T
     {
         $this->authCode = $authCode;
     }
+
 }
 
 

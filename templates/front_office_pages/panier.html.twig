@@ -169,6 +169,9 @@
     <div class="container-fluid" style="margin-top: 20px; margin-bottom: 20px;">
         <div class="row px-xl-5">
             <div class="col-lg-8 table-responsive mb-5">
+            {% if message is defined %}
+            <h2>{{ message }}</h2>
+            {% endif %}
             {% set total = 0 %}
 
             {% if lc|length >0 %}
@@ -231,7 +234,7 @@
                             
                             <h5>{{total ~' DT'}} </h5>
                         </div>
-                        <button class="btn btn-block btn-primary font-weight-bold my-3 py-3">Proceed To Checkout</button>
+                       <a href="{{ path('app_paiement', {amount: total}) }}" target="_blank"><button class="btn btn-block btn-primary font-weight-bold my-3 py-3">Proceed To Checkout</button></a> 
                     </div>
                 </div>
             </div>

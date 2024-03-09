@@ -30,7 +30,8 @@ class LCController extends AbstractController
         return $this->render('front_office_pages/panier.html.twig', [
             'lc'=> $LCRepository->findAll()
         ]);
-}
+    }
+    
 #[Route('lc/add/{id}', name: 'add_lc')]
 public function add(ManagerRegistry $man,$id,PanierRepository $panierRepository, ProduitRepository $produitRepository, LigneCommandeRepository $ligneCommandeRepository ,Request $request){
 

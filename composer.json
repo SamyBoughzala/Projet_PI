@@ -16,6 +16,7 @@
         "mikehaertl/phpwkhtmltopdf": "^2.5",
         "orhanerday/open-ai": "^5.1",
         "facebook/graph-sdk": "*",
+        "facebook/facebook-sdk-php-zf2": "^0.0.1",
         "knpuniversity/oauth2-client-bundle": "^2.18",
         "league/oauth2-facebook": "^2.2",
         "scheb/2fa-email": "^6.12",
