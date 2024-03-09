@@ -49,6 +49,10 @@
 						<li class="nav-item active">
 							<a class="nav-link" href="{{path('index')}}">Home</a>
 						</li>
+						<li><a class="nav-link" href="{{path('produits')}}">Produits</a></li>
+						{% if app.session.has('user_id') %}
+						<li><a class="nav-link" href="{{path('app_profil')}}">Profil</a></li>
+						{% endif %}
 						<li><a class="nav-link" href="{{path('services')}}">Services</a></li>
 						<li><a class="nav-link" href="{{path('contact')}}">Contact</a></li>
 					</ul>

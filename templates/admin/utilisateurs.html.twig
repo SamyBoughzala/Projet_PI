@@ -7,7 +7,7 @@
                 <div class="recentOrders">
                     <div class="cardHeader">
                         <h2>Users </h2>
-                        <a href="#" class="btn">View All</a>
+                        <a href="{{path('app_addadmin')}}" class="btn">Add Admin</a>
                     </div>
 
                     <table>
@@ -19,6 +19,7 @@
                                 <td>Email</td>
                                  <td>Adress</td>
                                  <td>Phone Number</td>
+                                 <td>Role</td>
                                  <td>Action</td>
                             </tr>
                         </thead>
@@ -27,12 +28,22 @@
                         {% for Utilisateur in rep %}
                             <tr>
                                 <td>{{Utilisateur.id}}</td>
-                                <td>{{Utilisateur.Prenom}} </td>
-                                <td>{{Utilisateur.Nom}}  </td>
+                                <td>{{Utilisateur.prenom}} </td>
+                                <td>{{Utilisateur.nom}}  </td>
 
                                  <td> {{Utilisateur.email}}    </td>
                                  <td> {{Utilisateur.adresse}}    </td>
                                  <td> {{Utilisateur.telephone}}    </td>
+                                  <td>
+                        {% if Utilisateur.roles is not empty %}
+                            {% for role in Utilisateur.roles %}
+                                {{ role }}
+                                {% if not loop.last %}, {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            No roles assigned
+                        {% endif %}
+                    </td>
 
                                  <td> <form method="post" action="{{ path('app_delete', {id: Utilisateur.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
                 <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ Utilisateur.id) }}">

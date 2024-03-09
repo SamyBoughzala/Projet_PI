@@ -2,18 +2,20 @@
 
 namespace App\Entity;
 
+use App\Enum\UsersRoles;
+
 use App\Repository\UtilisateurRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\JsonType;
+
 use Doctrine\ORM\Mapping as ORM;
+use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Validator\Constraints\Json;
+
 
 #[ORM\Entity(repositoryClass: UtilisateurRepository::class)]
-class Utilisateur implements PasswordAuthenticatedUserInterface ,UserInterface
+class Utilisateur implements PasswordAuthenticatedUserInterface ,UserInterface,TwoFactorInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -36,7 +38,7 @@ class Utilisateur implements PasswordAuthenticatedUserInterface ,UserInterface
     private ?string $telephone = null;
     
    
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique:true)]
     private ?string $email = null;
 
 
@@ -47,8 +49,17 @@ class Utilisateur implements PasswordAuthenticatedUserInterface ,UserInterface
     #[ORM\Column(nullable: true)]
     private ?float $score = null;
 
-    #[ORM\Column(type:"json")]
-    private  array $roles= [];
+    #[ORM\Column(type: "string", length: 20, enumType: UsersRoles::class)]
+    private UsersRoles $Role;
+
+
+    
+      #[ORM\Column(nullable:true)]
+     private ?string  $authCode;
+
+     #[ORM\Column(length: 255)]
+     private ?string $gender;
+
 
     #[ORM\OneToMany(mappedBy: 'utilisateur', targetEntity: Commentaire::class, orphanRemoval: true)]
     private Collection $commentaires;
@@ -64,12 +75,26 @@ class Utilisateur implements PasswordAuthenticatedUserInterface ,UserInterface
 
     #[ORM\OneToOne(mappedBy: 'utilisateur', cascade: ['persist', 'remove'])]
     private ?Panier $panier = null;
-
+    
     #[ORM\OneToMany(mappedBy: 'utilisateur', targetEntity: Service::class, orphanRemoval: true)]
     private Collection $services;
 
     #[ORM\OneToMany(mappedBy: 'reviewer', targetEntity: Review::class, orphanRemoval: true)]
     private Collection $reviews;
+    
+    #[ORM\Column(type: "string",nullable:true)]
+    private ?string $imageName;
+
+    public function setImageName(?string $imageName): void
+    {
+        $this->imageName = $imageName;
+    }
+
+    public function getImageName(): ?string
+    {
+        return $this->imageName;
+    }
+
 
     public function __construct()
     {
@@ -109,7 +134,7 @@ class Utilisateur implements PasswordAuthenticatedUserInterface ,UserInterface
         return $this;
     }
 
-
+   
 
     public function getAdresse(): ?string
     {
@@ -170,6 +195,39 @@ class Utilisateur implements PasswordAuthenticatedUserInterface ,UserInterface
 
         return $this;
     }
+
+
+
+    public function getAuthCode(): ?string
+    {
+        return $this->authCode;
+    }
+
+    public function setAuthCode(string $authCode): self
+    {
+        $this->authCode = $authCode;
+
+        return $this;
+    }
+
+    public function getGender(): ?string
+    {
+        return $this->gender;
+    }
+
+    public function setGender(?string $gender): self
+    {
+        $this->gender = $gender;
+
+        return $this;
+    }
+
+
+
+
+
+
+
 
    
     /**
@@ -297,22 +355,22 @@ class Utilisateur implements PasswordAuthenticatedUserInterface ,UserInterface
     }
 
 
-    public function getRoles(): array
+    public function getRole(): UsersRoles
     {
-        $roles = $this->roles;
-
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
+        return $this->Role;
     }
 
-    public function setRoles(array $roles): self
+    public function setRole(UsersRoles $role): self
     {
-        $this->roles = $roles;
-
+        $this->Role = $role;
         return $this;
     }
+
+    public function getRoles(): array
+    {
+        return [$this->Role->value];
+    }
+
 
     public function getSalt()
     {
@@ -403,4 +461,45 @@ class Utilisateur implements PasswordAuthenticatedUserInterface ,UserInterface
 
         return $this;
     }
+
+
+
+    public function isEmailAuthEnabled(): bool
+    {
+        return true; // This can be a persisted field to switch email code authentication on/off
+    }
+
+    public function getEmailAuthRecipient(): string
+    {
+        return $this->email;
+    }
+
+    public function getEmailAuthCode(): string
+    {
+        if (null === $this->authCode) {
+            throw new \LogicException('The email authentication code was not set');
+        }
+
+        return $this->authCode;
+    }
+
+    public function setEmailAuthCode(string $authCode): void
+    {
+        $this->authCode = $authCode;
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

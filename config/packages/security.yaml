@@ -17,10 +17,12 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
-            lazy: true
+            lazy: true 
             provider: app_user_provider
             pattern: ^/
-            custom_authenticator: App\Security\AppAuthenticator
+            custom_authenticator: 
+                - App\Security\AppAuthenticator
+               
             logout: 
                   path: app_logout
                 # where to redirect after logout
@@ -32,11 +34,31 @@ security:
             # https://symfony.com/doc/current/security/impersonating_user.html
             # switch_user: true
 
+            
+                 #success_handler: acme.custom_success_handler  # Use a custom success handler instead of the default one
+             
+           
+
+
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-          - { path: ^/users, roles: ROLE_USER }
+        - { path: ^/user, roles: ROLE_USER }  # Removed extra space
+        - { path: ^/D/, roles: ROLE_ADMIN }  # Removed extra space
+        #- { path: ^/e/, roles: ROLE_ADMIN }
+        - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/admin/home, roles: ROLE_ADMIN }
+        - { path: ^/admin/services, roles: ROLE_ADMIN }
+        - { path: ^/admin/categories, roles: ROLE_ADMIN }
+        - { path: ^/admin/produits, roles: ROLE_ADMIN }
+        - { path: ^/admin/reclamations, roles: ROLE_ADMIN }
+        - { path: ^/admin/messages, roles: ROLE_ADMIN }
+        - { path: ^/admin/commandes, roles: ROLE_ADMIN }
+        - { path: ^/admin/utilisateurs, roles: ROLE_ADMIN }
+        - { path: ^/admin/addadmin, roles: ROLE_ADMIN }
+
+
+   
 
 when@test:
     security:
