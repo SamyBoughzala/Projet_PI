@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20240309175024 extends AbstractMigration
+final class Version20240309182613 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -25,7 +25,7 @@ final class Version20240309175024 extends AbstractMigration
         $this->addSql('CREATE TABLE commentaire (id INT AUTO_INCREMENT NOT NULL, utilisateur_id INT NOT NULL, service_id INT NOT NULL, description LONGTEXT NOT NULL, INDEX IDX_67F068BCFB88E14F (utilisateur_id), INDEX IDX_67F068BCED5CA9E6 (service_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE echange_produit (id INT AUTO_INCREMENT NOT NULL, produit_in_id INT NOT NULL, produit_out_id INT NOT NULL, date_echange DATETIME NOT NULL, valide TINYINT(1) DEFAULT NULL, UNIQUE INDEX UNIQ_AE73CFC6206519A7 (produit_in_id), UNIQUE INDEX UNIQ_AE73CFC6F35D9340 (produit_out_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE echange_service (id INT AUTO_INCREMENT NOT NULL, service_in_id INT NOT NULL, service_out_id INT NOT NULL, date_echange DATETIME NOT NULL, valide TINYINT(1) DEFAULT NULL, UNIQUE INDEX UNIQ_664BB933B98B93D4 (service_in_id), UNIQUE INDEX UNIQ_664BB9333AC85D4C (service_out_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE evenement (id INT AUTO_INCREMENT NOT NULL, produit_id INT NOT NULL, titre_evenement VARCHAR(255) NOT NULL, description_evenement LONGTEXT NOT NULL, date_debut DATETIME NOT NULL, date_fin DATETIME NOT NULL, UNIQUE INDEX UNIQ_B26681EF347EFB (produit_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE evenement (id INT AUTO_INCREMENT NOT NULL, produit_id INT NOT NULL, titre_evenement VARCHAR(255) NOT NULL, description_evenement LONGTEXT NOT NULL, date_debut DATETIME NOT NULL, date_fin DATETIME NOT NULL, status VARCHAR(255) NOT NULL, UNIQUE INDEX UNIQ_B26681EF347EFB (produit_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE ligne_commande (id INT AUTO_INCREMENT NOT NULL, panier_id INT NOT NULL, produit_id INT NOT NULL, INDEX IDX_3170B74BF77D927C (panier_id), UNIQUE INDEX UNIQ_3170B74BF347EFB (produit_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE panier (id INT AUTO_INCREMENT NOT NULL, utilisateur_id INT NOT NULL, UNIQUE INDEX UNIQ_24CC0DF2FB88E14F (utilisateur_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE participation_evenement (id INT AUTO_INCREMENT NOT NULL, evenement_id INT NOT NULL, utilisateur_id INT NOT NULL, offre DOUBLE PRECISION DEFAULT NULL, UNIQUE INDEX UNIQ_65A14675FD02F13 (evenement_id), INDEX IDX_65A14675FB88E14F (utilisateur_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
@@ -37,6 +37,7 @@ final class Version20240309175024 extends AbstractMigration
         $this->addSql('CREATE TABLE service (id INT AUTO_INCREMENT NOT NULL, categorie_id INT NOT NULL, utilisateur_id INT NOT NULL, titre_service VARCHAR(255) NOT NULL, description_service VARCHAR(255) NOT NULL, ville VARCHAR(255) NOT NULL, photo VARCHAR(255) DEFAULT NULL, choix_echange TINYINT(1) NOT NULL, valid TINYINT(1) NOT NULL, INDEX IDX_E19D9AD2BCF5E72D (categorie_id), INDEX IDX_E19D9AD2FB88E14F (utilisateur_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE utilisateur (id INT AUTO_INCREMENT NOT NULL, nom VARCHAR(255) NOT NULL, prenom VARCHAR(255) NOT NULL, adresse VARCHAR(255) NOT NULL, telephone VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, mot_de_passe VARCHAR(255) NOT NULL, score DOUBLE PRECISION DEFAULT NULL, role VARCHAR(20) NOT NULL, auth_code VARCHAR(255) DEFAULT NULL, gender VARCHAR(255) NOT NULL, image_name VARCHAR(255) DEFAULT NULL, UNIQUE INDEX UNIQ_1D1C63B3E7927C74 (email), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE wish_list (id INT AUTO_INCREMENT NOT NULL, utilisateur_id INT NOT NULL, UNIQUE INDEX UNIQ_5B8739BDFB88E14F (utilisateur_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE messenger_messages (id BIGINT AUTO_INCREMENT NOT NULL, body LONGTEXT NOT NULL, headers LONGTEXT NOT NULL, queue_name VARCHAR(190) NOT NULL, created_at DATETIME NOT NULL, available_at DATETIME NOT NULL, delivered_at DATETIME DEFAULT NULL, INDEX IDX_75EA56E0FB7336F0 (queue_name), INDEX IDX_75EA56E0E3BD61CE (available_at), INDEX IDX_75EA56E016BA31DB (delivered_at), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('ALTER TABLE abonnee ADD CONSTRAINT FK_5211BACDBB8D60AC FOREIGN KEY (troqueur_id) REFERENCES utilisateur (id)');
         $this->addSql('ALTER TABLE abonnee ADD CONSTRAINT FK_5211BACD8BACA6B1 FOREIGN KEY (abonnee_id) REFERENCES utilisateur (id)');
         $this->addSql('ALTER TABLE commentaire ADD CONSTRAINT FK_67F068BCFB88E14F FOREIGN KEY (utilisateur_id) REFERENCES utilisateur (id)');
@@ -109,5 +110,6 @@ final class Version20240309175024 extends AbstractMigration
         $this->addSql('DROP TABLE service');
         $this->addSql('DROP TABLE utilisateur');
         $this->addSql('DROP TABLE wish_list');
+        $this->addSql('DROP TABLE messenger_messages');
     }
 }

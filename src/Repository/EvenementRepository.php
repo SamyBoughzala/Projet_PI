@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Evenement;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
  * @extends ServiceEntityRepository<Evenement>
@@ -19,6 +20,22 @@ class EvenementRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Evenement::class);
+    }
+
+    public function countEvents(): int
+    {
+        return $this->createQueryBuilder('e')
+            ->select('COUNT(e.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function findAllSortedByDate(): array
+    {
+        return $this->createQueryBuilder('e')
+            ->orderBy('e.dateDebut', 'DESC')
+            ->getQuery()
+            ->getResult();
     }
 
 //    /**
