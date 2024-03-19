@@ -217,7 +217,7 @@ class ReclamationController extends AbstractController
 
 
 
-    // METIER
+   
 
 
     #[Route('/search', name: 'search_reclamation', methods: ['GET', 'POST'])]
@@ -236,39 +236,8 @@ class ReclamationController extends AbstractController
 
     
 
-    #[Route('/sort', name: 'sort_reclamations', methods: ['GET'])]
-    public function sort(Request $request, ReclamationRepository $reclamationRepository)
-    {
-        // Get the orderBy parameter from the request
-        $orderBy = $request->query->get('orderBy');
-        $orderDirection = $request->query->get('orderDirection');
-        // Validate the orderBy parameter (replace with your specific logic)
-        if ($orderBy == 'urgence') {
-            if ($orderDirection == 'DESC') {
-                $criteria = new Criteria();
-
-                // Define the urgency order
-                $urgencyOrder = ['Critical', 'Urgent', 'High', 'Normal', 'Low'];
-
-                // Ascending order
-                $criteria->orderBy(['urgence' => $urgencyOrder]);
-                $reclamations = $reclamationRepository->findAll(Criteria::DESC);
-
-
-                // Descending order
-                // $criteria->orderBy(['urgence' => Criteria::DESC]);
-            }
-        } else {
-            $reclamations = $reclamationRepository->findAll();
-        }
-
-
-        return $this->render('admin/reclamations.html.twig', [
-            'reclamations' => $reclamations
-        ]);
-    }
-
-    //li baathha fourat
+   
+   
 
 
     #[Route('/search_urgence', name: 'search_urgence', methods: ['GET'])]
@@ -304,25 +273,7 @@ class ReclamationController extends AbstractController
 
 
 
-    #[Route('/complaints-list', name: 'complaints_list', methods: ['GET'])]
-    public function complaintsListAction(ReclamationRepository $reclamationRepository)
-    {
-        $reclamations = $this->$reclamationRepository->findAllSortedByUrgency();
-
-        $data = [];
-        foreach ($reclamations as $reclamation) {
-            // Formatage des données selon vos besoins
-            $data[] = [
-                'id' => $reclamation->getId(),
-                'titreR' => $reclamation->getTitreR(),
-                'descriptionR' => $reclamation->getDescriptionR(),
-                'urgence' => $reclamation->getUrgence(),
-                'date' => $reclamation->getDate()->format('Y-m-d H:i')
-            ];
-        }
-
-        return new JsonResponse($data);
-    }
+    
 
 
     
